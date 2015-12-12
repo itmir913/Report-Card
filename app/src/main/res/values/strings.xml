@@ -1,4 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ReportCard</string>
-    <string name="action_settings">Settings</string>
+
+    <!-- Main -->
+    <string name="app_name">성적표</string>
+    <!-- Menu -->
+    <string name="action_settings">설정</string>
+    <string name="action_add">추가</string>
+    <!-- Create Exam -->
+    <string name="title_activity_create_exam">시험 추가</string>
+
 </resources>
