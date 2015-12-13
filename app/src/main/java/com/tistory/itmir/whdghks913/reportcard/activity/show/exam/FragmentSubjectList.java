@@ -27,11 +27,12 @@ import java.util.Comparator;
  * Created by whdghks913 on 2015-12-13.
  */
 public class FragmentSubjectList extends Fragment {
-    public static Fragment getInstance(Context mContext, int _id) {
+    public static Fragment getInstance(Context mContext, int _id, String title) {
         FragmentSubjectList mFragment = new FragmentSubjectList();
 
         Bundle args = new Bundle();
         args.putInt("_id", _id);
+        args.putString("title", title);
         mFragment.setArguments(args);
 
         return mFragment;
@@ -43,11 +44,13 @@ public class FragmentSubjectList extends Fragment {
         RecyclerView recyclerView = (RecyclerView) mView.findViewById(R.id.mRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
 
-        AdapterSubject mAdapter = new AdapterSubject(getActivity());
-        recyclerView.setAdapter(mAdapter);
 
         Bundle args = getArguments();
         int _id = args.getInt("_id");
+        String title = args.getString("title");
+
+        AdapterSubject mAdapter = new AdapterSubject(getActivity(), title, _id);
+        recyclerView.setAdapter(mAdapter);
 
         Database mDatabase = new Database();
         mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
@@ -66,7 +69,7 @@ public class FragmentSubjectList extends Fragment {
             int applicants = mCursor.getInt(4);
             int mClass = mCursor.getInt(5);
 
-            mAdapter.addItem(_id, _subjectId, name, score, rank, applicants, mClass);
+            mAdapter.addItem(_subjectId, name, score, rank, applicants, mClass);
 
             mCursor.moveToNext();
         }
@@ -82,11 +85,16 @@ class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.SubjectViewHold
     private ArrayList<SubjectListInfo> mValues = new ArrayList<>();
     private FragmentActivity mContext;
 
-    public AdapterSubject(FragmentActivity mContext) {
+    private final int _id;
+    private final String title;
+
+    public AdapterSubject(FragmentActivity mContext, String title, int _id) {
         this.mContext = mContext;
         TypedValue mTypedValue = new TypedValue();
         mContext.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
         mBackground = mTypedValue.resourceId;
+        this.title = title;
+        this._id = _id;
     }
 
     public class SubjectViewHolder extends RecyclerView.ViewHolder {
@@ -103,10 +111,9 @@ class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.SubjectViewHold
         }
     }
 
-    public void addItem(int _id, int subjectId, String name, int score, int rank, int applicants, int mClass) {
+    public void addItem(int subjectId, String name, int score, int rank, int applicants, int mClass) {
         SubjectListInfo addInfo = new SubjectListInfo();
 
-        addInfo._id = _id;
         addInfo.subjectId = subjectId;
         addInfo.name = name;
         addInfo.score = score;
@@ -142,11 +149,13 @@ class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.SubjectViewHold
                 mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
 
                 SubjectListInfo mInfo = (SubjectListInfo) holder.mView.getTag();
-                mDatabase.remove(ExamDataBaseInfo.getExamTable(mInfo._id), "name", mInfo.subjectId);
+
+                mDatabase.remove(ExamDataBaseInfo.getExamTable(_id), "name", mInfo.subjectId);
                 mDatabase.release();
 
                 Intent mIntent = new Intent(mContext, ShowExamDetailActivity.class);
-                mIntent.putExtra("_id", mInfo._id);
+                mIntent.putExtra("_id", _id);
+                mIntent.putExtra("name", title);
                 mContext.startActivity(mIntent);
                 mContext.finish();
 
@@ -169,7 +178,7 @@ class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.SubjectViewHold
     }
 
     public class SubjectListInfo {
-        public int _id, subjectId;
+        public int subjectId;
         public int score, rank, applicants, mClass;
         public String name;
     }

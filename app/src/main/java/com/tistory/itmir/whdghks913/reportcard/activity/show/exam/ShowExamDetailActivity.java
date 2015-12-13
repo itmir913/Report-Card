@@ -33,9 +33,10 @@ public class ShowExamDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_show_exam_detail);
 
         Intent mIntent = getIntent();
+        String title = mIntent.getStringExtra("name");
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.mToolbar);
-        mToolbar.setTitle(mIntent.getStringExtra("name"));
+        mToolbar.setTitle(title);
 //        mToolbar.setBackgroundColor(mIntent.getIntExtra("color", ContextCompat.getColor(this, R.color.colorPrimary)));
         setSupportActionBar(mToolbar);
 
@@ -67,7 +68,7 @@ public class ShowExamDetailActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.mViewpager);
         if (viewPager != null) {
             mAdapter = new Adapter(getSupportFragmentManager());
-            mAdapter.addFragment(getString(R.string.subject), FragmentSubjectList.getInstance(this, _id));
+            mAdapter.addFragment(getString(R.string.subject), FragmentSubjectList.getInstance(this, _id, title));
             mAdapter.addFragment(getString(R.string.graph), FragmentGraph.getInstance(_id));
             viewPager.setAdapter(mAdapter);
         }
