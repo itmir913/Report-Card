@@ -20,6 +20,8 @@ import android.widget.TextView;
 
 import com.tistory.itmir.whdghks913.reportcard.R;
 import com.tistory.itmir.whdghks913.reportcard.activity.create.exam.CreateExamActivity;
+import com.tistory.itmir.whdghks913.reportcard.activity.create.subject.CreateSubjectActivity;
+import com.tistory.itmir.whdghks913.reportcard.activity.show.exam.ShowExamDetailActivity;
 import com.tistory.itmir.whdghks913.reportcard.tool.Database;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 import com.tistory.itmir.whdghks913.reportcard.tool.initDatabase;
@@ -40,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar mToolbar = (Toolbar) findViewById(R.id.mToolbar);
         setSupportActionBar(mToolbar);
 
-        FloatingActionButton mFab = (FloatingActionButton) findViewById(R.id.mFab);
-        mFab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton mExamFab = (FloatingActionButton) findViewById(R.id.mFab);
+        mExamFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), CreateExamActivity.class));
@@ -167,19 +169,29 @@ public class MainActivity extends AppCompatActivity {
             holder.mExamDate.setText(mData.date);
             holder.mExamCategory.setText(mData.categoryName);
 
-            holder.mView.setTag(mData._id);
+            holder.mView.setTag(mData);
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // TODO
+                    ExamData mTag = (ExamData) v.getTag();
+
+                    Intent mIntent = new Intent(v.getContext(), ShowExamDetailActivity.class);
+                    mIntent.putExtra("_id", mTag._id);
+                    mIntent.putExtra("name", mTag.name);
+                    mIntent.putExtra("category", mTag.category);
+                    mIntent.putExtra("color", mTag.color);
+
+                    startActivity(mIntent);
                 }
             });
             holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
                     if (mDatabase != null) {
-                        mDatabase.remove(ExamDataBaseInfo.examListTableName, "_id", (int) view.getTag());
+                        int _id = ((ExamData) view.getTag())._id;
+                        mDatabase.remove(ExamDataBaseInfo.examListTableName, "_id", _id);
+                        mDatabase.removeTable("exam_" + _id);
                         getExamList();
                     }
 
@@ -218,6 +230,9 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        } else if (id == R.id.action_add_subject) {
+            startActivity(new Intent(getApplicationContext(), CreateSubjectActivity.class));
             return true;
         }
 

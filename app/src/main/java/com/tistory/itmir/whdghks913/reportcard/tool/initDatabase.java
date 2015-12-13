@@ -9,6 +9,7 @@ public class initDatabase {
         mData.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
         mData.createTable(ExamDataBaseInfo.categoryExamTableName, ExamDataBaseInfo.categoryExamTableColumn);
         mData.createTable(ExamDataBaseInfo.examListTableName, ExamDataBaseInfo.examListTableColumn);
+        mData.createTable(ExamDataBaseInfo.subjectTableName, ExamDataBaseInfo.subjectColumn);
 
         mData.addData("name", "내신");
         mData.addData("color", -16537100);

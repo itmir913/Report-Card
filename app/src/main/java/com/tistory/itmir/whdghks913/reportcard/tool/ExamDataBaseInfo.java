@@ -15,7 +15,7 @@ public class ExamDataBaseInfo {
     public static final String dataBaseName = "ExaminationData.db";
 
     /**
-     *
+     * 시험 카테고리 (내신, 모의고사, etc..)
      */
     public static final String categoryExamTableName = "categoryExam";
     public static final String categoryExamTableColumn = "name text, color integer";
@@ -27,6 +27,14 @@ public class ExamDataBaseInfo {
     public static final String examListTableColumn = "name text, category integer, year integer, month integer, day integer, color integer";
 
     /**
+     * 과목을 저장하는 세부 테이블
+     * name 과목 이름
+     * color 과목 색상
+     */
+    public static final String subjectTableName = "subjectList";
+    public static final String subjectColumn = "name text, color integer";
+
+    /**
      * 시험 정보를 저장하는 세부 테이블
      * 테이블 이름은 시험 리스트에 저장된 _id값
      * name : 과목 이름
@@ -35,7 +43,7 @@ public class ExamDataBaseInfo {
      * applicants : 응시자 수
      * class : 등급
      */
-    public static final String examDetailedColumn = "name text, score integer, rank integer, applicants integer, class integer";
+    public static final String examDetailedColumn = "name integer, score integer, rank integer, applicants integer, class integer";
 
     public static boolean isDatabaseExists() {
         return new File(dataBasePath + dataBaseName).exists();

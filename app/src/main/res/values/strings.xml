@@ -4,13 +4,26 @@
     <!-- Main -->
     <string name="app_name">성적표</string>
     <string name="back">뒤로가기</string>
+    <string name="basic">일반설정</string>
     <string name="custom">고급설정</string>
     <!-- Menu -->
     <string name="action_settings">설정</string>
     <string name="action_add">추가</string>
+    <string name="action_edit">편집</string>
+    <!-- Fragment -->
+    <string name="subject">과목</string>
+    <string name="graph">통계</string>
     <!-- Create Exam -->
     <string name="title_activity_create_exam">시험 추가</string>
     <string name="edit_exam_color">시험 색상 변경</string>
     <string name="edit_category">시험 카테고리 변경</string>
+    <!-- Create Subject -->
+    <string name="title_activity_create_subject">과목 추가</string>
+    <!-- Detail Exam Activity -->
+    <string name="title_activity_show_exam_detail">시험 상세 정보</string>
+    <string name="rank_format">%1$d / %2$d</string>
+    <string name="score_format">%1$d점</string>
+    <string name="class_format">%1$d등급</string>
+
 
 </resources>

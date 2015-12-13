@@ -90,6 +90,7 @@ public class CreateExamActivity extends AppCompatActivity implements ColorChoose
             categoryColor.add(mCategoryCursor.getInt(2));
             mCategoryCursor.moveToNext();
         }
+        mData.release();
 
         categoryColorView(categoryName.get(0).substring(0, 1), categoryColor.get(0));
     }
@@ -102,6 +103,7 @@ public class CreateExamActivity extends AppCompatActivity implements ColorChoose
                 .cancelButton(android.R.string.cancel)  // changes label of the cancel button
                 .backButton(R.string.back)  // changes label of the back button
                 .customButton(R.string.custom)
+                .presetsButton(R.string.basic)
                 .dynamicButtonColor(true)  // defaults to true, false will disable changing action buttons' color to currently selected color
                 .show();
     }
@@ -109,7 +111,6 @@ public class CreateExamActivity extends AppCompatActivity implements ColorChoose
     @Override
     public void onColorSelection(ColorChooserDialog dialog, int color) {
         this.color = color;
-
         examColorGradient.setColor(color);
     }
 
@@ -202,6 +203,8 @@ public class CreateExamActivity extends AppCompatActivity implements ColorChoose
             mCursor = mData.getLastData(ExamDataBaseInfo.examListTableName, "_id");
 
             mData.createTable("exam_" + mCursor.getInt(0), ExamDataBaseInfo.examDetailedColumn);
+
+            mData.release();
 
             finish();
 
