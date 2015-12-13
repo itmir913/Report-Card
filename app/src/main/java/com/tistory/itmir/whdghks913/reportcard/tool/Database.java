@@ -183,6 +183,42 @@ public class Database {
     }
 
     /**
+     * addColumn
+     */
+    public void addColumn(String tableName, String columnName, String columnType) {
+        try {
+            String addColumnSQL = "alter table " + tableName + " add " + columnName + " " + columnType;
+            mDatabase.execSQL(addColumnSQL);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * dropColumn
+     */
+    public void dropColumn(String tableName, String columnName) {
+        try {
+            String dropColumnSQL = "alter table " + tableName + " drop column " + columnName;
+            mDatabase.execSQL(dropColumnSQL);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * renameColumn
+     */
+    public void renameColumn(String tableName, String oldColumnName, String newColumnName) {
+        try {
+            String renameColumnSQL = "alter table " + tableName + " rename column " + oldColumnName + " to " + newColumnName;
+            mDatabase.execSQL(renameColumnSQL);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * 데이터를 반환할때 사용합니다
      * Cursor를 반환하며 더 정확한 데이터 추출은 아래 Example을 확인하세요
      *
@@ -223,6 +259,33 @@ public class Database {
         Cursor mCursor = mDatabase.rawQuery(SQL, null);
 
         mCursor.moveToLast();
+
+        return mCursor;
+    }
+
+    public Cursor getLastData(String tableName, String Column) {
+        String SQL = "select " + Column + " from " + tableName;
+        Cursor mCursor = mDatabase.rawQuery(SQL, null);
+
+        mCursor.moveToLast();
+
+        return mCursor;
+    }
+
+    public Cursor getFirstData(String tableName) {
+        String SQL = "select * from " + tableName;
+        Cursor mCursor = mDatabase.rawQuery(SQL, null);
+
+        mCursor.moveToFirst();
+
+        return mCursor;
+    }
+
+    public Cursor getFirstData(String tableName, String Column) {
+        String SQL = "select " + Column + " from " + tableName;
+        Cursor mCursor = mDatabase.rawQuery(SQL, null);
+
+        mCursor.moveToFirst();
 
         return mCursor;
     }
