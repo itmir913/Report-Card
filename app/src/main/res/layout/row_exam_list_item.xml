@@ -2,13 +2,15 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
 
     <View
         android:id="@+id/mColor"
         android:layout_width="55dp"
         android:layout_height="55dp"
-        android:layout_margin="16dp"
+        android:layout_gravity="center_vertical"
         android:background="@drawable/circle_view" />
 
     <LinearLayout
@@ -25,10 +27,17 @@
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView
+            android:id="@+id/mExamCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
             android:id="@+id/mExamDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="2dp"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
     </LinearLayout>

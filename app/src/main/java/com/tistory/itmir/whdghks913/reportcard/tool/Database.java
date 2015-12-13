@@ -254,6 +254,38 @@ public class Database {
         return mCursor;
     }
 
+    public Cursor getData(String tableName, String Column, String whereName, int whereData) {
+        String SQL = "select " + Column + " from " + tableName + " where " + whereName + "='" + whereData + "'";
+        Cursor mCursor = mDatabase.rawQuery(SQL, null);
+
+        return mCursor;
+
+        // int recordCount = mCursor.getCount();
+        //
+        // for (int i = 0; i < recordCount; i++) {
+        // mCursor.moveToNext();
+        // String title = mCursor.getString(0);
+        // String memo = mCursor.getString(1);
+        // String date = mCursor.getString(2);
+        // }
+    }
+
+    public Cursor getData(String tableName, String Column, String whereName, String whereData) {
+        String SQL = "select " + Column + " from " + tableName + " where " + whereName + "='" + whereData + "'";
+        Cursor mCursor = mDatabase.rawQuery(SQL, null);
+
+        return mCursor;
+
+        // int recordCount = mCursor.getCount();
+        //
+        // for (int i = 0; i < recordCount; i++) {
+        // mCursor.moveToNext();
+        // String title = mCursor.getString(0);
+        // String memo = mCursor.getString(1);
+        // String date = mCursor.getString(2);
+        // }
+    }
+
     public Cursor getLastData(String tableName) {
         String SQL = "select * from " + tableName;
         Cursor mCursor = mDatabase.rawQuery(SQL, null);

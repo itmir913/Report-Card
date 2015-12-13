@@ -68,31 +68,31 @@ public class MainActivity extends AppCompatActivity {
         if (mDatabase == null)
             mDatabase = new Database();
         mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
-        Cursor mCursor = mDatabase.getData(ExamDataBaseInfo.examListTableName);
+        Cursor mExamListCursor = mDatabase.getData(ExamDataBaseInfo.examListTableName);
 
-        if (mCursor == null)
+        if (mExamListCursor == null)
             return;
 
-        for (int i = 0; i < mCursor.getCount(); i++) {
-            mCursor.moveToNext();
+        for (int i = 0; i < mExamListCursor.getCount(); i++) {
+            mExamListCursor.moveToNext();
 
-            int _id = mCursor.getInt(0);
+            int _id = mExamListCursor.getInt(0);
 
-            String name = mCursor.getString(1);
+            String name = mExamListCursor.getString(1);
 
-            int category = mCursor.getInt(2);
+            int category = mExamListCursor.getInt(2);
 
-            int year = mCursor.getInt(3);
-            int month = mCursor.getInt(4);
-            int day = mCursor.getInt(5);
+            int year = mExamListCursor.getInt(3);
+            int month = mExamListCursor.getInt(4);
+            int day = mExamListCursor.getInt(5);
 
-            int color = mCursor.getInt(6);
+            int color = mExamListCursor.getInt(6);
 
             SimpleDateFormat mFormat = new SimpleDateFormat("yyyy.MM.dd E요일", Locale.KOREA);
             Calendar mCalendar = Calendar.getInstance();
             mCalendar.set(year, month, day);
 
-            mAdapter.addItem(_id, category, color, name, mFormat.format(mCalendar.getTime()));
+            mAdapter.addItem(_id, category, color, name, mFormat.format(mCalendar.getTime()), ExamDataBaseInfo.getCategoryNameById(mDatabase, category));
         }
     }
 
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
             public final View mColor;
-            public final TextView mExamName, mExamDate;
+            public final TextView mExamName, mExamDate, mExamCategory;
 
             public ViewHolder(View view) {
                 super(view);
@@ -119,10 +119,11 @@ public class MainActivity extends AppCompatActivity {
                 mColor = view.findViewById(R.id.mColor);
                 mExamName = (TextView) view.findViewById(R.id.mExamName);
                 mExamDate = (TextView) view.findViewById(R.id.mExamDate);
+                mExamCategory = (TextView) view.findViewById(R.id.mExamCategory);
             }
         }
 
-        public void addItem(int _id, int category, int color, String name, String date) {
+        public void addItem(int _id, int category, int color, String name, String date, String categoryName) {
             ExamData mData = new ExamData();
 
             mData._id = _id;
@@ -130,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
             mData.color = color;
             mData.name = name;
             mData.date = date;
+            mData.categoryName = categoryName;
 
             mValues.add(mData);
         }
@@ -163,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
 
             holder.mExamName.setText(mData.name);
             holder.mExamDate.setText(mData.date);
+            holder.mExamCategory.setText(mData.categoryName);
 
             holder.mView.setTag(mData._id);
 
@@ -189,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
     public class ExamData {
         public int _id;
         public int color, category;
-        public String name, date;
+        public String name, categoryName, date;
     }
 
     @Override

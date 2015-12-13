@@ -1,5 +1,7 @@
 package com.tistory.itmir.whdghks913.reportcard.tool;
 
+import android.database.Cursor;
+
 import java.io.File;
 
 /**
@@ -37,5 +39,11 @@ public class ExamDataBaseInfo {
 
     public static boolean isDatabaseExists() {
         return new File(dataBasePath + dataBaseName).exists();
+    }
+
+    public static String getCategoryNameById(Database mDatabase, int category) {
+        Cursor mCategoryCursor = mDatabase.getData(ExamDataBaseInfo.categoryExamTableName, "name", "_id", category);
+        mCategoryCursor.moveToNext();
+        return mCategoryCursor.getString(0);
     }
 }
