@@ -20,8 +20,8 @@ import android.widget.TextView;
 
 import com.tistory.itmir.whdghks913.reportcard.R;
 import com.tistory.itmir.whdghks913.reportcard.activity.create.exam.CreateExamActivity;
-import com.tistory.itmir.whdghks913.reportcard.activity.create.subject.CreateSubjectActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.show.exam.ShowExamDetailActivity;
+import com.tistory.itmir.whdghks913.reportcard.activity.show.subject.ShowSubjectActivity;
 import com.tistory.itmir.whdghks913.reportcard.tool.Database;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 import com.tistory.itmir.whdghks913.reportcard.tool.initDatabase;
@@ -231,8 +231,8 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
-        } else if (id == R.id.action_add_subject) {
-            startActivity(new Intent(getApplicationContext(), CreateSubjectActivity.class));
+        } else if (id == R.id.action_subject) {
+            startActivity(new Intent(getApplicationContext(), ShowSubjectActivity.class));
             return true;
         }
 

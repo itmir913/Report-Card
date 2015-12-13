@@ -29,7 +29,11 @@
         <activity
             android:name=".activity.create.subject.CreateSubjectActivity"
             android:label="@string/title_activity_create_subject"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.show.subject.ShowSubjectActivity"
+            android:label="@string/title_activity_show_subject"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

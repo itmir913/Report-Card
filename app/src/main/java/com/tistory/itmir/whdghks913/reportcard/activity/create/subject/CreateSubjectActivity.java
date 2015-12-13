@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -31,6 +32,19 @@ public class CreateSubjectActivity extends AppCompatActivity implements ColorCho
         setContentView(R.layout.activity_create_subject);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.mToolbar);
         setSupportActionBar(mToolbar);
+
+        ActionBar mActionBar = getSupportActionBar();
+        if (mActionBar != null) {
+            mActionBar.setHomeButtonEnabled(true);
+            mActionBar.setDisplayHomeAsUpEnabled(true);
+
+            mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    onBackPressed();
+                }
+            });
+        }
 
         Random randomGenerator = new Random();
         int red = randomGenerator.nextInt(256);
