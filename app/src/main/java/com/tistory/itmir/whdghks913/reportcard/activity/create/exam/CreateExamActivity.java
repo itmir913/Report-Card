@@ -124,6 +124,7 @@ public class CreateExamActivity extends AppCompatActivity implements ColorChoose
                 categoryColorView(categoryName.get(which).substring(0, 1), categoryColor.get(which));
             }
         });
+		builder.setCancelable(false);
         builder.show();
     }
 

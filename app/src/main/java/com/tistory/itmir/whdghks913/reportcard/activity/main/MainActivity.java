@@ -26,9 +26,12 @@ import com.tistory.itmir.whdghks913.reportcard.tool.Database;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 import com.tistory.itmir.whdghks913.reportcard.tool.initDatabase;
 
+import java.text.Collator;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
@@ -96,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
 
             mAdapter.addItem(_id, category, color, name, mFormat.format(mCalendar.getTime()), ExamDataBaseInfo.getCategoryNameById(mDatabase, category));
         }
+
+        mAdapter.sort();
     }
 
     public class SimpleRecyclerViewAdapter
@@ -147,6 +152,10 @@ public class MainActivity extends AppCompatActivity {
 //            return mValues.get(position);
 //        }
 
+        public void sort() {
+            Collections.sort(mValues, ALPHA_COMPARATOR);
+        }
+
         public void clear() {
             mValues.clear();
         }
@@ -191,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
                     if (mDatabase != null) {
                         int _id = ((ExamData) view.getTag())._id;
                         mDatabase.remove(ExamDataBaseInfo.examListTableName, "_id", _id);
-                        mDatabase.removeTable("exam_" + _id);
+                        mDatabase.removeTable(ExamDataBaseInfo.getExamTable(_id));
                         getExamList();
                     }
 
@@ -206,6 +215,18 @@ public class MainActivity extends AppCompatActivity {
         public int color, category;
         public String name, categoryName, date;
     }
+
+    /**
+     * 알파벳순으로 정렬
+     */
+    public static final Comparator<ExamData> ALPHA_COMPARATOR = new Comparator<ExamData>() {
+        private final Collator sCollator = Collator.getInstance();
+
+        @Override
+        public int compare(ExamData arg1, ExamData arg2) {
+            return sCollator.compare(arg1.date, arg2.date);
+        }
+    };
 
     @Override
     public void onResume() {

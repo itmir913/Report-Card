@@ -7,7 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.tistory.itmir.whdghks913.reportcard.R;
+import com.tistory.itmir.whdghks913.reportcard.activity.create.add.AddExamDataActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,7 @@ import java.util.List;
 public class ShowExamDetailActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private int _id, category;
+    private Adapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +56,9 @@ public class ShowExamDetailActivity extends AppCompatActivity {
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO edit data
+                Intent mIntent = new Intent(getApplicationContext(), AddExamDataActivity.class);
+                mIntent.putExtra("_id", _id);
+                startActivity(mIntent);
             }
         });
 
@@ -63,7 +67,7 @@ public class ShowExamDetailActivity extends AppCompatActivity {
 
         viewPager = (ViewPager) findViewById(R.id.mViewpager);
         if (viewPager != null) {
-            Adapter mAdapter = new Adapter(getSupportFragmentManager());
+            mAdapter = new Adapter(getSupportFragmentManager());
             mAdapter.addFragment(getString(R.string.subject), FragmentSubjectList.getInstance(this, _id));
             mAdapter.addFragment(getString(R.string.graph), FragmentGraph.getInstance(_id));
             viewPager.setAdapter(mAdapter);
@@ -74,7 +78,7 @@ public class ShowExamDetailActivity extends AppCompatActivity {
         tabLayout.setSelectedTabIndicatorColor(Color.WHITE);
     }
 
-    class Adapter extends FragmentPagerAdapter {
+    class Adapter extends FragmentStatePagerAdapter {
         private final List<Fragment> mFragments = new ArrayList<>();
         private final List<String> mFragmentTitles = new ArrayList<>();
 
@@ -98,9 +102,20 @@ public class ShowExamDetailActivity extends AppCompatActivity {
         }
 
         @Override
+        public int getItemPosition(Object item) {
+            return POSITION_NONE;   // notifyDataSetChanged
+        }
+
+        @Override
         public CharSequence getPageTitle(int position) {
             return mFragmentTitles.get(position);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAdapter.notifyDataSetChanged();
     }
 
     @Override

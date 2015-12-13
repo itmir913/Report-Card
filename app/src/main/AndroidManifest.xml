@@ -34,6 +34,10 @@
             android:name=".activity.show.subject.ShowSubjectActivity"
             android:label="@string/title_activity_show_subject"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.create.add.AddExamDataActivity"
+            android:label="@string/title_activity_add_exam_data"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

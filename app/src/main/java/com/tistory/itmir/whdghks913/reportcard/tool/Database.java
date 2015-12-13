@@ -227,8 +227,14 @@ public class Database {
      * @return
      */
     public Cursor getData(String tableName, String Column) {
-        String SQL = "select " + Column + " from " + tableName;
-        Cursor mCursor = mDatabase.rawQuery(SQL, null);
+        Cursor mCursor;
+        try {
+            String SQL = "select " + Column + " from " + tableName;
+            mCursor = mDatabase.rawQuery(SQL, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mCursor = null;
+        }
 
         return mCursor;
 
@@ -243,9 +249,9 @@ public class Database {
     }
 
     public Cursor getData(String tableName) {
-        String SQL = "select * from " + tableName;
         Cursor mCursor;
         try {
+            String SQL = "select * from " + tableName;
             mCursor = mDatabase.rawQuery(SQL, null);
         } catch (Exception e) {
             mCursor = null;
@@ -255,8 +261,14 @@ public class Database {
     }
 
     public Cursor getData(String tableName, String Column, String whereName, int whereData) {
-        String SQL = "select " + Column + " from " + tableName + " where " + whereName + "='" + whereData + "'";
-        Cursor mCursor = mDatabase.rawQuery(SQL, null);
+        Cursor mCursor;
+        try {
+            String SQL = "select " + Column + " from " + tableName + " where " + whereName + "='" + whereData + "'";
+            mCursor = mDatabase.rawQuery(SQL, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mCursor = null;
+        }
 
         return mCursor;
 
@@ -271,8 +283,14 @@ public class Database {
     }
 
     public Cursor getData(String tableName, String Column, String whereName, String whereData) {
-        String SQL = "select " + Column + " from " + tableName + " where " + whereName + "='" + whereData + "'";
-        Cursor mCursor = mDatabase.rawQuery(SQL, null);
+        Cursor mCursor;
+        try {
+            String SQL = "select " + Column + " from " + tableName + " where " + whereName + "='" + whereData + "'";
+            mCursor = mDatabase.rawQuery(SQL, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            mCursor = null;
+        }
 
         return mCursor;
 
@@ -287,37 +305,57 @@ public class Database {
     }
 
     public Cursor getLastData(String tableName) {
-        String SQL = "select * from " + tableName;
-        Cursor mCursor = mDatabase.rawQuery(SQL, null);
-
-        mCursor.moveToLast();
+        Cursor mCursor;
+        try {
+            String SQL = "select * from " + tableName;
+            mCursor = mDatabase.rawQuery(SQL, null);
+            mCursor.moveToLast();
+        } catch (Exception e) {
+            e.printStackTrace();
+            mCursor = null;
+        }
 
         return mCursor;
     }
 
     public Cursor getLastData(String tableName, String Column) {
-        String SQL = "select " + Column + " from " + tableName;
-        Cursor mCursor = mDatabase.rawQuery(SQL, null);
-
-        mCursor.moveToLast();
+        Cursor mCursor;
+        try {
+            String SQL = "select " + Column + " from " + tableName;
+            mCursor = mDatabase.rawQuery(SQL, null);
+            mCursor.moveToLast();
+        } catch (Exception e) {
+            e.printStackTrace();
+            mCursor = null;
+        }
 
         return mCursor;
     }
 
     public Cursor getFirstData(String tableName) {
-        String SQL = "select * from " + tableName;
-        Cursor mCursor = mDatabase.rawQuery(SQL, null);
-
-        mCursor.moveToFirst();
+        Cursor mCursor;
+        try {
+            String SQL = "select * from " + tableName;
+            mCursor = mDatabase.rawQuery(SQL, null);
+            mCursor.moveToFirst();
+        } catch (Exception e) {
+            e.printStackTrace();
+            mCursor = null;
+        }
 
         return mCursor;
     }
 
     public Cursor getFirstData(String tableName, String Column) {
-        String SQL = "select " + Column + " from " + tableName;
-        Cursor mCursor = mDatabase.rawQuery(SQL, null);
-
-        mCursor.moveToFirst();
+        Cursor mCursor;
+        try {
+            String SQL = "select " + Column + " from " + tableName;
+            mCursor = mDatabase.rawQuery(SQL, null);
+            mCursor.moveToFirst();
+        } catch (Exception e) {
+            e.printStackTrace();
+            mCursor = null;
+        }
 
         return mCursor;
     }

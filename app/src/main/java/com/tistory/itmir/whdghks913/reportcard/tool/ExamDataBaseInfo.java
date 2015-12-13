@@ -54,4 +54,8 @@ public class ExamDataBaseInfo {
         mCategoryCursor.moveToNext();
         return mCategoryCursor.getString(0);
     }
+
+    public static String getExamTable(int _id) {
+        return "exam_" + _id;
+    }
 }

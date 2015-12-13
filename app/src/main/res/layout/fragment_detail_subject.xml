@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="석차/전교생"
+            android:text="석차"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <TextView

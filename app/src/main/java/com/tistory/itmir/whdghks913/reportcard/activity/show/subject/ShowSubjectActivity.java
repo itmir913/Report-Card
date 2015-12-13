@@ -7,6 +7,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,9 +24,11 @@ import com.tistory.itmir.whdghks913.reportcard.R;
 import com.tistory.itmir.whdghks913.reportcard.activity.create.subject.CreateSubjectActivity;
 import com.tistory.itmir.whdghks913.reportcard.tool.Database;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
-import com.tistory.itmir.whdghks913.reportcard.tool.initDatabase;
 
+import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ShowSubjectActivity extends AppCompatActivity {
     Database mDatabase;
@@ -89,6 +92,8 @@ public class ShowSubjectActivity extends AppCompatActivity {
 
             mAdapter.addItem(_id, name, color);
         }
+
+        mAdapter.sort();
     }
 
     public class SimpleRecyclerViewAdapter
@@ -139,6 +144,10 @@ public class ShowSubjectActivity extends AppCompatActivity {
             mValues.clear();
         }
 
+        public void sort() {
+            Collections.sort(mValues, ALPHA_COMPARATOR);
+        }
+
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_subject_list_item, parent, false);
@@ -166,9 +175,34 @@ public class ShowSubjectActivity extends AppCompatActivity {
                 @Override
                 public boolean onLongClick(View view) {
                     if (mDatabase != null) {
+                        boolean isDelete = true;
                         int _id = ((ExamData) view.getTag())._id;
-                        mDatabase.remove(ExamDataBaseInfo.subjectTableName, "_id", _id);
-                        getSubjectList();
+
+                        Cursor mExamNameList = mDatabase.getFirstData(ExamDataBaseInfo.examListTableName, "_id");
+                        label:
+                        for (int i = 0; i < mExamNameList.getCount(); i++) {
+                            Cursor mExamDetailList = mDatabase.getFirstData(ExamDataBaseInfo.getExamTable(mExamNameList.getInt(0)), "name");
+                            for (int j = 0; j < mExamDetailList.getCount(); j++) {
+                                if (_id == mExamDetailList.getInt(0)) {
+                                    isDelete = false;
+                                    break label;
+                                }
+                                mExamDetailList.moveToNext();
+                            }
+                            mExamNameList.moveToNext();
+                        }
+
+                        if (isDelete) {
+                            mDatabase.remove(ExamDataBaseInfo.subjectTableName, "_id", _id);
+                            getSubjectList();
+                        } else {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(holder.mView.getContext(), R.style.AppCompatErrorAlertDialogStyle);
+                            builder.setTitle(R.string.not_delete_subject_title);
+                            builder.setMessage(R.string.not_delete_subject_message);
+                            builder.setPositiveButton(android.R.string.ok, null);
+							builder.setCancelable(false);
+                            builder.show();
+                        }
                     }
 
                     return true;
@@ -182,6 +216,18 @@ public class ShowSubjectActivity extends AppCompatActivity {
         public int color;
         public String name;
     }
+
+    /**
+     * 알파벳순으로 정렬
+     */
+    public static final Comparator<ExamData> ALPHA_COMPARATOR = new Comparator<ExamData>() {
+        private final Collator sCollator = Collator.getInstance();
+
+        @Override
+        public int compare(ExamData arg1, ExamData arg2) {
+            return sCollator.compare(arg1.name, arg2.name);
+        }
+    };
 
     @Override
     public void onResume() {
