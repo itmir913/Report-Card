@@ -30,12 +30,43 @@
         tools:context=".activity.create.exam.CreateExamActivity"
         tools:showIn="@layout/activity_create_exam">
 
-        <View
-            android:id="@+id/mCircleView"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:layout_margin="16dp"
-            android:background="@drawable/circle_view" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_gravity="center"
+                android:layout_margin="16dp">
+
+                <View
+                    android:id="@+id/mCategoryColorCircleView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/circle_view"
+                    android:onClick="categoryColorView" />
+
+                <TextView
+                    android:id="@+id/mCategoryName"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:maxEms="1"
+                    android:textColor="@android:color/white" />
+
+            </FrameLayout>
+
+            <View
+                android:id="@+id/mExamColorCircleView"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:layout_gravity="center"
+                android:background="@drawable/circle_view"
+                android:onClick="examColorView" />
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

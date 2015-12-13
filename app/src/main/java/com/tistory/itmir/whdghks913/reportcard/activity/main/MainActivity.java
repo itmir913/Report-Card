@@ -3,7 +3,7 @@ package com.tistory.itmir.whdghks913.reportcard.activity.main;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +22,7 @@ import com.tistory.itmir.whdghks913.reportcard.R;
 import com.tistory.itmir.whdghks913.reportcard.activity.create.exam.CreateExamActivity;
 import com.tistory.itmir.whdghks913.reportcard.tool.Database;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
+import com.tistory.itmir.whdghks913.reportcard.tool.initDatabase;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -53,6 +54,10 @@ public class MainActivity extends AppCompatActivity {
         mAdapter = new SimpleRecyclerViewAdapter(this);
         recyclerView.setAdapter(mAdapter);
 
+        if (!ExamDataBaseInfo.isDatabaseExists()) {
+            (new initDatabase()).init();
+        }
+
         getExamList();
     }
 
@@ -75,19 +80,19 @@ public class MainActivity extends AppCompatActivity {
 
             String name = mCursor.getString(1);
 
-            int year = mCursor.getInt(2);
-            int month = mCursor.getInt(3);
-            int day = mCursor.getInt(4);
+            int category = mCursor.getInt(2);
 
-            int red = mCursor.getInt(5);
-            int green = mCursor.getInt(6);
-            int blue = mCursor.getInt(7);
+            int year = mCursor.getInt(3);
+            int month = mCursor.getInt(4);
+            int day = mCursor.getInt(5);
+
+            int color = mCursor.getInt(6);
 
             SimpleDateFormat mFormat = new SimpleDateFormat("yyyy.MM.dd E요일", Locale.KOREA);
             Calendar mCalendar = Calendar.getInstance();
             mCalendar.set(year, month, day);
 
-            mAdapter.addItem(_id, Color.rgb(red, green, blue), name, mFormat.format(mCalendar.getTime()));
+            mAdapter.addItem(_id, category, color, name, mFormat.format(mCalendar.getTime()));
         }
     }
 
@@ -117,10 +122,11 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        public void addItem(int _id, int color, String name, String date) {
+        public void addItem(int _id, int category, int color, String name, String date) {
             ExamData mData = new ExamData();
 
             mData._id = _id;
+            mData.category = category;
             mData.color = color;
             mData.name = name;
             mData.date = date;
@@ -133,9 +139,9 @@ public class MainActivity extends AppCompatActivity {
             return mValues.size();
         }
 
-        public ExamData getItemData(int position) {
-            return mValues.get(position);
-        }
+//        public ExamData getItemData(int position) {
+//            return mValues.get(position);
+//        }
 
         public void clear() {
             mValues.clear();
@@ -152,7 +158,9 @@ public class MainActivity extends AppCompatActivity {
         public void onBindViewHolder(final ViewHolder holder, int position) {
             ExamData mData = mValues.get(position);
 
-            holder.mColor.setBackgroundColor(mData.color);
+            GradientDrawable bgShape = (GradientDrawable) holder.mColor.getBackground();
+            bgShape.setColor(mData.color);
+
             holder.mExamName.setText(mData.name);
             holder.mExamDate.setText(mData.date);
 
@@ -180,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
 
     public class ExamData {
         public int _id;
-        public int color;
+        public int color, category;
         public String name, date;
     }
 

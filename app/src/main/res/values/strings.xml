@@ -3,10 +3,14 @@
 
     <!-- Main -->
     <string name="app_name">성적표</string>
+    <string name="back">뒤로가기</string>
+    <string name="custom">고급설정</string>
     <!-- Menu -->
     <string name="action_settings">설정</string>
     <string name="action_add">추가</string>
     <!-- Create Exam -->
     <string name="title_activity_create_exam">시험 추가</string>
+    <string name="edit_exam_color">시험 색상 변경</string>
+    <string name="edit_category">시험 카테고리 변경</string>
 
 </resources>

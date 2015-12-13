@@ -13,13 +13,20 @@ public class ExamDataBaseInfo {
     public static final String dataBaseName = "ExaminationData.db";
 
     /**
+     *
+     */
+    public static final String categoryExamTableName = "categoryExam";
+    public static final String categoryExamTableColumn = "name text, color integer";
+
+    /**
      * 시험 리스트를 저장하는 테이블
      */
     public static final String examListTableName = "examNameList";
-    public static final String examListTableColumn = "name text, year integer, month integer, day integer, red integer, green integer, blue integer";
+    public static final String examListTableColumn = "name text, category integer, year integer, month integer, day integer, color integer";
 
     /**
      * 시험 정보를 저장하는 세부 테이블
+     * 테이블 이름은 시험 리스트에 저장된 _id값
      * name : 과목 이름
      * score : 받은 점수
      * rank : 전교 석차

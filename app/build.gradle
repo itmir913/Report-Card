@@ -24,7 +24,7 @@ dependencies {
     compile 'com.android.support:design:23.1.1'
     compile files('libs/MPAndroidChartLibrary-2-1-6.jar')
     compile 'com.wdullaer:materialdatetimepicker:2.1.0'
-    compile('com.github.afollestad.material-dialogs:core:0.8.5.2@aar') {
+    compile('com.github.afollestad.material-dialogs:commons:0.8.5.2@aar') {
         transitive = true
     }
 }

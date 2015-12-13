@@ -1,11 +1,13 @@
 package com.tistory.itmir.whdghks913.reportcard.activity.create.exam;
 
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -13,22 +15,31 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import com.afollestad.materialdialogs.color.ColorChooserDialog;
 import com.tistory.itmir.whdghks913.reportcard.R;
 import com.tistory.itmir.whdghks913.reportcard.tool.Database;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.Random;
 
-public class CreateExamActivity extends AppCompatActivity {
-    private int red, green, blue;
+public class CreateExamActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback {
+    private int color;
     private Calendar mCalendar;
     private TextInputLayout mTextInputLayout;
     private EditText mEditText;
+
+    private GradientDrawable examColorGradient, examCategoryGradient;
+    private ArrayList<Integer> categoryId = new ArrayList<>();
+    private ArrayList<String> categoryName = new ArrayList<>();
+    private ArrayList<Integer> categoryColor = new ArrayList<>();
+    private int categoryIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,13 +67,68 @@ public class CreateExamActivity extends AppCompatActivity {
         mEditText = (EditText) findViewById(R.id.mEditText);
 
         Random randomGenerator = new Random();
-        red = randomGenerator.nextInt(256);
-        green = randomGenerator.nextInt(256);
-        blue = randomGenerator.nextInt(256);
+        int red = randomGenerator.nextInt(256);
+        int green = randomGenerator.nextInt(256);
+        int blue = randomGenerator.nextInt(256);
+        color = Color.rgb(red, green, blue);
 
-        View mCircleView = findViewById(R.id.mCircleView);
-        GradientDrawable bgShape = (GradientDrawable) mCircleView.getBackground();
-        bgShape.setColor(Color.rgb(red, green, blue));
+        View mExamColorCircleView = findViewById(R.id.mExamColorCircleView);
+        View mCategoryColorCircleView = findViewById(R.id.mCategoryColorCircleView);
+
+        examColorGradient = (GradientDrawable) mExamColorCircleView.getBackground();
+        examColorGradient.setColor(color);
+
+        examCategoryGradient = (GradientDrawable) mCategoryColorCircleView.getBackground();
+
+        Database mData = new Database();
+        mData.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
+        Cursor mCategoryCursor = mData.getFirstData(ExamDataBaseInfo.categoryExamTableName);
+
+        for (int i = 0; i < mCategoryCursor.getCount(); i++) {
+            categoryId.add(mCategoryCursor.getInt(0));
+            categoryName.add(mCategoryCursor.getString(1));
+            categoryColor.add(mCategoryCursor.getInt(2));
+            mCategoryCursor.moveToNext();
+        }
+
+        categoryColorView(categoryName.get(0).substring(0, 1), categoryColor.get(0));
+    }
+
+    public void examColorView(View v) {
+        // Pass AppCompatActivity which implements ColorCallback, along with the title of the dialog
+        new ColorChooserDialog.Builder(this, R.string.edit_exam_color)
+                .accentMode(true)  // when true, will display accent palette instead of primary palette
+                .doneButton(android.R.string.ok)  // changes label of the done button
+                .cancelButton(android.R.string.cancel)  // changes label of the cancel button
+                .backButton(R.string.back)  // changes label of the back button
+                .customButton(R.string.custom)
+                .dynamicButtonColor(true)  // defaults to true, false will disable changing action buttons' color to currently selected color
+                .show();
+    }
+
+    @Override
+    public void onColorSelection(ColorChooserDialog dialog, int color) {
+        this.color = color;
+
+        examColorGradient.setColor(color);
+    }
+
+    public void categoryColorView(View v) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatAlertDialogStyle);
+        builder.setTitle(R.string.edit_category);
+        builder.setItems(categoryName.toArray(new String[categoryName.size()]), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                categoryIndex = which;
+                categoryColorView(categoryName.get(which).substring(0, 1), categoryColor.get(which));
+            }
+        });
+        builder.show();
+    }
+
+    private void categoryColorView(String name, int color) {
+        ((TextView) findViewById(R.id.mCategoryName)).setText(name);
+        examCategoryGradient.setColor(color);
     }
 
     public void examDate(final View v) {
@@ -102,7 +168,7 @@ public class CreateExamActivity extends AppCompatActivity {
         if (id == R.id.action_add) {
             String examName = mEditText.getText().toString();
 
-            if (examName.isEmpty() || examName.length() == 0) {
+            if (examName.isEmpty() || examName.length() == 0 || (examName.replaceAll("\\s", "")).length() == 0) {
                 mTextInputLayout.setError("시험 이름은 필수로 입력해야 합니다.");
                 return true;
             }
@@ -123,17 +189,19 @@ public class CreateExamActivity extends AppCompatActivity {
 
             mData.addData("name", examName);
 
+            mData.addData("category", categoryId.get(categoryIndex));
+
             mData.addData("year", mCalendar.get(Calendar.YEAR));
             mData.addData("month", mCalendar.get(Calendar.MONTH));
             mData.addData("day", mCalendar.get(Calendar.DAY_OF_MONTH));
 
-            mData.addData("red", red);
-            mData.addData("green", green);
-            mData.addData("blue", blue);
+            mData.addData("color", color);
 
             mData.commit(ExamDataBaseInfo.examListTableName);
 
-            mData.createTable(examName, ExamDataBaseInfo.examDetailedColumn);
+            mCursor = mData.getLastData(ExamDataBaseInfo.examListTableName, "_id");
+
+            mData.createTable("exam_" + mCursor.getInt(0), ExamDataBaseInfo.examDetailedColumn);
 
             finish();
 
