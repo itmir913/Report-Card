@@ -188,8 +188,8 @@ public class MainActivity extends AppCompatActivity {
                     Intent mIntent = new Intent(v.getContext(), ShowExamDetailActivity.class);
                     mIntent.putExtra("_id", mTag._id);
                     mIntent.putExtra("name", mTag.name);
-                    mIntent.putExtra("category", mTag.category);
-                    mIntent.putExtra("color", mTag.color);
+//                    mIntent.putExtra("category", mTag.category);
+//                    mIntent.putExtra("color", mTag.color);
 
                     startActivity(mIntent);
                 }

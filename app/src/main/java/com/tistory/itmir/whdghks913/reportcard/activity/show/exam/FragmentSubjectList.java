@@ -143,8 +143,11 @@ class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.SubjectViewHold
 
                 SubjectListInfo mInfo = (SubjectListInfo) holder.mView.getTag();
                 mDatabase.remove(ExamDataBaseInfo.getExamTable(mInfo._id), "name", mInfo.subjectId);
+                mDatabase.release();
 
-                mContext.startActivity(new Intent(mContext, ShowExamDetailActivity.class));
+                Intent mIntent = new Intent(mContext, ShowExamDetailActivity.class);
+                mIntent.putExtra("_id", mInfo._id);
+                mContext.startActivity(mIntent);
                 mContext.finish();
 
                 return true;

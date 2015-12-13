@@ -24,7 +24,7 @@ import java.util.List;
 
 public class ShowExamDetailActivity extends AppCompatActivity {
     private ViewPager viewPager;
-    private int _id, category;
+    private int _id;
     private Adapter mAdapter;
 
     @Override
@@ -63,7 +63,6 @@ public class ShowExamDetailActivity extends AppCompatActivity {
         });
 
         _id = mIntent.getIntExtra("_id", 0);
-        category = mIntent.getIntExtra("category", 0);
 
         viewPager = (ViewPager) findViewById(R.id.mViewpager);
         if (viewPager != null) {
