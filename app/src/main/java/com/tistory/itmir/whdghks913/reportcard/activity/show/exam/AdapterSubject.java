@@ -2,7 +2,6 @@ package com.tistory.itmir.whdghks913.reportcard.activity.show.exam;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +23,6 @@ public class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.SubjectV
         TypedValue mTypedValue = new TypedValue();
         mContext.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
         mBackground = mTypedValue.resourceId;
-        Log.d("dd", "DD: " + mBackground);
     }
 
     public class SubjectViewHolder extends RecyclerView.ViewHolder {
@@ -69,6 +67,13 @@ public class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.SubjectV
         holder.mScore.setText(String.format(holder.mRank.getContext().getString(R.string.score_format), mInfo.score));
         holder.mRank.setText(String.format(holder.mRank.getContext().getString(R.string.rank_format), mInfo.rank, mInfo.applicants));
         holder.mClass.setText(String.format(holder.mRank.getContext().getString(R.string.class_format), mInfo.mClass));
+
+        holder.mView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     @Override
