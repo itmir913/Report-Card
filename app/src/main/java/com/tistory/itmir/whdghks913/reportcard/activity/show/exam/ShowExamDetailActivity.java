@@ -17,7 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.tistory.itmir.whdghks913.reportcard.R;
-import com.tistory.itmir.whdghks913.reportcard.activity.create.AddExamDataActivity;
+import com.tistory.itmir.whdghks913.reportcard.activity.create.AddExamScoreActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.edit.EditExamActivity;
 
 import java.util.ArrayList;
@@ -59,7 +59,7 @@ public class ShowExamDetailActivity extends AppCompatActivity {
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent mIntent = new Intent(getApplicationContext(), AddExamDataActivity.class);
+                Intent mIntent = new Intent(getApplicationContext(), AddExamScoreActivity.class);
                 mIntent.putExtra("_id", _id);
                 startActivity(mIntent);
             }
@@ -70,7 +70,7 @@ public class ShowExamDetailActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.mViewpager);
         if (viewPager != null) {
             mAdapter = new Adapter(getSupportFragmentManager());
-            mAdapter.addFragment(getString(R.string.subject), FragmentSubjectList.getInstance(this, _id, title));
+            mAdapter.addFragment(getString(R.string.subject), FragmentSubjectList.getInstance(_id));
             mAdapter.addFragment(getString(R.string.graph), FragmentGraph.getInstance(_id));
             viewPager.setAdapter(mAdapter);
         }

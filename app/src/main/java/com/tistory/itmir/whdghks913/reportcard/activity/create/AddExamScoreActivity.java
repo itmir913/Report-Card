@@ -19,7 +19,6 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.tistory.itmir.whdghks913.reportcard.R;
-import com.tistory.itmir.whdghks913.reportcard.activity.create.CreateSubjectActivity;
 import com.tistory.itmir.whdghks913.reportcard.tool.Database;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 
@@ -28,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class AddExamDataActivity extends AppCompatActivity {
+public class AddExamScoreActivity extends AppCompatActivity {
     private int _id;
     private Database mDatabase;
     private ArrayList<subjectData> subjectData = new ArrayList<>();
@@ -47,7 +46,7 @@ public class AddExamDataActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_exam_data);
+        setContentView(R.layout.activity_add_exam_score_data);
         Toolbar mToolbar = (Toolbar) findViewById(R.id.mToolbar);
         setSupportActionBar(mToolbar);
 

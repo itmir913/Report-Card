@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -15,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.tistory.itmir.whdghks913.reportcard.R;
+import com.tistory.itmir.whdghks913.reportcard.activity.edit.EditSubjectScoreActivity;
 import com.tistory.itmir.whdghks913.reportcard.tool.Database;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 
@@ -27,12 +27,12 @@ import java.util.Comparator;
  * Created by whdghks913 on 2015-12-13.
  */
 public class FragmentSubjectList extends Fragment {
-    public static Fragment getInstance(Context mContext, int _id, String title) {
+    public static Fragment getInstance(int _id) {
         FragmentSubjectList mFragment = new FragmentSubjectList();
 
         Bundle args = new Bundle();
         args.putInt("_id", _id);
-        args.putString("title", title);
+//        args.putString("title", title);
         mFragment.setArguments(args);
 
         return mFragment;
@@ -44,12 +44,11 @@ public class FragmentSubjectList extends Fragment {
         RecyclerView recyclerView = (RecyclerView) mView.findViewById(R.id.mRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
 
-
         Bundle args = getArguments();
         int _id = args.getInt("_id");
-        String title = args.getString("title");
+//        String title = args.getString("title");
 
-        AdapterSubject mAdapter = new AdapterSubject(getActivity(), title, _id);
+        AdapterSubject mAdapter = new AdapterSubject(getActivity());
         recyclerView.setAdapter(mAdapter);
 
         Database mDatabase = new Database();
@@ -69,7 +68,7 @@ public class FragmentSubjectList extends Fragment {
             int applicants = mCursor.getInt(4);
             int mClass = mCursor.getInt(5);
 
-            mAdapter.addItem(_subjectId, name, score, rank, applicants, mClass);
+            mAdapter.addItem(_id, _subjectId, name, score, rank, applicants, mClass);
 
             mCursor.moveToNext();
         }
@@ -83,18 +82,11 @@ public class FragmentSubjectList extends Fragment {
 class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.SubjectViewHolder> {
     private final int mBackground;
     private ArrayList<SubjectListInfo> mValues = new ArrayList<>();
-    private FragmentActivity mContext;
 
-    private final int _id;
-    private final String title;
-
-    public AdapterSubject(FragmentActivity mContext, String title, int _id) {
-        this.mContext = mContext;
+    public AdapterSubject(Context mContext) {
         TypedValue mTypedValue = new TypedValue();
         mContext.getTheme().resolveAttribute(R.attr.selectableItemBackground, mTypedValue, true);
         mBackground = mTypedValue.resourceId;
-        this.title = title;
-        this._id = _id;
     }
 
     public class SubjectViewHolder extends RecyclerView.ViewHolder {
@@ -111,9 +103,10 @@ class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.SubjectViewHold
         }
     }
 
-    public void addItem(int subjectId, String name, int score, int rank, int applicants, int mClass) {
+    public void addItem(int _id, int subjectId, String name, int score, int rank, int applicants, int mClass) {
         SubjectListInfo addInfo = new SubjectListInfo();
 
+        addInfo._id = _id;
         addInfo.subjectId = subjectId;
         addInfo.name = name;
         addInfo.score = score;
@@ -142,24 +135,22 @@ class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.SubjectViewHold
         holder.mClass.setText(String.format(holder.mRank.getContext().getString(R.string.class_format), mInfo.mClass));
 
         holder.mView.setTag(mInfo);
-        holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+        holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View view) {
-                Database mDatabase = new Database();
-                mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
+            public void onClick(View view) {
+                SubjectListInfo mInfo = (SubjectListInfo) view.getTag();
+                Intent mIntent = new Intent(view.getContext(), EditSubjectScoreActivity.class);
 
-                SubjectListInfo mInfo = (SubjectListInfo) holder.mView.getTag();
+                mIntent.putExtra("_id", mInfo._id);
+                mIntent.putExtra("subjectId", mInfo.subjectId);
+                mIntent.putExtra("name", mInfo.name);
 
-                mDatabase.remove(ExamDataBaseInfo.getExamTable(_id), "name", mInfo.subjectId);
-                mDatabase.release();
+                mIntent.putExtra("score", mInfo.score);
+                mIntent.putExtra("rank", mInfo.rank);
+                mIntent.putExtra("applicants", mInfo.applicants);
+                mIntent.putExtra("mClass", mInfo.mClass);
 
-                Intent mIntent = new Intent(mContext, ShowExamDetailActivity.class);
-                mIntent.putExtra("_id", _id);
-                mIntent.putExtra("name", title);
-                mContext.startActivity(mIntent);
-                mContext.finish();
-
-                return true;
+                view.getContext().startActivity(mIntent);
             }
         });
     }
@@ -178,6 +169,7 @@ class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.SubjectViewHold
     }
 
     public class SubjectListInfo {
+        public int _id;
         public int subjectId;
         public int score, rank, applicants, mClass;
         public String name;
