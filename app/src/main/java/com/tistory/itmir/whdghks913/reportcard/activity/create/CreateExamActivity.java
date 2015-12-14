@@ -1,4 +1,4 @@
-package com.tistory.itmir.whdghks913.reportcard.activity.create.exam;
+package com.tistory.itmir.whdghks913.reportcard.activity.create;
 
 import android.content.DialogInterface;
 import android.database.Cursor;

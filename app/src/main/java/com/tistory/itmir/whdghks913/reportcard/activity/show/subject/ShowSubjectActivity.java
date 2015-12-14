@@ -20,7 +20,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.tistory.itmir.whdghks913.reportcard.R;
-import com.tistory.itmir.whdghks913.reportcard.activity.create.subject.CreateSubjectActivity;
+import com.tistory.itmir.whdghks913.reportcard.activity.create.CreateSubjectActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.edit.EditSubjectActivity;
 import com.tistory.itmir.whdghks913.reportcard.tool.Database;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".activity.create.exam.CreateExamActivity">
+    tools:context=".activity.create.CreateExamActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
         android:layout_margin="16dp"
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".activity.create.exam.CreateExamActivity"
+        tools:context=".activity.create.CreateExamActivity"
         tools:showIn="@layout/activity_create_exam">
 
         <LinearLayout

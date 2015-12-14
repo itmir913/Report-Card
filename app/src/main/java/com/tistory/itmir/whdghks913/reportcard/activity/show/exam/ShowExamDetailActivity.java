@@ -17,7 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.tistory.itmir.whdghks913.reportcard.R;
-import com.tistory.itmir.whdghks913.reportcard.activity.create.add.AddExamDataActivity;
+import com.tistory.itmir.whdghks913.reportcard.activity.create.AddExamDataActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.edit.EditExamActivity;
 
 import java.util.ArrayList;

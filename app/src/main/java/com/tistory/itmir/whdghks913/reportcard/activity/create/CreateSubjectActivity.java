@@ -1,4 +1,4 @@
-package com.tistory.itmir.whdghks913.reportcard.activity.create.subject;
+package com.tistory.itmir.whdghks913.reportcard.activity.create;
 
 import android.database.Cursor;
 import android.graphics.Color;

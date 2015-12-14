@@ -1,4 +1,4 @@
-package com.tistory.itmir.whdghks913.reportcard.activity.create.add;
+package com.tistory.itmir.whdghks913.reportcard.activity.create;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,7 +19,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import com.tistory.itmir.whdghks913.reportcard.R;
-import com.tistory.itmir.whdghks913.reportcard.activity.create.subject.CreateSubjectActivity;
+import com.tistory.itmir.whdghks913.reportcard.activity.create.CreateSubjectActivity;
 import com.tistory.itmir.whdghks913.reportcard.tool.Database;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 
