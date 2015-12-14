@@ -1,8 +1,8 @@
-package com.tistory.itmir.whdghks913.reportcard.activity.create.exam;
+package com.tistory.itmir.whdghks913.reportcard.activity.edit;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -27,9 +27,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.Random;
 
-public class CreateExamActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback {
+public class EditExamActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback {
+    private int _id;
+
+    private Database mDatabase;
     private int color;
     private Calendar mCalendar;
     private TextInputLayout mTextInputLayout;
@@ -61,28 +63,24 @@ public class CreateExamActivity extends AppCompatActivity implements ColorChoose
             });
         }
 
+        Intent mIntent = getIntent();
+        _id = mIntent.getIntExtra("_id", 0);
+        if (_id == 0)
+            return;
+        String title = mIntent.getStringExtra("name");
+
+        findViewById(R.id.removeButton).setVisibility(View.VISIBLE);
+
         mCalendar = Calendar.getInstance();
         mTextInputLayout = (TextInputLayout) findViewById(R.id.mTextInputLayout);
         mTextInputLayout.setErrorEnabled(true);
         mEditText = (EditText) findViewById(R.id.mEditText);
+        mEditText.setText(title);
 
-        Random randomGenerator = new Random();
-        int red = randomGenerator.nextInt(256);
-        int green = randomGenerator.nextInt(256);
-        int blue = randomGenerator.nextInt(256);
-        color = Color.rgb(red, green, blue);
+        mDatabase = new Database();
+        mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
 
-        View mExamColorCircleView = findViewById(R.id.mExamColorCircleView);
-        View mCategoryColorCircleView = findViewById(R.id.mCategoryColorCircleView);
-
-        examColorGradient = (GradientDrawable) mExamColorCircleView.getBackground();
-        examColorGradient.setColor(color);
-
-        examCategoryGradient = (GradientDrawable) mCategoryColorCircleView.getBackground();
-
-        Database mData = new Database();
-        mData.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
-        Cursor mCategoryCursor = mData.getFirstData(ExamDataBaseInfo.categoryExamTableName);
+        Cursor mCategoryCursor = mDatabase.getFirstData(ExamDataBaseInfo.categoryExamTableName);
 
         for (int i = 0; i < mCategoryCursor.getCount(); i++) {
             categoryId.add(mCategoryCursor.getInt(0));
@@ -90,10 +88,35 @@ public class CreateExamActivity extends AppCompatActivity implements ColorChoose
             categoryColor.add(mCategoryCursor.getInt(2));
             mCategoryCursor.moveToNext();
         }
-        mData.release();
 
-        categoryColorView(categoryName.get(0).substring(0, 1), categoryColor.get(0));
+        Cursor mExamData = mDatabase.getData(ExamDataBaseInfo.examListTableName, "*", "_id", _id);
+        mExamData.moveToNext();
+
+        int category = mExamData.getInt(2);
+
+        int year = mExamData.getInt(3);
+        int month = mExamData.getInt(4);
+        int day = mExamData.getInt(5);
+
+        color = mExamData.getInt(6);
+
+        mCalendar.set(year, month, day);
+        SimpleDateFormat mFormat = new SimpleDateFormat("시험 날짜 : yyyy.MM.dd E요일", Locale.KOREA);
+        ((Button) findViewById(R.id.mDatePickerButton)).setText(mFormat.format(mCalendar.getTime()));
+
+        View mExamColorCircleView = findViewById(R.id.mExamColorCircleView);
+        View mCategoryColorCircleView = findViewById(R.id.mCategoryColorCircleView);
+
+        examCategoryGradient = (GradientDrawable) mCategoryColorCircleView.getBackground();
+        examColorGradient = (GradientDrawable) mExamColorCircleView.getBackground();
+        examColorGradient.setColor(color);
+
+        if (categoryId.contains(category))
+            categoryColorView(categoryName.get(categoryId.indexOf(category)).substring(0, 1), categoryColor.get(categoryId.indexOf(category)));
+        else
+            categoryColorView(categoryName.get(0).substring(0, 1), categoryColor.get(0));
     }
+
 
     public void examColorView(View v) {
         // Pass AppCompatActivity which implements ColorCallback, along with the title of the dialog
@@ -152,6 +175,16 @@ public class CreateExamActivity extends AppCompatActivity implements ColorChoose
         dpd.show(getFragmentManager(), null);
     }
 
+    public void remove(View v) {
+        if (mDatabase != null) {
+            mDatabase.remove(ExamDataBaseInfo.examListTableName, "_id", _id);
+            mDatabase.removeTable(ExamDataBaseInfo.getExamTable(_id));
+
+            setResult(999);
+            finish();git
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -175,38 +208,19 @@ public class CreateExamActivity extends AppCompatActivity implements ColorChoose
                 return true;
             }
 
-            Database mData = new Database();
-            mData.openOrCreateDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName,
-                    ExamDataBaseInfo.examListTableName, ExamDataBaseInfo.examListTableColumn);
+            if (mDatabase == null)
+                return true;
 
-            Cursor mCursor = mData.getData(ExamDataBaseInfo.examListTableName, "name");
-            for (int i = 0; i < mCursor.getCount(); i++) {
-                mCursor.moveToNext();
+            mDatabase.update(ExamDataBaseInfo.examListTableName, "name", examName);
+            mDatabase.update(ExamDataBaseInfo.examListTableName, "category", categoryId.get(categoryIndex));
+            mDatabase.update(ExamDataBaseInfo.examListTableName, "year", mCalendar.get(Calendar.YEAR));
+            mDatabase.update(ExamDataBaseInfo.examListTableName, "month", mCalendar.get(Calendar.MONTH));
+            mDatabase.update(ExamDataBaseInfo.examListTableName, "day", mCalendar.get(Calendar.DAY_OF_MONTH));
+            mDatabase.update(ExamDataBaseInfo.examListTableName, "color", color);
 
-                if (examName.equals(mCursor.getString(0))) {
-                    mTextInputLayout.setError("이미 존재하는 시험 이름입니다.");
-                    return true;
-                }
-            }
+            mDatabase.release();
 
-            mData.addData("name", examName);
-
-            mData.addData("category", categoryId.get(categoryIndex));
-
-            mData.addData("year", mCalendar.get(Calendar.YEAR));
-            mData.addData("month", mCalendar.get(Calendar.MONTH));
-            mData.addData("day", mCalendar.get(Calendar.DAY_OF_MONTH));
-
-            mData.addData("color", color);
-
-            mData.commit(ExamDataBaseInfo.examListTableName);
-
-            mCursor = mData.getLastData(ExamDataBaseInfo.examListTableName, "_id");
-
-            mData.createTable(ExamDataBaseInfo.getExamTable(mCursor.getInt(0)), ExamDataBaseInfo.examDetailedColumn);
-
-            mData.release();
-
+            setResult(1234);
             finish();
 
             return true;

@@ -197,12 +197,6 @@ public class MainActivity extends AppCompatActivity {
             holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                    if (mDatabase != null) {
-                        int _id = ((ExamData) view.getTag())._id;
-                        mDatabase.remove(ExamDataBaseInfo.examListTableName, "_id", _id);
-                        mDatabase.removeTable(ExamDataBaseInfo.getExamTable(_id));
-                        getExamList();
-                    }
 
                     return true;
                 }

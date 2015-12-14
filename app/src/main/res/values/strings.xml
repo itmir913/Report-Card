@@ -32,6 +32,8 @@
     <string name="not_exists_subject_title">과목 없음</string>
     <string name="not_exists_subject_message">추가된 과목이 없거나 모든 과목이 추가되었습니다.\n확인을 눌러 먼저 과목을 추가하세요.</string>
     <string name="title_activity_add_exam_data">시험 성적 추가</string>
+    <!-- Edit Exam Activity-->
+    <string name="title_activity_edit_exam">시험 수정</string>
 
 
 </resources>

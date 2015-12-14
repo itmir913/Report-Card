@@ -18,13 +18,15 @@ import android.view.View;
 
 import com.tistory.itmir.whdghks913.reportcard.R;
 import com.tistory.itmir.whdghks913.reportcard.activity.create.add.AddExamDataActivity;
+import com.tistory.itmir.whdghks913.reportcard.activity.edit.EditExamActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ShowExamDetailActivity extends AppCompatActivity {
-    private ViewPager viewPager;
     private int _id;
+    private String title;
+    private ViewPager viewPager;
     private Adapter mAdapter;
 
     @Override
@@ -33,7 +35,7 @@ public class ShowExamDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_show_exam_detail);
 
         Intent mIntent = getIntent();
-        String title = mIntent.getStringExtra("name");
+        title = mIntent.getStringExtra("name");
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.mToolbar);
         mToolbar.setTitle(title);
@@ -134,11 +136,24 @@ public class ShowExamDetailActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_edit) {
-            // TODO
+            Intent mIntent = new Intent(this, EditExamActivity.class);
+            mIntent.putExtra("_id", _id);
+            mIntent.putExtra("name", title);
+            startActivityForResult(mIntent, 777);
+
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        if ((resultCode == 1234) || (resultCode == 999)) {
+            finish();
+        }
     }
 
 }

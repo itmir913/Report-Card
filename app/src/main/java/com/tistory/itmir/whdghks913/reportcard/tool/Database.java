@@ -173,6 +173,15 @@ public class Database {
         }
     }
 
+    public void update(String tableName, String key, int value) {
+        try {
+            String UpdateSQL = "update " + tableName + " set " + key + "='" + value + "'";
+            mDatabase.execSQL(UpdateSQL);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void update(String tableName, String key, String value, String checkKey, String checkValue) {
         try {
             String UpdateSQL = "update " + tableName + " set " + key + "='" + value + "' where " + checkKey + "='" + checkValue + "'";
