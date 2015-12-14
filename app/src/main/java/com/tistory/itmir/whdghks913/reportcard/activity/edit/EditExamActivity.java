@@ -181,7 +181,7 @@ public class EditExamActivity extends AppCompatActivity implements ColorChooserD
             mDatabase.removeTable(ExamDataBaseInfo.getExamTable(_id));
 
             setResult(999);
-            finish();git
+            finish();
         }
     }
 
