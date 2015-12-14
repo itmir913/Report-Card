@@ -30,12 +30,13 @@ import java.util.Locale;
 
 public class EditExamActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback {
     private int _id;
+    private String title;
 
-    private Database mDatabase;
     private int color;
     private Calendar mCalendar;
     private TextInputLayout mTextInputLayout;
     private EditText mEditText;
+    private Database mDatabase;
 
     private GradientDrawable examColorGradient, examCategoryGradient;
     private ArrayList<Integer> categoryId = new ArrayList<>();
@@ -67,7 +68,7 @@ public class EditExamActivity extends AppCompatActivity implements ColorChooserD
         _id = mIntent.getIntExtra("_id", 0);
         if (_id == 0)
             return;
-        String title = mIntent.getStringExtra("name");
+        title = mIntent.getStringExtra("name");
 
         findViewById(R.id.removeButton).setVisibility(View.VISIBLE);
 
@@ -213,13 +214,15 @@ public class EditExamActivity extends AppCompatActivity implements ColorChooserD
                 mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
             }
 
-            Cursor mCursor = mDatabase.getData(ExamDataBaseInfo.examListTableName, "name");
-            for (int i = 0; i < mCursor.getCount(); i++) {
-                mCursor.moveToNext();
+            if (!title.equals(examName)) {
+                Cursor mCursor = mDatabase.getData(ExamDataBaseInfo.examListTableName, "name");
+                for (int i = 0; i < mCursor.getCount(); i++) {
+                    mCursor.moveToNext();
 
-                if (examName.equals(mCursor.getString(0))) {
-                    mTextInputLayout.setError("이미 존재하는 시험 이름입니다.");
-                    return true;
+                    if (examName.equals(mCursor.getString(0))) {
+                        mTextInputLayout.setError("이미 존재하는 시험 이름입니다.");
+                        return true;
+                    }
                 }
             }
 
