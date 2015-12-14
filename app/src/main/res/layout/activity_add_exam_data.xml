@@ -77,6 +77,7 @@
                         android:hint="받은 점수"
                         android:inputType="number"
                         android:maxLength="4"
+                        android:nextFocusDown="@+id/mClass"
                         android:singleLine="true" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -94,6 +95,8 @@
                         android:hint="등급"
                         android:inputType="number"
                         android:maxLength="2"
+                        android:nextFocusDown="@+id/mRank"
+                        android:nextFocusUp="@id/mScore"
                         android:singleLine="true" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -119,6 +122,8 @@
                         android:layout_height="wrap_content"
                         android:hint="과목 석차"
                         android:inputType="number"
+                        android:nextFocusDown="@+id/mApplicants"
+                        android:nextFocusUp="@id/mClass"
                         android:singleLine="true" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -135,6 +140,7 @@
                         android:layout_height="wrap_content"
                         android:hint="전체 응시자 수"
                         android:inputType="number"
+                        android:nextFocusUp="@id/mApplicants"
                         android:singleLine="true" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -147,6 +153,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="16dp"
                 android:background="@color/colorAccent"
+                android:nextFocusUp="@id/mApplicants"
                 android:text="삭제"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@android:color/white"
