@@ -191,6 +191,24 @@ public class Database {
         }
     }
 
+    public void update(String tableName, String key, String value, String checkKey, int checkValue) {
+        try {
+            String UpdateSQL = "update " + tableName + " set " + key + "='" + value + "' where " + checkKey + "='" + checkValue + "'";
+            mDatabase.execSQL(UpdateSQL);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void update(String tableName, String key, int value, String checkKey, int checkValue) {
+        try {
+            String UpdateSQL = "update " + tableName + " set " + key + "='" + value + "' where " + checkKey + "='" + checkValue + "'";
+            mDatabase.execSQL(UpdateSQL);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * addColumn
      */

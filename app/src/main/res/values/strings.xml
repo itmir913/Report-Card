@@ -34,6 +34,7 @@
     <string name="title_activity_add_exam_data">시험 성적 추가</string>
     <!-- Edit Exam Activity-->
     <string name="title_activity_edit_exam">시험 수정</string>
+    <string name="title_activity_edit_subject">과목 수정</string>
 
 
 </resources>

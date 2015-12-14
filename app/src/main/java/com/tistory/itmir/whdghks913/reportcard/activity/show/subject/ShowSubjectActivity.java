@@ -7,7 +7,6 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,6 +21,7 @@ import android.widget.TextView;
 
 import com.tistory.itmir.whdghks913.reportcard.R;
 import com.tistory.itmir.whdghks913.reportcard.activity.create.subject.CreateSubjectActivity;
+import com.tistory.itmir.whdghks913.reportcard.activity.edit.EditSubjectActivity;
 import com.tistory.itmir.whdghks913.reportcard.tool.Database;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 
@@ -168,46 +168,57 @@ public class ShowSubjectActivity extends AppCompatActivity {
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    ExamData mData = (ExamData) v.getTag();
+                    int _id = mData._id;
+                    int color = mData.color;
+                    String name = mData.name;
 
+                    Intent mIntent = new Intent(v.getContext(), EditSubjectActivity.class);
+                    mIntent.putExtra("_id", _id);
+                    mIntent.putExtra("color", color);
+                    mIntent.putExtra("name", name);
+
+                    v.getContext().startActivity(mIntent);
                 }
             });
-            holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    if (mDatabase != null) {
-                        boolean isDelete = true;
-                        int _id = ((ExamData) view.getTag())._id;
-
-                        Cursor mExamNameList = mDatabase.getFirstData(ExamDataBaseInfo.examListTableName, "_id");
-                        label:
-                        for (int i = 0; i < mExamNameList.getCount(); i++) {
-                            Cursor mExamDetailList = mDatabase.getFirstData(ExamDataBaseInfo.getExamTable(mExamNameList.getInt(0)), "name");
-                            for (int j = 0; j < mExamDetailList.getCount(); j++) {
-                                if (_id == mExamDetailList.getInt(0)) {
-                                    isDelete = false;
-                                    break label;
-                                }
-                                mExamDetailList.moveToNext();
-                            }
-                            mExamNameList.moveToNext();
-                        }
-
-                        if (isDelete) {
-                            mDatabase.remove(ExamDataBaseInfo.subjectTableName, "_id", _id);
-                            getSubjectList();
-                        } else {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(holder.mView.getContext(), R.style.AppCompatErrorAlertDialogStyle);
-                            builder.setTitle(R.string.not_delete_subject_title);
-                            builder.setMessage(R.string.not_delete_subject_message);
-                            builder.setPositiveButton(android.R.string.ok, null);
-							builder.setCancelable(false);
-                            builder.show();
-                        }
-                    }
-
-                    return true;
-                }
-            });
+//            holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+//                @Override
+//                public boolean onLongClick(View view) {
+            // TODO
+//                    if (mDatabase != null) {
+//                        boolean isDelete = true;
+//                        int _id = ((ExamData) view.getTag())._id;
+//
+//                        Cursor mExamNameList = mDatabase.getFirstData(ExamDataBaseInfo.examListTableName, "_id");
+//                        label:
+//                        for (int i = 0; i < mExamNameList.getCount(); i++) {
+//                            Cursor mExamDetailList = mDatabase.getFirstData(ExamDataBaseInfo.getExamTable(mExamNameList.getInt(0)), "name");
+//                            for (int j = 0; j < mExamDetailList.getCount(); j++) {
+//                                if (_id == mExamDetailList.getInt(0)) {
+//                                    isDelete = false;
+//                                    break label;
+//                                }
+//                                mExamDetailList.moveToNext();
+//                            }
+//                            mExamNameList.moveToNext();
+//                        }
+//
+//                        if (isDelete) {
+//                            mDatabase.remove(ExamDataBaseInfo.subjectTableName, "_id", _id);
+//                            getSubjectList();
+//                        } else {
+//                            AlertDialog.Builder builder = new AlertDialog.Builder(holder.mView.getContext(), R.style.AppCompatErrorAlertDialogStyle);
+//                            builder.setTitle(R.string.not_delete_subject_title);
+//                            builder.setMessage(R.string.not_delete_subject_message);
+//                            builder.setPositiveButton(android.R.string.ok, null);
+//							builder.setCancelable(false);
+//                            builder.show();
+//                        }
+//                    }
+//
+//                    return true;
+//                }
+//            });
         }
     }
 

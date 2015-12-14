@@ -208,15 +208,27 @@ public class EditExamActivity extends AppCompatActivity implements ColorChooserD
                 return true;
             }
 
-            if (mDatabase == null)
-                return true;
+            if (mDatabase == null) {
+                mDatabase = new Database();
+                mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
+            }
 
-            mDatabase.update(ExamDataBaseInfo.examListTableName, "name", examName);
-            mDatabase.update(ExamDataBaseInfo.examListTableName, "category", categoryId.get(categoryIndex));
-            mDatabase.update(ExamDataBaseInfo.examListTableName, "year", mCalendar.get(Calendar.YEAR));
-            mDatabase.update(ExamDataBaseInfo.examListTableName, "month", mCalendar.get(Calendar.MONTH));
-            mDatabase.update(ExamDataBaseInfo.examListTableName, "day", mCalendar.get(Calendar.DAY_OF_MONTH));
-            mDatabase.update(ExamDataBaseInfo.examListTableName, "color", color);
+            Cursor mCursor = mDatabase.getData(ExamDataBaseInfo.examListTableName, "name");
+            for (int i = 0; i < mCursor.getCount(); i++) {
+                mCursor.moveToNext();
+
+                if (examName.equals(mCursor.getString(0))) {
+                    mTextInputLayout.setError("이미 존재하는 시험 이름입니다.");
+                    return true;
+                }
+            }
+
+            mDatabase.update(ExamDataBaseInfo.examListTableName, "name", examName, "_id", _id);
+            mDatabase.update(ExamDataBaseInfo.examListTableName, "category", categoryId.get(categoryIndex), "_id", _id);
+            mDatabase.update(ExamDataBaseInfo.examListTableName, "year", mCalendar.get(Calendar.YEAR), "_id", _id);
+            mDatabase.update(ExamDataBaseInfo.examListTableName, "month", mCalendar.get(Calendar.MONTH), "_id", _id);
+            mDatabase.update(ExamDataBaseInfo.examListTableName, "day", mCalendar.get(Calendar.DAY_OF_MONTH), "_id", _id);
+            mDatabase.update(ExamDataBaseInfo.examListTableName, "color", color, "_id", _id);
 
             mDatabase.release();
 
