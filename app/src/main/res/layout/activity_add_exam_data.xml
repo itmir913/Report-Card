@@ -44,6 +44,7 @@
                     android:id="@+id/mSubjectColorCircleView"
                     android:layout_width="55dp"
                     android:layout_height="55dp"
+                    android:layout_gravity="center"
                     android:background="@drawable/circle_view" />
 
 
@@ -52,71 +53,104 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_margin="16dp" />
+                    android:layout_marginLeft="16dp" />
 
             </LinearLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/mScoreTextInputLayout"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp">
+                android:layout_margin="16dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/mScore"
-                    android:layout_width="match_parent"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/mScoreTextInputLayout"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="받은 점수를 입력해주세요."
-                    android:inputType="number"
-                    android:maxLength="4" />
+                    android:layout_weight="1">
 
-            </android.support.design.widget.TextInputLayout>
+                    <EditText
+                        android:id="@+id/mScore"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="받은 점수"
+                        android:inputType="number"
+                        android:maxLength="4"
+                        android:singleLine="true" />
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/mClassTextInputLayout"
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/mClassTextInputLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/mClass"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="등급"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:singleLine="true" />
+
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp">
+                android:layout_margin="16dp"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/mClass"
-                    android:layout_width="match_parent"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/mRankTextInputLayout"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="등급을 입력해주세요."
-                    android:inputType="number"
-                    android:maxLength="2" />
+                    android:layout_weight="1">
 
-            </android.support.design.widget.TextInputLayout>
+                    <EditText
+                        android:id="@+id/mRank"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="과목 석차"
+                        android:inputType="number"
+                        android:singleLine="true" />
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/mRankTextInputLayout"
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/mApplicantsTextInputLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+
+                    <EditText
+                        android:id="@+id/mApplicants"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="전체 응시자 수"
+                        android:inputType="number"
+                        android:singleLine="true" />
+
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+            <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp">
-
-                <EditText
-                    android:id="@+id/mRank"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="과목 석차를 입력해주세요."
-                    android:inputType="number" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/mApplicantsTextInputLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp">
-
-                <EditText
-                    android:id="@+id/mApplicants"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="전체 응시자 수를 입력하세요"
-                    android:inputType="number" />
-
-            </android.support.design.widget.TextInputLayout>
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="16dp"
+                android:background="@color/colorAccent"
+                android:text="삭제"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@android:color/white"
+                android:visibility="gone" />
 
         </LinearLayout>
 

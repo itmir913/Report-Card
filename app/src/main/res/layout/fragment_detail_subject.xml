@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center"
+            android:gravity="center_horizontal"
             android:text="이름"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -23,7 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center"
+            android:gravity="center_horizontal"
             android:text="점수"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -31,7 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center"
+            android:gravity="center_horizontal"
             android:text="석차"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -39,11 +39,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center"
+            android:gravity="center_horizontal"
             android:text="등급"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
     </LinearLayout>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/colorDivider" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/mRecyclerView"
