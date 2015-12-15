@@ -75,9 +75,9 @@ public class EditSubjectScoreActivity extends AppCompatActivity {
         findViewById(R.id.removeButton).setVisibility(View.VISIBLE);
 
         mScore.setText(String.valueOf(mIntent.getIntExtra("score", 0)));
-        mClass.setText(String.valueOf(mIntent.getIntExtra("rank", 0)));
-        mRank.setText(String.valueOf(mIntent.getIntExtra("applicants", 0)));
-        mApplicants.setText(String.valueOf(mIntent.getIntExtra("mClass", 0)));
+        mClass.setText(String.valueOf(mIntent.getIntExtra("mClass", 0)));
+        mRank.setText(String.valueOf(mIntent.getIntExtra("rank", 0)));
+        mApplicants.setText(String.valueOf(mIntent.getIntExtra("applicants", 0)));
 
         mScoreTextInputLayout = (TextInputLayout) findViewById(R.id.mScoreTextInputLayout);
         mApplicantsTextInputLayout = (TextInputLayout) findViewById(R.id.mApplicantsTextInputLayout);
