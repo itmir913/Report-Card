@@ -2,7 +2,6 @@ package com.tistory.itmir.whdghks913.reportcard.activity.main;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -22,7 +21,6 @@ import com.tistory.itmir.whdghks913.reportcard.R;
 import com.tistory.itmir.whdghks913.reportcard.activity.create.CreateExamActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.show.exam.ShowExamDetailActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.show.subject.ShowSubjectActivity;
-import com.tistory.itmir.whdghks913.reportcard.tool.Database;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 import com.tistory.itmir.whdghks913.reportcard.tool.initDatabase;
 
@@ -35,7 +33,6 @@ import java.util.Comparator;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-    Database mDatabase;
     SimpleRecyclerViewAdapter mAdapter;
 
     @Override
@@ -70,35 +67,20 @@ public class MainActivity extends AppCompatActivity {
         mAdapter.clear();
         mAdapter.notifyDataSetChanged();
 
-        if (mDatabase == null)
-            mDatabase = new Database();
-        mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
-        Cursor mExamListCursor = mDatabase.getData(ExamDataBaseInfo.examListTableName);
-
-        if (mExamListCursor == null)
+        ArrayList<ExamDataBaseInfo.examData> mValues = ExamDataBaseInfo.getExamList();
+        if (mValues == null)
             return;
 
-        for (int i = 0; i < mExamListCursor.getCount(); i++) {
-            mExamListCursor.moveToNext();
-
-            int _id = mExamListCursor.getInt(0);
-
-            String name = mExamListCursor.getString(1);
-
-            int category = mExamListCursor.getInt(2);
-
-            int year = mExamListCursor.getInt(3);
-            int month = mExamListCursor.getInt(4);
-            int day = mExamListCursor.getInt(5);
-
-            int color = mExamListCursor.getInt(6);
+        for (int i = 0; i < mValues.size(); i++) {
+            ExamDataBaseInfo.examData mData = mValues.get(i);
 
             SimpleDateFormat mFormat = new SimpleDateFormat("yyyy.MM.dd E요일", Locale.KOREA);
             Calendar mCalendar = Calendar.getInstance();
-            mCalendar.set(year, month, day);
+            mCalendar.set(mData.year, mData.month, mData.day);
 
-            mAdapter.addItem(_id, category, color, name, mFormat.format(mCalendar.getTime()), ExamDataBaseInfo.getCategoryNameById(mDatabase, category));
+            mAdapter.addItem(mData._id, mData.category, mData.color, mData.name, mFormat.format(mCalendar.getTime()), ExamDataBaseInfo.getCategoryNameById(mData.category));
         }
+
 
         mAdapter.sort();
     }

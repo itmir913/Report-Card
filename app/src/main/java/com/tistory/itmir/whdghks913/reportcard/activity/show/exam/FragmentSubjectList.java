@@ -2,7 +2,6 @@ package com.tistory.itmir.whdghks913.reportcard.activity.show.exam;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 
 import com.tistory.itmir.whdghks913.reportcard.R;
 import com.tistory.itmir.whdghks913.reportcard.activity.edit.EditSubjectScoreActivity;
-import com.tistory.itmir.whdghks913.reportcard.tool.Database;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 
 import java.text.Collator;
@@ -51,26 +49,15 @@ public class FragmentSubjectList extends Fragment {
         AdapterSubject mAdapter = new AdapterSubject(getActivity());
         recyclerView.setAdapter(mAdapter);
 
-        Database mDatabase = new Database();
-        mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
-        Cursor mCursor = mDatabase.getFirstData(ExamDataBaseInfo.getExamTable(_id));
-        if (mCursor == null)
+        ArrayList<ExamDataBaseInfo.subjectInExamData> mValues = ExamDataBaseInfo.getSubjectDataByExamId(_id);
+        if (mValues == null)
             return mView;
 
-        for (int i = 0; i < mCursor.getCount(); i++) {
-            int _subjectId = mCursor.getInt(1);
-            Cursor mSubjectNameCursor = mDatabase.getData(ExamDataBaseInfo.subjectTableName, "name", "_id", _subjectId);
-            mSubjectNameCursor.moveToNext();
 
-            String name = mSubjectNameCursor.getString(0);
-            int score = mCursor.getInt(2);
-            int rank = mCursor.getInt(3);
-            int applicants = mCursor.getInt(4);
-            int mClass = mCursor.getInt(5);
+        for (int i = 0; i < mValues.size(); i++) {
+            ExamDataBaseInfo.subjectInExamData mData = mValues.get(i);
 
-            mAdapter.addItem(_id, _subjectId, name, score, rank, applicants, mClass);
-
-            mCursor.moveToNext();
+            mAdapter.addItem(_id, mData._subjectId, mData.name, mData.score, mData.rank, mData.applicants, mData.mClass);
         }
 
         mAdapter.sort();

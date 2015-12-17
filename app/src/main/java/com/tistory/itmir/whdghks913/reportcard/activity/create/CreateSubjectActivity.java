@@ -103,11 +103,11 @@ public class CreateSubjectActivity extends AppCompatActivity implements ColorCho
                 return true;
             }
 
-            Database mData = new Database();
-            mData.openOrCreateDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName,
+            Database mDatabase = new Database();
+            mDatabase.openOrCreateDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName,
                     ExamDataBaseInfo.subjectTableName, ExamDataBaseInfo.subjectColumn);
 
-            Cursor mCursor = mData.getData(ExamDataBaseInfo.subjectTableName, "name");
+            Cursor mCursor = mDatabase.getData(ExamDataBaseInfo.subjectTableName, "name");
             for (int i = 0; i < mCursor.getCount(); i++) {
                 mCursor.moveToNext();
 
@@ -117,10 +117,10 @@ public class CreateSubjectActivity extends AppCompatActivity implements ColorCho
                 }
             }
 
-            mData.addData("name", examName);
-            mData.addData("color", color);
-            mData.commit(ExamDataBaseInfo.subjectTableName);
-            mData.release();
+            mDatabase.addData("name", examName);
+            mDatabase.addData("color", color);
+            mDatabase.commit(ExamDataBaseInfo.subjectTableName);
+            mDatabase.release();
 
             finish();
 

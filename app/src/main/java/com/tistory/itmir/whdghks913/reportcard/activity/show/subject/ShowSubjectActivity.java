@@ -2,7 +2,6 @@ package com.tistory.itmir.whdghks913.reportcard.activity.show.subject;
 
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -22,7 +21,6 @@ import android.widget.TextView;
 import com.tistory.itmir.whdghks913.reportcard.R;
 import com.tistory.itmir.whdghks913.reportcard.activity.create.CreateSubjectActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.edit.EditSubjectActivity;
-import com.tistory.itmir.whdghks913.reportcard.tool.Database;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 
 import java.text.Collator;
@@ -31,7 +29,6 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class ShowSubjectActivity extends AppCompatActivity {
-    Database mDatabase;
     SimpleRecyclerViewAdapter mAdapter;
 
     @Override
@@ -75,22 +72,13 @@ public class ShowSubjectActivity extends AppCompatActivity {
         mAdapter.clear();
         mAdapter.notifyDataSetChanged();
 
-        if (mDatabase == null)
-            mDatabase = new Database();
-        mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
-        Cursor mSubjectListCursor = mDatabase.getData(ExamDataBaseInfo.subjectTableName);
-
-        if (mSubjectListCursor == null)
+        ArrayList<ExamDataBaseInfo.subjectData> mValues = ExamDataBaseInfo.getSubjectList();
+        if (mValues == null)
             return;
 
-        for (int i = 0; i < mSubjectListCursor.getCount(); i++) {
-            mSubjectListCursor.moveToNext();
-
-            int _id = mSubjectListCursor.getInt(0);
-            String name = mSubjectListCursor.getString(1);
-            int color = mSubjectListCursor.getInt(2);
-
-            mAdapter.addItem(_id, name, color);
+        for (int i = 0; i < mValues.size(); i++) {
+            ExamDataBaseInfo.subjectData mData = mValues.get(i);
+            mAdapter.addItem(mData._subjectId, mData.name, mData.color);
         }
 
         mAdapter.sort();

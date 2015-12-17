@@ -2,7 +2,6 @@ package com.tistory.itmir.whdghks913.reportcard.activity.create;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -29,19 +28,13 @@ import java.util.Comparator;
 
 public class AddExamScoreActivity extends AppCompatActivity {
     private int _id;
-    private Database mDatabase;
-    private ArrayList<subjectData> subjectData = new ArrayList<>();
+    private ArrayList<ExamDataBaseInfo.subjectData> subjectExamData = new ArrayList<>();
 
     private GradientDrawable subjectColorGradient;
 
     private Spinner mSubjectSpinner;
     private EditText mScore, mClass, mRank, mApplicants;
     private TextInputLayout mScoreTextInputLayout, mApplicantsTextInputLayout;
-
-    class subjectData {
-        public String name;
-        public int _id, color;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +64,7 @@ public class AddExamScoreActivity extends AppCompatActivity {
 
         getSubjectList();
 
-        if (subjectData.size() == 0) {
+        if (subjectExamData.size() == 0 || subjectExamData == null) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatErrorAlertDialogStyle);
             builder.setTitle(R.string.not_exists_subject_title);
             builder.setMessage(R.string.not_exists_subject_message);
@@ -97,9 +90,9 @@ public class AddExamScoreActivity extends AppCompatActivity {
         View mSubjectColorCircleView = findViewById(R.id.mSubjectColorCircleView);
         subjectColorGradient = (GradientDrawable) mSubjectColorCircleView.getBackground();
 
-        String[] mSubjectName = new String[subjectData.size()];
+        String[] mSubjectName = new String[subjectExamData.size()];
         for (int i = 0; i < mSubjectName.length; i++) {
-            mSubjectName[i] = subjectData.get(i).name;
+            mSubjectName[i] = subjectExamData.get(i).name;
         }
 
         mSubjectSpinner = (Spinner) findViewById(R.id.mSubjectSpinner);
@@ -109,7 +102,7 @@ public class AddExamScoreActivity extends AppCompatActivity {
         mSubjectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                subjectColorGradient.setColor(subjectData.get(position).color);
+                subjectColorGradient.setColor(subjectExamData.get(position).color);
             }
 
             @Override
@@ -132,51 +125,45 @@ public class AddExamScoreActivity extends AppCompatActivity {
     }
 
     private void getSubjectList() {
-        mDatabase = new Database();
-        mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
-
-        Cursor mCursor = mDatabase.getFirstData(ExamDataBaseInfo.getExamTable(_id));
         ArrayList<Integer> addedSubject = new ArrayList<>();
-        for (int i = 0; i < mCursor.getCount(); i++) {
-            int _id = mCursor.getInt(1);
-            addedSubject.add(_id);
+        ArrayList<ExamDataBaseInfo.subjectInExamData> mValues = ExamDataBaseInfo.getSubjectDataByExamId(_id);
+        ArrayList<ExamDataBaseInfo.subjectData> subjectList = ExamDataBaseInfo.getSubjectList();
 
-            mCursor.moveToNext();
-        }
-
-        Cursor mSubjectListCursor = mDatabase.getData(ExamDataBaseInfo.subjectTableName);
-        if (mSubjectListCursor == null)
+        if (mValues == null || subjectList == null)
             return;
 
-        for (int i = 0; i < mSubjectListCursor.getCount(); i++) {
-            mSubjectListCursor.moveToNext();
-
-            int _id = mSubjectListCursor.getInt(0);
-            String name = mSubjectListCursor.getString(1);
-            int color = mSubjectListCursor.getInt(2);
-
-            if (!addedSubject.contains(_id)) {
-                subjectData addInfo = new subjectData();
-                addInfo.name = name;
-                addInfo._id = _id;
-                addInfo.color = color;
-
-                subjectData.add(addInfo);
-            }
-
+        for (int i = 0; i < mValues.size(); i++) {
+            addedSubject.add(mValues.get(i)._subjectId);
         }
 
-        Collections.sort(subjectData, ALPHA_COMPARATOR);
+        for (int i = 0; i < subjectList.size(); i++) {
+            ExamDataBaseInfo.subjectData mData = subjectList.get(i);
+
+            int _subjectId = mData._subjectId;
+            String name = mData.name;
+            int color = mData.color;
+
+            if (!addedSubject.contains(_subjectId)) {
+                ExamDataBaseInfo.subjectData addInfo = new ExamDataBaseInfo.subjectData();
+                addInfo.name = name;
+                addInfo._subjectId = _subjectId;
+                addInfo.color = color;
+
+                subjectExamData.add(addInfo);
+            }
+        }
+
+        Collections.sort(subjectExamData, ALPHA_COMPARATOR);
     }
 
     /**
      * 알파벳순으로 정렬
      */
-    public static final Comparator<subjectData> ALPHA_COMPARATOR = new Comparator<subjectData>() {
+    public static final Comparator<ExamDataBaseInfo.subjectData> ALPHA_COMPARATOR = new Comparator<ExamDataBaseInfo.subjectData>() {
         private final Collator sCollator = Collator.getInstance();
 
         @Override
-        public int compare(subjectData arg1, subjectData arg2) {
+        public int compare(ExamDataBaseInfo.subjectData arg1, ExamDataBaseInfo.subjectData arg2) {
             return sCollator.compare(arg1.name, arg2.name);
         }
     };
@@ -221,12 +208,10 @@ public class AddExamScoreActivity extends AppCompatActivity {
                 return true;
             }
 
-            if (mDatabase == null) {
-                mDatabase = new Database();
-                mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
-            }
+            Database mDatabase = new Database();
+            mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
 
-            mDatabase.addData("name", subjectData.get(mSubjectSpinner.getSelectedItemPosition())._id);
+            mDatabase.addData("name", subjectExamData.get(mSubjectSpinner.getSelectedItemPosition())._subjectId);
             mDatabase.addData("score", score);
             mDatabase.addData("rank", rank);
             mDatabase.addData("applicants", applicants);
