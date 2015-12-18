@@ -22,7 +22,7 @@
     <!-- Detail Exam Activity -->
     <string name="title_activity_show_exam_detail">시험 상세 정보</string>
     <string name="rank_format">%1$d / %2$d</string>
-    <string name="score_format">%1$d점</string>
+    <string name="score_format">%1$.2f점</string>
     <string name="class_format">%1$d등급</string>
     <!-- Subject List -->
     <string name="title_activity_show_subject">과목 목록</string>

@@ -75,8 +75,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="받은 점수"
-                        android:inputType="number"
-                        android:maxLength="4"
+                        android:inputType="numberDecimal"
+                        android:maxLength="6"
                         android:nextFocusDown="@+id/mClass"
                         android:singleLine="true" />
 

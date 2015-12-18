@@ -198,7 +198,7 @@ public class AddExamScoreActivity extends AppCompatActivity {
                 return true;
             }
 
-            int score = Integer.parseInt(scoreText);
+            float score = Float.parseFloat(scoreText);
             int mClass = (classText.isEmpty() || classText.length() == 0 || (classText.replaceAll("\\s", "")).length() == 0) ? 0 : Integer.parseInt(classText);
             int rank = (rankText.isEmpty() || rankText.length() == 0 || (rankText.replaceAll("\\s", "")).length() == 0) ? 0 : Integer.parseInt(rankText);
             int applicants = (applicantsText.isEmpty() || applicantsText.length() == 0 || (applicantsText.replaceAll("\\s", "")).length() == 0) ? 0 : Integer.parseInt(applicantsText);

@@ -209,6 +209,15 @@ public class Database {
         }
     }
 
+    public void update(String tableName, String key, float value, String checkKey, int checkValue) {
+        try {
+            String UpdateSQL = "update " + tableName + " set " + key + "='" + value + "' where " + checkKey + "='" + checkValue + "'";
+            mDatabase.execSQL(UpdateSQL);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * addColumn
      */

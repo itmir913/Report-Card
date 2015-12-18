@@ -90,7 +90,7 @@ class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.SubjectViewHold
         }
     }
 
-    public void addItem(int _id, int subjectId, String name, int score, int rank, int applicants, int mClass) {
+    public void addItem(int _id, int subjectId, String name, float score, int rank, int applicants, int mClass) {
         SubjectListInfo addInfo = new SubjectListInfo();
 
         addInfo._id = _id;
@@ -158,7 +158,8 @@ class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.SubjectViewHold
     public class SubjectListInfo {
         public int _id;
         public int subjectId;
-        public int score, rank, applicants, mClass;
+        public float score;
+        public int rank, applicants, mClass;
         public String name;
     }
 

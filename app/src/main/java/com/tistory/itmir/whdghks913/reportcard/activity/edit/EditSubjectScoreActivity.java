@@ -74,7 +74,7 @@ public class EditSubjectScoreActivity extends AppCompatActivity {
         mApplicants = (EditText) findViewById(R.id.mApplicants);
         findViewById(R.id.removeButton).setVisibility(View.VISIBLE);
 
-        mScore.setText(String.valueOf(mIntent.getIntExtra("score", 0)));
+        mScore.setText(String.valueOf(mIntent.getFloatExtra("score", 0)));
         mClass.setText(String.valueOf(mIntent.getIntExtra("mClass", 0)));
         mRank.setText(String.valueOf(mIntent.getIntExtra("rank", 0)));
         mApplicants.setText(String.valueOf(mIntent.getIntExtra("applicants", 0)));
@@ -130,7 +130,7 @@ public class EditSubjectScoreActivity extends AppCompatActivity {
                 return true;
             }
 
-            int score = Integer.parseInt(scoreText);
+            float score = Float.parseFloat(scoreText);
             int mClass = (classText.isEmpty() || classText.length() == 0 || (classText.replaceAll("\\s", "")).length() == 0) ? 0 : Integer.parseInt(classText);
             int rank = (rankText.isEmpty() || rankText.length() == 0 || (rankText.replaceAll("\\s", "")).length() == 0) ? 0 : Integer.parseInt(rankText);
             int applicants = (applicantsText.isEmpty() || applicantsText.length() == 0 || (applicantsText.replaceAll("\\s", "")).length() == 0) ? 0 : Integer.parseInt(applicantsText);

@@ -176,7 +176,7 @@ public class ExamDataBaseInfo {
             mSubjectNameCursor.moveToNext();
 
             String name = mSubjectNameCursor.getString(0);
-            int score = mCursor.getInt(2);
+            float score = mCursor.getFloat(2);
             int rank = mCursor.getInt(3);
             int applicants = mCursor.getInt(4);
             int mClass = mCursor.getInt(5);
@@ -199,7 +199,8 @@ public class ExamDataBaseInfo {
     }
 
     public static class subjectInExamData {
-        public int _id, _subjectId, score, rank, applicants, mClass;
+        public int _id, _subjectId, rank, applicants, mClass;
+        public float score;
         public String name;
     }
 
