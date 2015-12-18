@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,6 +92,7 @@ public class FragmentGraph extends Fragment {
             bar.setColor(mData.color);
             barSet.addBar(bar);
         }
+
         mBarChartView.addData(barSet);
 
         mBarChartView.setBorderSpacing(Tools.fromDpToPx(5))
@@ -112,6 +114,33 @@ public class FragmentGraph extends Fragment {
     private void showPercentageGraph(View mView, ArrayList<chartData> mChartData) {
         LineChartView mLineChartView = (LineChartView) mView.findViewById(R.id.mPercentageLineChartView);
 
+        LineSet listSet = new LineSet();
+
+        int size = mChartData.size();
+        for (int i = size - 1; i >= 0; i--) {
+            chartData mData = mChartData.get(i);
+
+            int rank = mData.rank;
+            int applicants = mData.applicants;
+
+            Log.d("rank", "" + rank);
+            Log.d("applicants", "" + applicants);
+
+            boolean isZero = ((rank == 0) || (applicants == 0));
+            float percentage = isZero ? 0 : 100 - (new BigDecimal(rank))
+                    .divide(new BigDecimal(applicants), 2, BigDecimal.ROUND_UP)
+                    .multiply(new BigDecimal("100"))
+                    .floatValue();
+
+            Point point = new Point(mData.name, percentage);
+            point.setColor(Color.parseColor("#eef1f6"));
+            point.setStrokeColor(mData.color);
+            point.setStrokeThickness(Tools.fromDpToPx(4));
+
+            if (!isZero)
+                listSet.addPoint(point);
+        }
+
         Tooltip mTooltip = new Tooltip(getActivity(), R.layout.tooltip_linechart, R.id.value);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             mTooltip.setEnterAnimation(PropertyValuesHolder.ofFloat(View.ALPHA, 1),
@@ -123,31 +152,6 @@ public class FragmentGraph extends Fragment {
                     PropertyValuesHolder.ofFloat(View.SCALE_Y, 0f));
         }
         mLineChartView.setTooltips(mTooltip);
-
-        LineSet listSet = new LineSet();
-
-        int size = mChartData.size();
-        for (int i = size - 1; i >= 0; i--) {
-            chartData mData = mChartData.get(i);
-
-            int rank = mData.rank;
-            int applicants = mData.applicants;
-
-            if (rank == 0 || applicants == 0)
-                continue;
-
-            float percentage = 100 - (new BigDecimal(rank))
-                    .divide(new BigDecimal(applicants), 2, BigDecimal.ROUND_UP)
-                    .multiply(new BigDecimal("100"))
-                    .floatValue();
-
-            Point point = new Point(mData.name, percentage);
-            point.setColor(Color.parseColor("#eef1f6"));
-            point.setStrokeColor(mData.color);
-            point.setStrokeThickness(Tools.fromDpToPx(4));
-
-            listSet.addPoint(point);
-        }
 
         listSet.setColor(Color.parseColor("#FF8E8A84"));
         listSet.setThickness(Tools.fromDpToPx(2));
