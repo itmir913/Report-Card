@@ -1,6 +1,8 @@
 package com.tistory.itmir.whdghks913.reportcard.activity.show.exam;
 
+import android.animation.PropertyValuesHolder;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,12 +12,18 @@ import android.view.ViewGroup;
 import com.db.chart.Tools;
 import com.db.chart.model.Bar;
 import com.db.chart.model.BarSet;
+import com.db.chart.model.LineSet;
+import com.db.chart.model.Point;
 import com.db.chart.view.HorizontalBarChartView;
+import com.db.chart.view.LineChartView;
+import com.db.chart.view.Tooltip;
 import com.db.chart.view.XController;
 import com.db.chart.view.animation.Animation;
+import com.db.chart.view.animation.easing.CubicEase;
 import com.tistory.itmir.whdghks913.reportcard.R;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 
+import java.math.BigDecimal;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,48 +52,41 @@ public class FragmentGraph extends Fragment {
 
         ArrayList<ExamDataBaseInfo.subjectInExamData> mValues = ExamDataBaseInfo.getSubjectDataByExamId(_id);
         ArrayList<ExamDataBaseInfo.subjectData> subjectList = ExamDataBaseInfo.getSubjectList();
-
-        if (mValues == null || subjectList == null || mValues.size() == 0 || subjectList.size() == 0)
-            return mView;
-
         ArrayList<Integer> mSubjectId = ExamDataBaseInfo.getSubjectIdList();
         ArrayList<Integer> mSubjectColor = ExamDataBaseInfo.getSubjectColorList();
 
-        showScoreGraph(mView, _id, mValues, subjectList, mSubjectId, mSubjectColor);
+        if (mValues == null || subjectList == null || mValues.size() == 0 || subjectList.size() == 0 || mSubjectId == null || mSubjectColor == null)
+            return mView;
+
+        ArrayList<chartData> mChartData = new ArrayList<>();
+        for (int i = 0; i < mValues.size(); i++) {
+            ExamDataBaseInfo.subjectInExamData mData = mValues.get(i);
+
+            chartData mBarData = new chartData();
+            mBarData.name = mData.name;
+            mBarData.color = mSubjectColor.get(mSubjectId.indexOf(mData._subjectId));
+            mBarData.score = mData.score;
+            mBarData.applicants = mData.applicants;
+            mBarData.rank = mData.rank;
+            mChartData.add(mBarData);
+        }
+
+        Collections.sort(mChartData, ALPHA_COMPARATOR);
+
+        showScoreGraph(mView, mChartData);
+        showPercentageGraph(mView, mChartData);
 
         return mView;
     }
 
-    private void showScoreGraph(View mView, int _id,
-                                ArrayList<ExamDataBaseInfo.subjectInExamData> mValues,
-                                ArrayList<ExamDataBaseInfo.subjectData> subjectList,
-                                ArrayList<Integer> mSubjectId,
-                                ArrayList<Integer> mSubjectColor) {
-        ArrayList<barSubjectData> mBarSetData = new ArrayList<>();
-
+    private void showScoreGraph(View mView, ArrayList<chartData> mChartData) {
         HorizontalBarChartView mBarChartView = (HorizontalBarChartView) mView.findViewById(R.id.mBarChartView);
 
         BarSet barSet = new BarSet();
-        for (int i = 0; i < mValues.size(); i++) {
-            ExamDataBaseInfo.subjectInExamData mData = mValues.get(i);
 
-            int _subjectId = mData._subjectId;
-            String name = mData.name;
-            int color = mSubjectColor.get(mSubjectId.indexOf(_subjectId));
-            float score = mData.score;
-
-            barSubjectData mBarData = new barSubjectData();
-            mBarData.name = name;
-            mBarData.color = color;
-            mBarData.score = score;
-            mBarSetData.add(mBarData);
-        }
-
-        Collections.sort(mBarSetData, ALPHA_COMPARATOR);
-
-        int size = mBarSetData.size();
+        int size = mChartData.size();
         for (int i = 0; i < size; i++) {
-            barSubjectData mData = mBarSetData.get(i);
+            chartData mData = mChartData.get(i);
             Bar bar = new Bar(mData.name, mData.score);
             bar.setColor(mData.color);
             barSet.addBar(bar);
@@ -100,29 +101,87 @@ public class FragmentGraph extends Fragment {
                 .setXLabels(XController.LabelPosition.OUTSIDE);
 
         ViewGroup.LayoutParams mParams = mBarChartView.getLayoutParams();
-        mParams.height = (size == 1) ? 200 : 235 + (size * 15);
+        mParams.height = (size == 1) ? 150 : 220 + (size * 40);
         mBarChartView.setLayoutParams(mParams);
 
-        Animation anim = new Animation(500);
+        Animation anim = new Animation(3000);
+        anim.setAlpha(2);
         mBarChartView.show(anim);
+    }
+
+    private void showPercentageGraph(View mView, ArrayList<chartData> mChartData) {
+        LineChartView mLineChartView = (LineChartView) mView.findViewById(R.id.mPercentageLineChartView);
+
+        Tooltip mTooltip = new Tooltip(getActivity(), R.layout.tooltip_linechart, R.id.value);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            mTooltip.setEnterAnimation(PropertyValuesHolder.ofFloat(View.ALPHA, 1),
+                    PropertyValuesHolder.ofFloat(View.SCALE_X, 1f),
+                    PropertyValuesHolder.ofFloat(View.SCALE_Y, 1f));
+
+            mTooltip.setExitAnimation(PropertyValuesHolder.ofFloat(View.ALPHA, 0),
+                    PropertyValuesHolder.ofFloat(View.SCALE_X, 0f),
+                    PropertyValuesHolder.ofFloat(View.SCALE_Y, 0f));
+        }
+        mLineChartView.setTooltips(mTooltip);
+
+        LineSet listSet = new LineSet();
+
+        int size = mChartData.size();
+        for (int i = size - 1; i >= 0; i--) {
+            chartData mData = mChartData.get(i);
+
+            int rank = mData.rank;
+            int applicants = mData.applicants;
+
+            if (rank == 0 || applicants == 0)
+                continue;
+
+            float percentage = 100 - (new BigDecimal(rank))
+                    .divide(new BigDecimal(applicants), 2, BigDecimal.ROUND_UP)
+                    .multiply(new BigDecimal("100"))
+                    .floatValue();
+
+            Point point = new Point(mData.name, percentage);
+            point.setColor(Color.parseColor("#eef1f6"));
+            point.setStrokeColor(mData.color);
+            point.setStrokeThickness(Tools.fromDpToPx(4));
+
+            listSet.addPoint(point);
+        }
+
+        listSet.setColor(Color.parseColor("#FF8E8A84"));
+        listSet.setThickness(Tools.fromDpToPx(2));
+
+        mLineChartView.addData(listSet);
+
+        mLineChartView.setAxisBorderValues(0, 100, 20)
+                .setLabelsColor(Color.parseColor("#FF8E8A84"))
+                .setAxisColor(Color.parseColor("#FF8E8A84"));
+
+        // Animation customization
+        Animation anim = new Animation(3000);
+        anim.setEasing(new CubicEase());
+        anim.setAlpha(2);
+        mLineChartView.show(anim);
     }
 
     /**
      * 알파벳순으로 정렬
      */
-    public final Comparator<barSubjectData> ALPHA_COMPARATOR = new Comparator<barSubjectData>() {
+    public final Comparator<chartData> ALPHA_COMPARATOR = new Comparator<chartData>() {
         private final Collator sCollator = Collator.getInstance();
 
         @Override
-        public int compare(barSubjectData arg1, barSubjectData arg2) {
+        public int compare(chartData arg1, chartData arg2) {
             return sCollator.compare(arg2.name, arg1.name);
         }
     };
 
-    class barSubjectData {
+    class chartData {
         public String name;
         public int color;
         public float score;
+        public int rank, applicants;
     }
 
 }

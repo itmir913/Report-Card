@@ -17,8 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.tistory.itmir.whdghks913.reportcard.R;
-import com.tistory.itmir.whdghks913.reportcard.activity.modify.ExamScoreActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.modify.ExamActivity;
+import com.tistory.itmir.whdghks913.reportcard.activity.modify.ExamScoreActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +27,8 @@ public class ShowExamDetailActivity extends AppCompatActivity {
     private int _id;
     private String title;
     private Adapter mAdapter;
+
+    private FloatingActionButton mFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +56,7 @@ public class ShowExamDetailActivity extends AppCompatActivity {
             });
         }
 
-        FloatingActionButton mFab = (FloatingActionButton) findViewById(R.id.mFab);
+        mFab = (FloatingActionButton) findViewById(R.id.mFab);
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -73,6 +75,24 @@ public class ShowExamDetailActivity extends AppCompatActivity {
             mAdapter.addFragment(getString(R.string.subject), FragmentSubjectList.getInstance(_id));
             mAdapter.addFragment(getString(R.string.graph), FragmentGraph.getInstance(_id));
             viewPager.setAdapter(mAdapter);
+
+            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    if (position == 1) mFab.hide();
+                    else mFab.show();
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
         }
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.mTabLayout);
