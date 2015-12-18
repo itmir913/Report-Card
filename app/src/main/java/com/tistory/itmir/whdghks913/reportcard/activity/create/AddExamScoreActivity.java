@@ -197,17 +197,17 @@ public class AddExamScoreActivity extends AppCompatActivity {
              * private EditText mScore, mClass, mRank, mApplicants;
              * private TextInputLayout mScoreTextInputLayout, mClassTextInputLayout, mRankTextInputLayout, mApplicantsTextInputLayout;
              */
-            if (scoreText.isEmpty() || scoreText.length() == 0 || (scoreText.replaceAll("\\s", "")).length() == 0) {
+            if (scoreText.isEmpty() || scoreText.length() == 0) {
                 mScoreTextInputLayout.setError("받은 점수는 필수로 입력해야 합니다.");
                 return true;
             }
 
             float score = Float.parseFloat(scoreText);
-            float average = Float.parseFloat(averageText);
-            float standardDeviation = Float.parseFloat(standardDeviationText);
-            int mClass = (classText.isEmpty() || classText.length() == 0 || (classText.replaceAll("\\s", "")).length() == 0) ? 0 : Integer.parseInt(classText);
-            int rank = (rankText.isEmpty() || rankText.length() == 0 || (rankText.replaceAll("\\s", "")).length() == 0) ? 0 : Integer.parseInt(rankText);
-            int applicants = (applicantsText.isEmpty() || applicantsText.length() == 0 || (applicantsText.replaceAll("\\s", "")).length() == 0) ? 0 : Integer.parseInt(applicantsText);
+            float average = (averageText.isEmpty() || averageText.length() == 0) ? 0 : Float.parseFloat(averageText);
+            float standardDeviation = (standardDeviationText.isEmpty() || standardDeviationText.length() == 0) ? 0 : Float.parseFloat(standardDeviationText);
+            int mClass = (classText.isEmpty() || classText.length() == 0) ? 0 : Integer.parseInt(classText);
+            int rank = (rankText.isEmpty() || rankText.length() == 0) ? 0 : Integer.parseInt(rankText);
+            int applicants = (applicantsText.isEmpty() || applicantsText.length() == 0) ? 0 : Integer.parseInt(applicantsText);
 
             if (rank > applicants) {
                 mApplicantsTextInputLayout.setError("전체 응시자 수는 과목 석차수보다 커야 합니다.");
