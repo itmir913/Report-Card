@@ -1,4 +1,4 @@
-package com.tistory.itmir.whdghks913.reportcard.activity.create;
+package com.tistory.itmir.whdghks913.reportcard.activity.modify;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,7 +30,7 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.Random;
 
-public class CreateExamActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback {
+public class ExamActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback {
     /**
      * type
      */

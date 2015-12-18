@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.tistory.itmir.whdghks913.reportcard.R;
-import com.tistory.itmir.whdghks913.reportcard.activity.create.AddExamScoreActivity;
+import com.tistory.itmir.whdghks913.reportcard.activity.modify.ExamScoreActivity;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 
 import java.text.Collator;
@@ -127,7 +127,7 @@ class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.SubjectViewHold
             @Override
             public void onClick(View view) {
                 SubjectListInfo mInfo = (SubjectListInfo) view.getTag();
-                Intent mIntent = new Intent(view.getContext(), AddExamScoreActivity.class);
+                Intent mIntent = new Intent(view.getContext(), ExamScoreActivity.class);
                 mIntent.putExtra("type", 1);
 
                 mIntent.putExtra("_id", mInfo._id);

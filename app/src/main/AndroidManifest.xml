@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.create.CreateExamActivity"
+            android:name=".activity.modify.ExamActivity"
             android:label="@string/title_activity_create_exam"
             android:theme="@style/AppTheme" />
         <activity
@@ -27,7 +27,7 @@
             android:label="@string/title_activity_show_exam_detail"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".activity.create.CreateSubjectActivity"
+            android:name=".activity.modify.SubjectActivity"
             android:label="@string/title_activity_create_subject"
             android:theme="@style/AppTheme" />
         <activity
@@ -35,7 +35,7 @@
             android:label="@string/title_activity_show_subject"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".activity.create.AddExamScoreActivity"
+            android:name=".activity.modify.ExamScoreActivity"
             android:label="@string/title_activity_add_exam_data"
             android:theme="@style/AppTheme" />
     </application>

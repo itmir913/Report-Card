@@ -19,7 +19,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.tistory.itmir.whdghks913.reportcard.R;
-import com.tistory.itmir.whdghks913.reportcard.activity.create.CreateSubjectActivity;
+import com.tistory.itmir.whdghks913.reportcard.activity.modify.SubjectActivity;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 
 import java.text.Collator;
@@ -41,7 +41,7 @@ public class ShowSubjectActivity extends AppCompatActivity {
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), CreateSubjectActivity.class));
+                startActivity(new Intent(getApplicationContext(), SubjectActivity.class));
             }
         });
 
@@ -160,7 +160,7 @@ public class ShowSubjectActivity extends AppCompatActivity {
                     int color = mData.color;
                     String name = mData.name;
 
-                    Intent mIntent = new Intent(v.getContext(), CreateSubjectActivity.class);
+                    Intent mIntent = new Intent(v.getContext(), SubjectActivity.class);
                     mIntent.putExtra("type", 1);
                     mIntent.putExtra("_id", _id);
                     mIntent.putExtra("color", color);
@@ -215,7 +215,7 @@ public class ShowSubjectActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_add_subject) {
-            Intent mIntent = new Intent(getApplicationContext(), CreateSubjectActivity.class);
+            Intent mIntent = new Intent(getApplicationContext(), SubjectActivity.class);
             mIntent.putExtra("type", 0);
             startActivity(mIntent);
             return true;

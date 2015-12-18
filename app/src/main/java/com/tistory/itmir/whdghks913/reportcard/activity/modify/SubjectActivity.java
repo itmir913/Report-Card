@@ -1,4 +1,4 @@
-package com.tistory.itmir.whdghks913.reportcard.activity.create;
+package com.tistory.itmir.whdghks913.reportcard.activity.modify;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -22,7 +22,7 @@ import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 
 import java.util.Random;
 
-public class CreateSubjectActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback {
+public class SubjectActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback {
     /**
      * type
      */

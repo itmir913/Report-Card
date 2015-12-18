@@ -17,8 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.tistory.itmir.whdghks913.reportcard.R;
-import com.tistory.itmir.whdghks913.reportcard.activity.create.AddExamScoreActivity;
-import com.tistory.itmir.whdghks913.reportcard.activity.create.CreateExamActivity;
+import com.tistory.itmir.whdghks913.reportcard.activity.modify.ExamScoreActivity;
+import com.tistory.itmir.whdghks913.reportcard.activity.modify.ExamActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +58,7 @@ public class ShowExamDetailActivity extends AppCompatActivity {
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent mIntent = new Intent(getApplicationContext(), AddExamScoreActivity.class);
+                Intent mIntent = new Intent(getApplicationContext(), ExamScoreActivity.class);
                 mIntent.putExtra("type", 0);
                 mIntent.putExtra("_id", _id);
                 startActivity(mIntent);
@@ -136,7 +136,7 @@ public class ShowExamDetailActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_edit) {
-            Intent mIntent = new Intent(this, CreateExamActivity.class);
+            Intent mIntent = new Intent(this, ExamActivity.class);
             mIntent.putExtra("type", 1);
             mIntent.putExtra("_id", _id);
             mIntent.putExtra("name", title);

@@ -1,4 +1,4 @@
-package com.tistory.itmir.whdghks913.reportcard.activity.create;
+package com.tistory.itmir.whdghks913.reportcard.activity.modify;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class AddExamScoreActivity extends AppCompatActivity {
+public class ExamScoreActivity extends AppCompatActivity {
     /**
      * type
      */
@@ -116,7 +116,7 @@ public class AddExamScoreActivity extends AppCompatActivity {
                 builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        Intent mIntent = new Intent(getApplicationContext(), CreateSubjectActivity.class);
+                        Intent mIntent = new Intent(getApplicationContext(), SubjectActivity.class);
                         mIntent.putExtra("type", 0);
                         startActivity(mIntent);
                         finish();
