@@ -1,8 +1,6 @@
 package com.tistory.itmir.whdghks913.reportcard.activity.show.exam;
 
-import android.animation.PropertyValuesHolder;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,7 +11,6 @@ import com.db.chart.Tools;
 import com.db.chart.model.Bar;
 import com.db.chart.model.BarSet;
 import com.db.chart.view.HorizontalBarChartView;
-import com.db.chart.view.Tooltip;
 import com.db.chart.view.XController;
 import com.db.chart.view.animation.Animation;
 import com.tistory.itmir.whdghks913.reportcard.R;
@@ -51,14 +48,17 @@ public class FragmentGraph extends Fragment {
     }
 
     private void showScoreGraph(View mView, int _id) {
-        ArrayList<barSubjectData> mBarSetData = new ArrayList<>();
         ArrayList<ExamDataBaseInfo.subjectInExamData> mValues = ExamDataBaseInfo.getSubjectDataByExamId(_id);
         ArrayList<ExamDataBaseInfo.subjectData> subjectList = ExamDataBaseInfo.getSubjectList();
+
+        if (mValues == null || subjectList == null)
+            return;
+        if (mValues.size() == 0 || subjectList.size() == 0)
+            return;
+
+        ArrayList<barSubjectData> mBarSetData = new ArrayList<>();
         ArrayList<Integer> mSubjectId = ExamDataBaseInfo.getSubjectIdList();
         ArrayList<Integer> mSubjectColor = ExamDataBaseInfo.getSubjectColorList();
-
-        if (mValues == null || subjectList == null || mSubjectId == null || mSubjectColor == null)
-            return;
 
         HorizontalBarChartView mBarChartView = (HorizontalBarChartView) mView.findViewById(R.id.mBarChartView);
 
@@ -99,18 +99,6 @@ public class FragmentGraph extends Fragment {
         ViewGroup.LayoutParams mParams = mBarChartView.getLayoutParams();
         mParams.height = (size == 1) ? 200 : 235 + (size * 15);
         mBarChartView.setLayoutParams(mParams);
-
-        Tooltip mTooltip = new Tooltip(getActivity(), R.layout.tooltip, R.id.value);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            mTooltip.setEnterAnimation(PropertyValuesHolder.ofFloat(View.ALPHA, 1),
-                    PropertyValuesHolder.ofFloat(View.SCALE_X, 1f),
-                    PropertyValuesHolder.ofFloat(View.SCALE_Y, 1f));
-
-            mTooltip.setExitAnimation(PropertyValuesHolder.ofFloat(View.ALPHA, 0),
-                    PropertyValuesHolder.ofFloat(View.SCALE_X, 0f),
-                    PropertyValuesHolder.ofFloat(View.SCALE_Y, 0f));
-        }
-        mBarChartView.setTooltips(mTooltip);
 
         Animation anim = new Animation(500);
         mBarChartView.show(anim);

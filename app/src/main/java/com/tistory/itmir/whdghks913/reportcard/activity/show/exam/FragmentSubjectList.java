@@ -50,9 +50,8 @@ public class FragmentSubjectList extends Fragment {
         recyclerView.setAdapter(mAdapter);
 
         ArrayList<ExamDataBaseInfo.subjectInExamData> mValues = ExamDataBaseInfo.getSubjectDataByExamId(_id);
-        if (mValues == null)
+        if (mValues == null || mValues.size() == 0)
             return mView;
-
 
         for (int i = 0; i < mValues.size(); i++) {
             ExamDataBaseInfo.subjectInExamData mData = mValues.get(i);
