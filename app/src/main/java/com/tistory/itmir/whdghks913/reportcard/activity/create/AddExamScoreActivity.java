@@ -2,6 +2,7 @@ package com.tistory.itmir.whdghks913.reportcard.activity.create;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -27,6 +28,14 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class AddExamScoreActivity extends AppCompatActivity {
+    /**
+     * type
+     */
+    private int type;
+
+    /**
+     * Create type
+     */
     private int _id;
     private ArrayList<ExamDataBaseInfo.subjectData> subjectExamData = new ArrayList<>();
 
@@ -36,14 +45,29 @@ public class AddExamScoreActivity extends AppCompatActivity {
     private EditText mScore, mClass, mRank, mApplicants, mAverage, mStandardDeviation;
     private TextInputLayout mScoreTextInputLayout, mApplicantsTextInputLayout;
 
+    /**
+     * Edit Type
+     */
+    private int subjectId;
+    private Database mDatabase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_exam_score_data);
+
+        Intent mIntent = getIntent();
+        type = mIntent.getIntExtra("type", 0);
+
         Toolbar mToolbar = (Toolbar) findViewById(R.id.mToolbar);
+        if (type == 1) mToolbar.setTitle(getString(R.string.title_activity_edit_subject_data));
         setSupportActionBar(mToolbar);
 
-        _id = getIntent().getIntExtra("_id", 0);
+        _id = mIntent.getIntExtra("_id", 0);
+        if (type == 1) {
+            subjectId = mIntent.getIntExtra("subjectId", 0);
+        }
+
         if (_id == 0) {
             // ERROR
             return;
@@ -62,55 +86,8 @@ public class AddExamScoreActivity extends AppCompatActivity {
             });
         }
 
-        getSubjectList();
-
-        if (subjectExamData.size() == 0 || subjectExamData == null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatErrorAlertDialogStyle);
-            builder.setTitle(R.string.not_exists_subject_title);
-            builder.setMessage(R.string.not_exists_subject_message);
-            builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    startActivity(new Intent(getApplicationContext(), CreateSubjectActivity.class));
-                    finish();
-                }
-            });
-            builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    finish();
-                }
-            });
-            builder.setCancelable(false);
-            builder.show();
-
-            return;
-        }
-
-        View mSubjectColorCircleView = findViewById(R.id.mSubjectColorCircleView);
-        subjectColorGradient = (GradientDrawable) mSubjectColorCircleView.getBackground();
-
-        String[] mSubjectName = new String[subjectExamData.size()];
-        for (int i = 0; i < mSubjectName.length; i++) {
-            mSubjectName[i] = subjectExamData.get(i).name;
-        }
-
-        mSubjectSpinner = (Spinner) findViewById(R.id.mSubjectSpinner);
-        ArrayAdapter<String> mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, mSubjectName);
-        mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mSubjectSpinner.setAdapter(mAdapter);
-        mSubjectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                subjectColorGradient.setColor(subjectExamData.get(position).color);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-        mSubjectSpinner.setSelection(0);
+        mDatabase = new Database();
+        mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
 
         mScore = (EditText) findViewById(R.id.mScore);
         mClass = (EditText) findViewById(R.id.mClass);
@@ -118,12 +95,100 @@ public class AddExamScoreActivity extends AppCompatActivity {
         mApplicants = (EditText) findViewById(R.id.mApplicants);
         mAverage = (EditText) findViewById(R.id.mAverage);
         mStandardDeviation = (EditText) findViewById(R.id.mStandardDeviation);
+        mSubjectSpinner = (Spinner) findViewById(R.id.mSubjectSpinner);
 
         mScoreTextInputLayout = (TextInputLayout) findViewById(R.id.mScoreTextInputLayout);
         mApplicantsTextInputLayout = (TextInputLayout) findViewById(R.id.mApplicantsTextInputLayout);
 
         mScoreTextInputLayout.setErrorEnabled(true);
         mApplicantsTextInputLayout.setErrorEnabled(true);
+
+        View mSubjectColorCircleView = findViewById(R.id.mSubjectColorCircleView);
+        subjectColorGradient = (GradientDrawable) mSubjectColorCircleView.getBackground();
+
+        if (type == 0) {
+            getSubjectList();
+
+            if (subjectExamData.size() == 0 || subjectExamData == null) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatErrorAlertDialogStyle);
+                builder.setTitle(R.string.not_exists_subject_title);
+                builder.setMessage(R.string.not_exists_subject_message);
+                builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Intent mIntent = new Intent(getApplicationContext(), CreateSubjectActivity.class);
+                        mIntent.putExtra("type", 0);
+                        startActivity(mIntent);
+                        finish();
+                    }
+                });
+                builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finish();
+                    }
+                });
+                builder.setCancelable(false);
+                builder.show();
+
+                return;
+            }
+
+            String[] mSubjectName = new String[subjectExamData.size()];
+            for (int i = 0; i < mSubjectName.length; i++) {
+                mSubjectName[i] = subjectExamData.get(i).name;
+            }
+
+            ArrayAdapter<String> mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, mSubjectName);
+            mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            mSubjectSpinner.setAdapter(mAdapter);
+            mSubjectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                    subjectColorGradient.setColor(subjectExamData.get(position).color);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+            mSubjectSpinner.setSelection(0);
+
+        } else if (type == 1) {
+            Cursor mCursor = mDatabase.getData(ExamDataBaseInfo.subjectTableName, "color", "_id", subjectId);
+            mCursor.moveToNext();
+
+            int color = mCursor.getInt(0);
+            subjectColorGradient.setColor(color);
+
+            ArrayAdapter<String> mAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, new String[]{mIntent.getStringExtra("name")});
+            mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            mSubjectSpinner.setAdapter(mAdapter);
+
+            findViewById(R.id.removeButton).setVisibility(View.VISIBLE);
+
+            mScore.setText(String.valueOf(mIntent.getFloatExtra("score", 0)));
+            mClass.setText(String.valueOf(mIntent.getIntExtra("mClass", 0)));
+            mRank.setText(String.valueOf(mIntent.getIntExtra("rank", 0)));
+            mApplicants.setText(String.valueOf(mIntent.getIntExtra("applicants", 0)));
+            mAverage.setText(String.valueOf(mIntent.getFloatExtra("average", 0)));
+            mStandardDeviation.setText(String.valueOf(mIntent.getFloatExtra("standardDeviation", 0)));
+        }
+    }
+
+    public void remove(View v) {
+        if (mDatabase == null) {
+            mDatabase = new Database();
+            mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
+        }
+
+        mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
+
+        mDatabase.remove(ExamDataBaseInfo.getExamTable(_id), "name", subjectId);
+        mDatabase.release();
+
+        finish();
     }
 
     private void getSubjectList() {
@@ -214,18 +279,31 @@ public class AddExamScoreActivity extends AppCompatActivity {
                 return true;
             }
 
-            Database mDatabase = new Database();
+            if (mDatabase == null) {
+                mDatabase = new Database();
+            }
             mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
 
-            mDatabase.addData("name", subjectExamData.get(mSubjectSpinner.getSelectedItemPosition())._subjectId);
-            mDatabase.addData("score", score);
-            mDatabase.addData("rank", rank);
-            mDatabase.addData("applicants", applicants);
-            mDatabase.addData("class", mClass);
-            mDatabase.addData("average", average);
-            mDatabase.addData("standardDeviation", standardDeviation);
-            mDatabase.commit(ExamDataBaseInfo.getExamTable(_id));
+            if (type == 0) {
+                mDatabase.addData("name", subjectExamData.get(mSubjectSpinner.getSelectedItemPosition())._subjectId);
+                mDatabase.addData("score", score);
+                mDatabase.addData("rank", rank);
+                mDatabase.addData("applicants", applicants);
+                mDatabase.addData("class", mClass);
+                mDatabase.addData("average", average);
+                mDatabase.addData("standardDeviation", standardDeviation);
+                mDatabase.commit(ExamDataBaseInfo.getExamTable(_id));
 
+            } else if (type == 1) {
+                mDatabase.update(ExamDataBaseInfo.getExamTable(_id), "score", score, "name", subjectId);
+                mDatabase.update(ExamDataBaseInfo.getExamTable(_id), "rank", rank, "name", subjectId);
+                mDatabase.update(ExamDataBaseInfo.getExamTable(_id), "applicants", applicants, "name", subjectId);
+                mDatabase.update(ExamDataBaseInfo.getExamTable(_id), "class", mClass, "name", subjectId);
+                mDatabase.update(ExamDataBaseInfo.getExamTable(_id), "average", average, "name", subjectId);
+                mDatabase.update(ExamDataBaseInfo.getExamTable(_id), "standardDeviation", standardDeviation, "name", subjectId);
+            }
+
+            mDatabase.release();
             finish();
 
             return true;

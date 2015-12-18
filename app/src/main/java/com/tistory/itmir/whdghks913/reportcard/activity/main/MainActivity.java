@@ -46,7 +46,9 @@ public class MainActivity extends AppCompatActivity {
         mExamFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), CreateExamActivity.class));
+                Intent mIntent = new Intent(getApplicationContext(), CreateExamActivity.class);
+                mIntent.putExtra("type", 0);
+                startActivity(mIntent);
             }
         });
 

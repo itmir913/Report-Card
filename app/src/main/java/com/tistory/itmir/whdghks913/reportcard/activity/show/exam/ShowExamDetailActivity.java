@@ -18,7 +18,7 @@ import android.view.View;
 
 import com.tistory.itmir.whdghks913.reportcard.R;
 import com.tistory.itmir.whdghks913.reportcard.activity.create.AddExamScoreActivity;
-import com.tistory.itmir.whdghks913.reportcard.activity.edit.EditExamActivity;
+import com.tistory.itmir.whdghks913.reportcard.activity.create.CreateExamActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +59,7 @@ public class ShowExamDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent mIntent = new Intent(getApplicationContext(), AddExamScoreActivity.class);
+                mIntent.putExtra("type", 0);
                 mIntent.putExtra("_id", _id);
                 startActivity(mIntent);
             }
@@ -135,7 +136,8 @@ public class ShowExamDetailActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_edit) {
-            Intent mIntent = new Intent(this, EditExamActivity.class);
+            Intent mIntent = new Intent(this, CreateExamActivity.class);
+            mIntent.putExtra("type", 1);
             mIntent.putExtra("_id", _id);
             mIntent.putExtra("name", title);
             startActivityForResult(mIntent, 777);

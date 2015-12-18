@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import com.tistory.itmir.whdghks913.reportcard.R;
 import com.tistory.itmir.whdghks913.reportcard.activity.create.CreateSubjectActivity;
-import com.tistory.itmir.whdghks913.reportcard.activity.edit.EditSubjectActivity;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 
 import java.text.Collator;
@@ -161,7 +160,8 @@ public class ShowSubjectActivity extends AppCompatActivity {
                     int color = mData.color;
                     String name = mData.name;
 
-                    Intent mIntent = new Intent(v.getContext(), EditSubjectActivity.class);
+                    Intent mIntent = new Intent(v.getContext(), CreateSubjectActivity.class);
+                    mIntent.putExtra("type", 1);
                     mIntent.putExtra("_id", _id);
                     mIntent.putExtra("color", color);
                     mIntent.putExtra("name", name);
@@ -215,7 +215,9 @@ public class ShowSubjectActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_add_subject) {
-            startActivity(new Intent(getApplicationContext(), CreateSubjectActivity.class));
+            Intent mIntent = new Intent(getApplicationContext(), CreateSubjectActivity.class);
+            mIntent.putExtra("type", 0);
+            startActivity(mIntent);
             return true;
         }
 

@@ -38,18 +38,6 @@
             android:name=".activity.create.AddExamScoreActivity"
             android:label="@string/title_activity_add_exam_data"
             android:theme="@style/AppTheme" />
-        <activity
-            android:name=".activity.edit.EditExamActivity"
-            android:label="@string/title_activity_edit_exam"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".activity.edit.EditSubjectActivity"
-            android:label="@string/title_activity_edit_subject"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".activity.edit.EditSubjectScoreActivity"
-            android:label="@string/title_activity_edit_subject_data"
-            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>
