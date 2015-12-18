@@ -21,7 +21,7 @@
         <com.db.chart.view.HorizontalBarChartView
             android:id="@+id/mBarChartView"
             android:layout_width="match_parent"
-            android:layout_height="350sp" />
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 

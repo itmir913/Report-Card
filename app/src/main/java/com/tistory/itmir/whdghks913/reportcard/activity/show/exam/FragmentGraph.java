@@ -1,5 +1,8 @@
 package com.tistory.itmir.whdghks913.reportcard.activity.show.exam;
 
+import android.animation.PropertyValuesHolder;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,8 +13,9 @@ import com.db.chart.Tools;
 import com.db.chart.model.Bar;
 import com.db.chart.model.BarSet;
 import com.db.chart.view.HorizontalBarChartView;
+import com.db.chart.view.Tooltip;
+import com.db.chart.view.XController;
 import com.db.chart.view.animation.Animation;
-import com.db.chart.view.animation.easing.CubicEase;
 import com.tistory.itmir.whdghks913.reportcard.R;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 
@@ -41,6 +45,12 @@ public class FragmentGraph extends Fragment {
         Bundle args = getArguments();
         int _id = args.getInt("_id");
 
+        showScoreGraph(mView, _id);
+
+        return mView;
+    }
+
+    private void showScoreGraph(View mView, int _id) {
         ArrayList<barSubjectData> mBarSetData = new ArrayList<>();
         ArrayList<ExamDataBaseInfo.subjectInExamData> mValues = ExamDataBaseInfo.getSubjectDataByExamId(_id);
         ArrayList<ExamDataBaseInfo.subjectData> subjectList = ExamDataBaseInfo.getSubjectList();
@@ -48,14 +58,11 @@ public class FragmentGraph extends Fragment {
         ArrayList<Integer> mSubjectColor = ExamDataBaseInfo.getSubjectColorList();
 
         if (mValues == null || subjectList == null || mSubjectId == null || mSubjectColor == null)
-            return mView;
+            return;
 
         HorizontalBarChartView mBarChartView = (HorizontalBarChartView) mView.findViewById(R.id.mBarChartView);
-        mBarChartView.setAxisBorderValues(0, 100, 20);
-        mBarChartView.setBarSpacing(Tools.fromDpToPx(50));
 
         BarSet barSet = new BarSet();
-
         for (int i = 0; i < mValues.size(); i++) {
             ExamDataBaseInfo.subjectInExamData mData = mValues.get(i);
 
@@ -73,26 +80,46 @@ public class FragmentGraph extends Fragment {
 
         Collections.sort(mBarSetData, ALPHA_COMPARATOR);
 
-        for (int i = 0; i < mBarSetData.size(); i++) {
+        int size = mBarSetData.size();
+        for (int i = 0; i < size; i++) {
             barSubjectData mData = mBarSetData.get(i);
             Bar bar = new Bar(mData.name, mData.score);
             bar.setColor(mData.color);
             barSet.addBar(bar);
         }
-
         mBarChartView.addData(barSet);
 
-        Animation anim = new Animation(500);
-        anim.setEasing(new CubicEase());
-        mBarChartView.show(anim);
+        mBarChartView.setBorderSpacing(Tools.fromDpToPx(5))
+                .setAxisBorderValues(0, 100, 20)
+                .setXAxis(false)
+                .setYAxis(false)
+                .setLabelsColor(Color.parseColor("#FF8E8A84"))
+                .setXLabels(XController.LabelPosition.OUTSIDE);
 
-        return mView;
+        ViewGroup.LayoutParams mParams = mBarChartView.getLayoutParams();
+        mParams.height = (size == 1) ? 200 : 235 + (size * 15);
+        mBarChartView.setLayoutParams(mParams);
+
+        Tooltip mTooltip = new Tooltip(getActivity(), R.layout.tooltip, R.id.value);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+            mTooltip.setEnterAnimation(PropertyValuesHolder.ofFloat(View.ALPHA, 1),
+                    PropertyValuesHolder.ofFloat(View.SCALE_X, 1f),
+                    PropertyValuesHolder.ofFloat(View.SCALE_Y, 1f));
+
+            mTooltip.setExitAnimation(PropertyValuesHolder.ofFloat(View.ALPHA, 0),
+                    PropertyValuesHolder.ofFloat(View.SCALE_X, 0f),
+                    PropertyValuesHolder.ofFloat(View.SCALE_Y, 0f));
+        }
+        mBarChartView.setTooltips(mTooltip);
+
+        Animation anim = new Animation(500);
+        mBarChartView.show(anim);
     }
 
     /**
      * 알파벳순으로 정렬
      */
-    public static final Comparator<barSubjectData> ALPHA_COMPARATOR = new Comparator<barSubjectData>() {
+    public final Comparator<barSubjectData> ALPHA_COMPARATOR = new Comparator<barSubjectData>() {
         private final Collator sCollator = Collator.getInstance();
 
         @Override

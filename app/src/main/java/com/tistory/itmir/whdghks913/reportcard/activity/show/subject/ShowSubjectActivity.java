@@ -169,44 +169,6 @@ public class ShowSubjectActivity extends AppCompatActivity {
                     v.getContext().startActivity(mIntent);
                 }
             });
-//            holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
-//                @Override
-//                public boolean onLongClick(View view) {
-            // TODO
-//                    if (mDatabase != null) {
-//                        boolean isDelete = true;
-//                        int _id = ((ExamData) view.getTag())._id;
-//
-//                        Cursor mExamNameList = mDatabase.getFirstData(ExamDataBaseInfo.examListTableName, "_id");
-//                        label:
-//                        for (int i = 0; i < mExamNameList.getCount(); i++) {
-//                            Cursor mExamDetailList = mDatabase.getFirstData(ExamDataBaseInfo.getExamTable(mExamNameList.getInt(0)), "name");
-//                            for (int j = 0; j < mExamDetailList.getCount(); j++) {
-//                                if (_id == mExamDetailList.getInt(0)) {
-//                                    isDelete = false;
-//                                    break label;
-//                                }
-//                                mExamDetailList.moveToNext();
-//                            }
-//                            mExamNameList.moveToNext();
-//                        }
-//
-//                        if (isDelete) {
-//                            mDatabase.remove(ExamDataBaseInfo.subjectTableName, "_id", _id);
-//                            getSubjectList();
-//                        } else {
-//                            AlertDialog.Builder builder = new AlertDialog.Builder(holder.mView.getContext(), R.style.AppCompatErrorAlertDialogStyle);
-//                            builder.setTitle(R.string.not_delete_subject_title);
-//                            builder.setMessage(R.string.not_delete_subject_message);
-//                            builder.setPositiveButton(android.R.string.ok, null);
-//							builder.setCancelable(false);
-//                            builder.show();
-//                        }
-//                    }
-//
-//                    return true;
-//                }
-//            });
         }
     }
 
@@ -219,7 +181,7 @@ public class ShowSubjectActivity extends AppCompatActivity {
     /**
      * 알파벳순으로 정렬
      */
-    public static final Comparator<ExamData> ALPHA_COMPARATOR = new Comparator<ExamData>() {
+    public final Comparator<ExamData> ALPHA_COMPARATOR = new Comparator<ExamData>() {
         private final Collator sCollator = Collator.getInstance();
 
         @Override

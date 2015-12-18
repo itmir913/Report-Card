@@ -10,6 +10,18 @@ import java.util.ArrayList;
  */
 public class ExamDataBaseInfo {
     /**
+     * Database
+     */
+    public static Database mDatabase;
+
+    public static void initDatabase() {
+        if (mDatabase == null) {
+            mDatabase = new Database();
+            mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
+        }
+    }
+
+    /**
      * DB의 기본적인 내용
      */
     public static final String dataBasePath = "/data/data/com.tistory.itmir.whdghks913.reportcard/databases/";
@@ -46,13 +58,16 @@ public class ExamDataBaseInfo {
      */
     public static final String examDetailedColumn = "name integer, score integer, rank integer, applicants integer, class integer";
 
+    public static String getExamTable(int _id) {
+        return "exam_" + _id;
+    }
+
     public static boolean isDatabaseExists() {
         return new File(dataBasePath + dataBaseName).exists();
     }
 
     public static String getCategoryNameById(int category) {
-        Database mDatabase = new Database();
-        mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
+        initDatabase();
 
         Cursor mCategoryCursor = mDatabase.getData(ExamDataBaseInfo.categoryExamTableName, "name", "_id", category);
         mCategoryCursor.moveToNext();
@@ -60,16 +75,12 @@ public class ExamDataBaseInfo {
         return mCategoryCursor.getString(0);
     }
 
-    public static String getExamTable(int _id) {
-        return "exam_" + _id;
-    }
-
     /**
      * 시험 리스트를 가져오는 메소드
      */
     public static ArrayList<examData> getExamList() {
-        Database mDatabase = new Database();
-        mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
+        initDatabase();
+
         Cursor mExamListCursor = mDatabase.getData(ExamDataBaseInfo.examListTableName);
 
         if (mExamListCursor == null)
@@ -108,15 +119,14 @@ public class ExamDataBaseInfo {
         public int _id, category, color;
         public int year, month, day;
         public String name;
-
     }
 
     /**
      * 과목 리스트를 가져오는 메소드
      */
     public static ArrayList<subjectData> getSubjectList() {
-        Database mDatabase = new Database();
-        mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
+        initDatabase();
+
         Cursor mSubjectListCursor = mDatabase.getData(ExamDataBaseInfo.subjectTableName);
 
         if (mSubjectListCursor == null)
@@ -151,8 +161,8 @@ public class ExamDataBaseInfo {
      * 시험 고유 _id를 이용하여 저장된 과목의 데이터를 가져오는 메소드
      */
     public static ArrayList<subjectInExamData> getSubjectDataByExamId(int _id) {
-        Database mDatabase = new Database();
-        mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
+        initDatabase();
+
         Cursor mCursor = mDatabase.getFirstData(ExamDataBaseInfo.getExamTable(_id));
 
         if (mCursor == null)
@@ -197,8 +207,8 @@ public class ExamDataBaseInfo {
      * 과목의 subjectId만 가져오는 메소드
      */
     public static ArrayList<Integer> getSubjectIdList() {
-        Database mDatabase = new Database();
-        mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
+        initDatabase();
+
         Cursor mSubjectListCursor = mDatabase.getData(ExamDataBaseInfo.subjectTableName);
 
         if (mSubjectListCursor == null)
@@ -221,8 +231,8 @@ public class ExamDataBaseInfo {
      * 과목의 color 가져오는 메소드
      */
     public static ArrayList<Integer> getSubjectColorList() {
-        Database mDatabase = new Database();
-        mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
+        initDatabase();
+
         Cursor mSubjectListCursor = mDatabase.getData(ExamDataBaseInfo.subjectTableName);
 
         if (mSubjectListCursor == null)

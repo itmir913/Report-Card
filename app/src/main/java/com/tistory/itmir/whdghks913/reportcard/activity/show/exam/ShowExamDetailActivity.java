@@ -26,7 +26,6 @@ import java.util.List;
 public class ShowExamDetailActivity extends AppCompatActivity {
     private int _id;
     private String title;
-    private ViewPager viewPager;
     private Adapter mAdapter;
 
     @Override
@@ -67,7 +66,7 @@ public class ShowExamDetailActivity extends AppCompatActivity {
 
         _id = mIntent.getIntExtra("_id", 0);
 
-        viewPager = (ViewPager) findViewById(R.id.mViewpager);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.mViewpager);
         if (viewPager != null) {
             mAdapter = new Adapter(getSupportFragmentManager());
             mAdapter.addFragment(getString(R.string.subject), FragmentSubjectList.getInstance(_id));

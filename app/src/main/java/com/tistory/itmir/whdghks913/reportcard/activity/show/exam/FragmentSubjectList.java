@@ -165,7 +165,7 @@ class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.SubjectViewHold
     /**
      * 알파벳순으로 정렬
      */
-    public static final Comparator<SubjectListInfo> ALPHA_COMPARATOR = new Comparator<SubjectListInfo>() {
+    public final Comparator<SubjectListInfo> ALPHA_COMPARATOR = new Comparator<SubjectListInfo>() {
         private final Collator sCollator = Collator.getInstance();
 
         @Override

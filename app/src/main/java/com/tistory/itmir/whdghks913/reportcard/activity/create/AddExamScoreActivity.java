@@ -159,7 +159,7 @@ public class AddExamScoreActivity extends AppCompatActivity {
     /**
      * 알파벳순으로 정렬
      */
-    public static final Comparator<ExamDataBaseInfo.subjectData> ALPHA_COMPARATOR = new Comparator<ExamDataBaseInfo.subjectData>() {
+    public final Comparator<ExamDataBaseInfo.subjectData> ALPHA_COMPARATOR = new Comparator<ExamDataBaseInfo.subjectData>() {
         private final Collator sCollator = Collator.getInstance();
 
         @Override

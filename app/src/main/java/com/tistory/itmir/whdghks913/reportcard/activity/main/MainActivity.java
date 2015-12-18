@@ -176,13 +176,6 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(mIntent);
                 }
             });
-            holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-
-                    return true;
-                }
-            });
         }
     }
 
@@ -195,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 알파벳순으로 정렬
      */
-    public static final Comparator<ExamData> ALPHA_COMPARATOR = new Comparator<ExamData>() {
+    public final Comparator<ExamData> ALPHA_COMPARATOR = new Comparator<ExamData>() {
         private final Collator sCollator = Collator.getInstance();
 
         @Override
