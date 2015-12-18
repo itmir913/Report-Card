@@ -42,23 +42,26 @@ public class FragmentGraph extends Fragment {
         Bundle args = getArguments();
         int _id = args.getInt("_id");
 
-        showScoreGraph(mView, _id);
+        ArrayList<ExamDataBaseInfo.subjectInExamData> mValues = ExamDataBaseInfo.getSubjectDataByExamId(_id);
+        ArrayList<ExamDataBaseInfo.subjectData> subjectList = ExamDataBaseInfo.getSubjectList();
+
+        if (mValues == null || subjectList == null || mValues.size() == 0 || subjectList.size() == 0)
+            return mView;
+
+        ArrayList<Integer> mSubjectId = ExamDataBaseInfo.getSubjectIdList();
+        ArrayList<Integer> mSubjectColor = ExamDataBaseInfo.getSubjectColorList();
+
+        showScoreGraph(mView, _id, mValues, subjectList, mSubjectId, mSubjectColor);
 
         return mView;
     }
 
-    private void showScoreGraph(View mView, int _id) {
-        ArrayList<ExamDataBaseInfo.subjectInExamData> mValues = ExamDataBaseInfo.getSubjectDataByExamId(_id);
-        ArrayList<ExamDataBaseInfo.subjectData> subjectList = ExamDataBaseInfo.getSubjectList();
-
-        if (mValues == null || subjectList == null)
-            return;
-        if (mValues.size() == 0 || subjectList.size() == 0)
-            return;
-
+    private void showScoreGraph(View mView, int _id,
+                                ArrayList<ExamDataBaseInfo.subjectInExamData> mValues,
+                                ArrayList<ExamDataBaseInfo.subjectData> subjectList,
+                                ArrayList<Integer> mSubjectId,
+                                ArrayList<Integer> mSubjectColor) {
         ArrayList<barSubjectData> mBarSetData = new ArrayList<>();
-        ArrayList<Integer> mSubjectId = ExamDataBaseInfo.getSubjectIdList();
-        ArrayList<Integer> mSubjectColor = ExamDataBaseInfo.getSubjectColorList();
 
         HorizontalBarChartView mBarChartView = (HorizontalBarChartView) mView.findViewById(R.id.mBarChartView);
 

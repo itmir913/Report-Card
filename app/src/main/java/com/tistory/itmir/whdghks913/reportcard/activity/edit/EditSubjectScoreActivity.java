@@ -23,7 +23,7 @@ public class EditSubjectScoreActivity extends AppCompatActivity {
     private int _id, subjectId;
 
     private Database mDatabase;
-    private EditText mScore, mClass, mRank, mApplicants;
+    private EditText mScore, mClass, mRank, mApplicants, mAverage, mStandardDeviation;
     private TextInputLayout mScoreTextInputLayout, mApplicantsTextInputLayout;
 
     @Override
@@ -72,12 +72,16 @@ public class EditSubjectScoreActivity extends AppCompatActivity {
         mClass = (EditText) findViewById(R.id.mClass);
         mRank = (EditText) findViewById(R.id.mRank);
         mApplicants = (EditText) findViewById(R.id.mApplicants);
+        mAverage = (EditText) findViewById(R.id.mAverage);
+        mStandardDeviation = (EditText) findViewById(R.id.mStandardDeviation);
         findViewById(R.id.removeButton).setVisibility(View.VISIBLE);
 
         mScore.setText(String.valueOf(mIntent.getFloatExtra("score", 0)));
         mClass.setText(String.valueOf(mIntent.getIntExtra("mClass", 0)));
         mRank.setText(String.valueOf(mIntent.getIntExtra("rank", 0)));
         mApplicants.setText(String.valueOf(mIntent.getIntExtra("applicants", 0)));
+        mAverage.setText(String.valueOf(mIntent.getFloatExtra("average", 0)));
+        mStandardDeviation.setText(String.valueOf(mIntent.getFloatExtra("standardDeviation", 0)));
 
         mScoreTextInputLayout = (TextInputLayout) findViewById(R.id.mScoreTextInputLayout);
         mApplicantsTextInputLayout = (TextInputLayout) findViewById(R.id.mApplicantsTextInputLayout);
@@ -120,6 +124,8 @@ public class EditSubjectScoreActivity extends AppCompatActivity {
             String classText = mClass.getText().toString();
             String rankText = mRank.getText().toString();
             String applicantsText = mApplicants.getText().toString();
+            String averageText = mAverage.getText().toString();
+            String standardDeviationText = mStandardDeviation.getText().toString();
 
             /**
              * private EditText mScore, mClass, mRank, mApplicants;
@@ -131,6 +137,8 @@ public class EditSubjectScoreActivity extends AppCompatActivity {
             }
 
             float score = Float.parseFloat(scoreText);
+            float average = Float.parseFloat(averageText);
+            float standardDeviation = Float.parseFloat(standardDeviationText);
             int mClass = (classText.isEmpty() || classText.length() == 0 || (classText.replaceAll("\\s", "")).length() == 0) ? 0 : Integer.parseInt(classText);
             int rank = (rankText.isEmpty() || rankText.length() == 0 || (rankText.replaceAll("\\s", "")).length() == 0) ? 0 : Integer.parseInt(rankText);
             int applicants = (applicantsText.isEmpty() || applicantsText.length() == 0 || (applicantsText.replaceAll("\\s", "")).length() == 0) ? 0 : Integer.parseInt(applicantsText);
@@ -151,6 +159,8 @@ public class EditSubjectScoreActivity extends AppCompatActivity {
             mDatabase.update(ExamDataBaseInfo.getExamTable(_id), "rank", rank, "name", subjectId);
             mDatabase.update(ExamDataBaseInfo.getExamTable(_id), "applicants", applicants, "name", subjectId);
             mDatabase.update(ExamDataBaseInfo.getExamTable(_id), "class", mClass, "name", subjectId);
+            mDatabase.update(ExamDataBaseInfo.getExamTable(_id), "average", average, "name", subjectId);
+            mDatabase.update(ExamDataBaseInfo.getExamTable(_id), "standardDeviation", standardDeviation, "name", subjectId);
 
             mDatabase.release();
 

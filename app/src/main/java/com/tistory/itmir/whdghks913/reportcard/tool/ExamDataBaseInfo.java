@@ -55,8 +55,10 @@ public class ExamDataBaseInfo {
      * rank : 전교 석차
      * applicants : 응시자 수
      * class : 등급
+     * average : 과목 평군
+     * standardDeviation : 과목 표준 편차
      */
-    public static final String examDetailedColumn = "name integer, score integer, rank integer, applicants integer, class integer";
+    public static final String examDetailedColumn = "name integer, score integer, rank integer, applicants integer, class integer, average integer, standardDeviation integer";
 
     public static String getExamTable(int _id) {
         return "exam_" + _id;
@@ -180,6 +182,8 @@ public class ExamDataBaseInfo {
             int rank = mCursor.getInt(3);
             int applicants = mCursor.getInt(4);
             int mClass = mCursor.getInt(5);
+            float average = mCursor.getFloat(6);
+            float standardDeviation = mCursor.getFloat(7);
 
             subjectInExamData mData = new subjectInExamData();
             mData._id = _id;
@@ -188,6 +192,8 @@ public class ExamDataBaseInfo {
             mData.rank = rank;
             mData.applicants = applicants;
             mData.mClass = mClass;
+            mData.average = average;
+            mData.standardDeviation = standardDeviation;
             mData.name = name;
 
             mValues.add(mData);
@@ -200,7 +206,7 @@ public class ExamDataBaseInfo {
 
     public static class subjectInExamData {
         public int _id, _subjectId, rank, applicants, mClass;
-        public float score;
+        public float score, average, standardDeviation;
         public String name;
     }
 
