@@ -137,8 +137,7 @@ public class FragmentGraph extends Fragment {
             point.setStrokeColor(mData.color);
             point.setStrokeThickness(Tools.fromDpToPx(4));
 
-            if (!isZero)
-                listSet.addPoint(point);
+            listSet.addPoint(point);
         }
 
         Tooltip mTooltip = new Tooltip(getActivity(), R.layout.tooltip_linechart, R.id.value);
