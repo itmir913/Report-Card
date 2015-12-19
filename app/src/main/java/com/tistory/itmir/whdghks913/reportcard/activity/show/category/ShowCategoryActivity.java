@@ -23,7 +23,7 @@ import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 
 import java.util.ArrayList;
 
-public class CategoryActivity extends AppCompatActivity {
+public class ShowCategoryActivity extends AppCompatActivity {
     SimpleRecyclerViewAdapter mAdapter;
 
     @Override
