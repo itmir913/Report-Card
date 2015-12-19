@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.tistory.itmir.whdghks913.reportcard.R;
 import com.tistory.itmir.whdghks913.reportcard.activity.modify.CategoryActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.modify.ExamActivity;
+import com.tistory.itmir.whdghks913.reportcard.activity.settings.SettingsActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.show.category.ShowCategoryActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.show.exam.ShowExamDetailActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.show.subject.ShowSubjectActivity;
@@ -341,6 +342,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
             return true;
         } else if (id == R.id.action_subject) {
             startActivity(new Intent(getApplicationContext(), ShowSubjectActivity.class));

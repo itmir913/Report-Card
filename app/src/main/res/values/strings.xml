@@ -10,6 +10,7 @@
     <string name="action_settings">설정</string>
     <string name="action_add">추가</string>
     <string name="action_edit">편집</string>
+    <string name="title_activity_settings">설정</string>
     <!-- List Activity -->
     <string name="title_activity_category">카테고리 목록</string>
     <string name="title_activity_show_subject">과목 목록</string>

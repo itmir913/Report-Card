@@ -45,7 +45,10 @@
         <activity
             android:name=".activity.modify.CategoryActivity"
             android:label="@string/title_activity_create_category"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.settings.SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
     </application>
 
 </manifest>
