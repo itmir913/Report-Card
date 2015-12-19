@@ -48,7 +48,11 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.settings.SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
+            android:label="@string/title_activity_settings" />
+        <activity
+            android:name=".activity.analytics.AnalyticsSubjectActivity"
+            android:label="@string/title_activity_analytics_subject"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

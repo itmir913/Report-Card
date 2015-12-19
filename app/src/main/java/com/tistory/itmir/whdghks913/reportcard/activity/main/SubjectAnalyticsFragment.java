@@ -1,67 +1,44 @@
-package com.tistory.itmir.whdghks913.reportcard.activity.show.subject;
+package com.tistory.itmir.whdghks913.reportcard.activity.main;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.tistory.itmir.whdghks913.reportcard.R;
-import com.tistory.itmir.whdghks913.reportcard.activity.modify.SubjectActivity;
+import com.tistory.itmir.whdghks913.reportcard.activity.analytics.AnalyticsSubjectActivity;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 
 import java.util.ArrayList;
 
-public class ShowSubjectActivity extends AppCompatActivity {
-    SimpleRecyclerViewAdapter mAdapter;
+public class SubjectAnalyticsFragment extends Fragment {
+    private SimpleRecyclerViewAdapter mAdapter;
+
+    public static SubjectAnalyticsFragment newInstance() {
+        return new SubjectAnalyticsFragment();
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_show_simple_list);
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.mToolbar);
-        setSupportActionBar(mToolbar);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View mView = inflater.inflate(R.layout.recyclerview, container, false);
 
-        FloatingActionButton mFab = (FloatingActionButton) findViewById(R.id.mFab);
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), SubjectActivity.class));
-            }
-        });
+        RecyclerView recyclerView = (RecyclerView) mView.findViewById(R.id.mRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        ActionBar mActionBar = getSupportActionBar();
-        if (mActionBar != null) {
-            mActionBar.setHomeButtonEnabled(true);
-            mActionBar.setDisplayHomeAsUpEnabled(true);
-
-            mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onBackPressed();
-                }
-            });
-        }
-
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.mRecyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
-
-        mAdapter = new SimpleRecyclerViewAdapter(this);
+        mAdapter = new SimpleRecyclerViewAdapter(getActivity());
         recyclerView.setAdapter(mAdapter);
 
         getSubjectList();
+
+        return mView;
     }
 
     private void getSubjectList() {
@@ -144,53 +121,18 @@ public class ShowSubjectActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     ExamDataBaseInfo.subjectData mData = (ExamDataBaseInfo.subjectData) v.getTag();
                     int _subjectId = mData._subjectId;
-                    int color = mData.color;
+//                    int color = mData.color;
                     String name = mData.name;
 
-                    Intent mIntent = new Intent(v.getContext(), SubjectActivity.class);
-                    mIntent.putExtra("type", 1);
+                    Intent mIntent = new Intent(v.getContext(), AnalyticsSubjectActivity.class);
                     mIntent.putExtra("_id", _subjectId);
-                    mIntent.putExtra("color", color);
+//                    mIntent.putExtra("color", color);
                     mIntent.putExtra("name", name);
 
                     v.getContext().startActivity(mIntent);
                 }
             });
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        getSubjectList();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_add_icon, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        } else if (id == R.id.action_add) {
-            Intent mIntent = new Intent(getApplicationContext(), SubjectActivity.class);
-            mIntent.putExtra("type", 0);
-            startActivity(mIntent);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
 }
