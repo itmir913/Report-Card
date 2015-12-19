@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".activity.modify.SubjectActivity">
+    tools:context=".activity.modify.CategoryActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -21,13 +21,13 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.v4.widget.NestedScrollView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="16dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".activity.modify.SubjectActivity"
-        tools:showIn="@layout/activity_create_subject">
+        tools:context=".activity.modify.CategoryActivity"
+        tools:showIn="@layout/activity_create_category">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -50,17 +50,17 @@
                         android:layout_gravity="center"
                         android:layout_marginTop="16dp"
                         android:gravity="center"
-                        android:text="과목 색 설정"
+                        android:text="카테고리 색 설정"
                         android:textAppearance="?android:attr/textAppearanceSmall" />
 
                     <View
-                        android:id="@+id/mSubjectCircleView"
+                        android:id="@+id/mCategoryCircleView"
                         android:layout_width="55dp"
                         android:layout_height="55dp"
                         android:layout_gravity="center"
                         android:layout_margin="16dp"
                         android:background="@drawable/circle_view"
-                        android:onClick="subjectColorView" />
+                        android:onClick="categoryColorView" />
 
                 </LinearLayout>
 
@@ -73,7 +73,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="과목 이름 설정"
+                        android:text="카테고리 이름 설정"
                         android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <android.support.design.widget.TextInputLayout
@@ -85,7 +85,7 @@
                             android:id="@+id/mEditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="과목의 이름을 입력해주세요."
+                            android:hint="카테고리 이름을 입력해주세요."
                             android:singleLine="true" />
 
                     </android.support.design.widget.TextInputLayout>
@@ -109,6 +109,6 @@
 
         </LinearLayout>
 
-    </android.support.v4.widget.NestedScrollView>
+    </ScrollView>
 
 </android.support.design.widget.CoordinatorLayout>

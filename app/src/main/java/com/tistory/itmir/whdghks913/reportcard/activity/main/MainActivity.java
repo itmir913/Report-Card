@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.tistory.itmir.whdghks913.reportcard.R;
+import com.tistory.itmir.whdghks913.reportcard.activity.modify.CategoryActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.modify.ExamActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.show.category.ShowCategoryActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.show.exam.ShowExamDetailActivity;
@@ -201,6 +202,19 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         categoryData mTag = (categoryData) v.getTag();
+
+                        int _categoryId = mTag._categoryId;
+                        int color = mTag.color;
+                        String name = mTag.name;
+
+                        Intent mIntent = new Intent(v.getContext(), CategoryActivity.class);
+                        mIntent.putExtra("type", 1);
+                        mIntent.putExtra("_id", _categoryId);
+                        mIntent.putExtra("color", color);
+                        mIntent.putExtra("name", name);
+
+                        v.getContext().startActivity(mIntent);
+
                     }
                 });
 

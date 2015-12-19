@@ -41,7 +41,11 @@
         <activity
             android:name=".activity.show.category.ShowCategoryActivity"
             android:label="@string/title_activity_category"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.modify.CategoryActivity"
+            android:label="@string/title_activity_create_category"
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>

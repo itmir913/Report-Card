@@ -1,6 +1,7 @@
 package com.tistory.itmir.whdghks913.reportcard.activity.show.category;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -19,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.tistory.itmir.whdghks913.reportcard.R;
+import com.tistory.itmir.whdghks913.reportcard.activity.modify.CategoryActivity;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 
 import java.util.ArrayList;
@@ -147,18 +149,18 @@ public class ShowCategoryActivity extends AppCompatActivity {
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    ExamDataBaseInfo.subjectData mData = (ExamDataBaseInfo.subjectData) v.getTag();
-//                    int _subjectId = mData._subjectId;
-//                    int color = mData.color;
-//                    String name = mData.name;
-//
-//                    Intent mIntent = new Intent(v.getContext(), SubjectActivity.class);
-//                    mIntent.putExtra("type", 1);
-//                    mIntent.putExtra("_id", _subjectId);
-//                    mIntent.putExtra("color", color);
-//                    mIntent.putExtra("name", name);
-//
-//                    v.getContext().startActivity(mIntent);
+                    ExamDataBaseInfo.categoryData mData = (ExamDataBaseInfo.categoryData) v.getTag();
+                    int _categoryId = mData._categoryId;
+                    int color = mData.color;
+                    String name = mData.name;
+
+                    Intent mIntent = new Intent(v.getContext(), CategoryActivity.class);
+                    mIntent.putExtra("type", 1);
+                    mIntent.putExtra("_id", _categoryId);
+                    mIntent.putExtra("color", color);
+                    mIntent.putExtra("name", name);
+
+                    v.getContext().startActivity(mIntent);
                 }
             });
         }
@@ -189,9 +191,9 @@ public class ShowCategoryActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_add) {
-//            Intent mIntent = new Intent(getApplicationContext(), SubjectActivity.class);
-//            mIntent.putExtra("type", 0);
-//            startActivity(mIntent);
+            Intent mIntent = new Intent(getApplicationContext(), CategoryActivity.class);
+            mIntent.putExtra("type", 0);
+            startActivity(mIntent);
             return true;
         }
 
