@@ -39,6 +39,7 @@
     <!-- Category List -->
     <string name="not_delete_category_title">카테고리 삭제 불가능</string>
     <string name="not_delete_category_message">이미 카테고리가 사용되어 삭제가 불가능 합니다.</string>
+    <string name="not_delete_basic_category_message">기본 카테고리는 삭제할 수 없습니다.</string>
     <!-- ExamActivity -->
     <string name="not_exists_subject_title">과목 없음</string>
     <string name="not_exists_subject_message">추가된 과목이 없거나 모든 과목이 추가되었습니다.\n확인을 눌러 먼저 과목을 추가하세요.</string>

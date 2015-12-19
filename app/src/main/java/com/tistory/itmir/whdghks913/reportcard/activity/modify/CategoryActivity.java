@@ -132,7 +132,14 @@ public class CategoryActivity extends AppCompatActivity implements ColorChooserD
 
     public void remove(View v) {
         if (mDatabase != null) {
-            if (isDelete) {
+            if (_id == 1) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatErrorAlertDialogStyle);
+                builder.setTitle(R.string.not_delete_category_title);
+                builder.setMessage(R.string.not_delete_basic_category_message);
+                builder.setPositiveButton(android.R.string.ok, null);
+                builder.setCancelable(false);
+                builder.show();
+            } else if (isDelete) {
                 mDatabase.remove(ExamDataBaseInfo.categoryExamTableName, "_id", _id);
                 finish();
             } else {
