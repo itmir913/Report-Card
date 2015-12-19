@@ -2,15 +2,18 @@ package com.tistory.itmir.whdghks913.reportcard.activity.main;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.res.Configuration;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,6 +25,7 @@ import android.widget.TextView;
 import com.tistory.itmir.whdghks913.reportcard.R;
 import com.tistory.itmir.whdghks913.reportcard.activity.modify.CategoryActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.modify.ExamActivity;
+import com.tistory.itmir.whdghks913.reportcard.activity.modify.SubjectActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.settings.SettingsActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.show.category.ShowCategoryActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.show.exam.ShowExamDetailActivity;
@@ -32,7 +36,9 @@ import com.tistory.itmir.whdghks913.reportcard.tool.initDatabase;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    SimpleRecyclerViewAdapter mAdapter;
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private SimpleRecyclerViewAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +57,33 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.mDrawerLayout);
+        NavigationView navigationView = (NavigationView) findViewById(R.id.mNavigationView);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                int id = menuItem.getItemId();
+
+                if (id == R.id.action_view_category) {
+                    startActivity(new Intent(getApplicationContext(), ShowCategoryActivity.class));
+                } else if (id == R.id.action_view_subject) {
+                    startActivity(new Intent(getApplicationContext(), ShowSubjectActivity.class));
+                } else if (id == R.id.action_add_category) {
+                    startActivity(new Intent(getApplicationContext(), CategoryActivity.class).putExtra("type", 0));
+                } else if (id == R.id.action_add_subject) {
+                    startActivity(new Intent(getApplicationContext(), SubjectActivity.class).putExtra("type", 0));
+                } else {
+                    menuItem.setChecked(true);
+                }
+
+                mDrawerLayout.closeDrawers();
+                return true;
+            }
+        });
+
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.app_name, R.string.app_name);
+        mDrawerLayout.setDrawerListener(mDrawerToggle);
+
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.mRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
 
@@ -62,9 +95,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
         getExamList();
-
-
-        Log.d("dd", "" + Color.parseColor("#009688"));
     }
 
     private void getExamList() {
@@ -327,6 +357,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -341,7 +385,10 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            mDrawerLayout.openDrawer(GravityCompat.START);
+            return true;
+        } else if (id == R.id.action_settings) {
             startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
             return true;
         } else if (id == R.id.action_subject) {
