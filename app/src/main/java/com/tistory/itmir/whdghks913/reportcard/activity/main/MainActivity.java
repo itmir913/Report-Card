@@ -2,6 +2,7 @@ package com.tistory.itmir.whdghks913.reportcard.activity.main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -58,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         getExamList();
+
+
+        Log.d("dd", "" + Color.parseColor("#009688"));
     }
 
     private void getExamList() {
@@ -112,11 +117,13 @@ public class MainActivity extends AppCompatActivity {
 
         public class HeaderViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
+            public final View headerDivider;
             public final TextView mHeader;
 
             public HeaderViewHolder(View view) {
                 super(view);
                 mView = view;
+                headerDivider = view.findViewById(R.id.headerDivider);
                 mHeader = (TextView) view.findViewById(R.id.mHeader);
             }
         }
@@ -188,10 +195,12 @@ public class MainActivity extends AppCompatActivity {
                 categoryData mCategoryData = (categoryData) mData;
 
                 mHolder.mHeader.setText(mCategoryData.getName());
+                mHolder.headerDivider.setBackgroundColor(mCategoryData.color);
+                mHolder.mView.setTag(mCategoryData);
                 mHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        categoryData mTag = (categoryData) v.getTag();
                     }
                 });
 
