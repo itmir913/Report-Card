@@ -3,7 +3,13 @@ package com.tistory.itmir.whdghks913.reportcard.tool;
 import android.database.Cursor;
 
 import java.io.File;
+import java.text.Collator;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Locale;
 
 /**
  * Created by whdghks913 on 2015-12-13.
@@ -68,14 +74,43 @@ public class ExamDataBaseInfo {
         return new File(dataBasePath + dataBaseName).exists();
     }
 
-    public static String getCategoryNameById(int category) {
+    public static ArrayList<categoryData> getCategoryList() {
         initDatabase();
 
-        Cursor mCategoryCursor = mDatabase.getData(ExamDataBaseInfo.categoryExamTableName, "name", "_id", category);
-        mCategoryCursor.moveToNext();
+        Cursor mCategoryCursor = mDatabase.getFirstData(ExamDataBaseInfo.categoryExamTableName);
 
-        return mCategoryCursor.getString(0);
+        ArrayList<categoryData> mValues = new ArrayList<>();
+
+        for (int i = 0; i < mCategoryCursor.getCount(); i++) {
+            categoryData mData = new categoryData();
+
+            mData._id = mCategoryCursor.getInt(0);
+            mData.name = mCategoryCursor.getString(1);
+            mData.color = mCategoryCursor.getInt(2);
+
+            mValues.add(mData);
+
+            mCategoryCursor.moveToNext();
+        }
+
+        Collections.sort(mValues, CATEGORY_LIST);
+
+        return mValues;
     }
+
+    public static class categoryData {
+        public String name;
+        public int _id, color;
+    }
+
+    public static final Comparator<categoryData> CATEGORY_LIST = new Comparator<categoryData>() {
+        private final Collator sCollator = Collator.getInstance();
+
+        @Override
+        public int compare(categoryData arg1, categoryData arg2) {
+            return sCollator.compare(arg1.name, arg2.name);
+        }
+    };
 
     /**
      * 시험 리스트를 가져오는 메소드
@@ -111,8 +146,16 @@ public class ExamDataBaseInfo {
             mData.day = day;
             mData.color = color;
 
+            SimpleDateFormat mFormat = new SimpleDateFormat("yyyy.MM.dd E요일", Locale.KOREA);
+            Calendar mCalendar = Calendar.getInstance();
+            mCalendar.set(year, month, day);
+
+            mData.dateName = mFormat.format(mCalendar.getTime());
+
             mValues.add(mData);
         }
+
+        Collections.sort(mValues, EXAM_LIST);
 
         return mValues;
     }
@@ -120,8 +163,20 @@ public class ExamDataBaseInfo {
     public static class examData {
         public int _id, category, color;
         public int year, month, day;
-        public String name;
+        public String name, dateName;
     }
+
+    public static final Comparator<examData> EXAM_LIST = new Comparator<examData>() {
+        private final Collator sCollator = Collator.getInstance();
+
+        @Override
+        public int compare(examData arg1, examData arg2) {
+            if (arg1.dateName.equals(arg2.dateName))
+                return sCollator.compare(arg1.name, arg2.name);
+            else
+                return sCollator.compare(arg1.dateName, arg2.dateName);
+        }
+    };
 
     /**
      * 과목 리스트를 가져오는 메소드

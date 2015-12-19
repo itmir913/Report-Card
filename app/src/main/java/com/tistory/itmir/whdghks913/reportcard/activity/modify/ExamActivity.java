@@ -94,13 +94,15 @@ public class ExamActivity extends AppCompatActivity implements ColorChooserDialo
 
         mDatabase = new Database();
         mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
-        Cursor mCategoryCursor = mDatabase.getFirstData(ExamDataBaseInfo.categoryExamTableName);
 
-        for (int i = 0; i < mCategoryCursor.getCount(); i++) {
-            categoryId.add(mCategoryCursor.getInt(0));
-            categoryName.add(mCategoryCursor.getString(1));
-            categoryColor.add(mCategoryCursor.getInt(2));
-            mCategoryCursor.moveToNext();
+        ArrayList<ExamDataBaseInfo.categoryData> mCategoryList = ExamDataBaseInfo.getCategoryList();
+
+        for (int i = 0; i < mCategoryList.size(); i++) {
+            ExamDataBaseInfo.categoryData mData = mCategoryList.get(i);
+
+            categoryId.add(mData._id);
+            categoryName.add(mData.name);
+            categoryColor.add(mData.color);
         }
 
         if (type == 0) {

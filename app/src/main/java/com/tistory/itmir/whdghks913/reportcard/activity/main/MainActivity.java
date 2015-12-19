@@ -24,13 +24,7 @@ import com.tistory.itmir.whdghks913.reportcard.activity.show.subject.ShowSubject
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 import com.tistory.itmir.whdghks913.reportcard.tool.initDatabase;
 
-import java.text.Collator;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     SimpleRecyclerViewAdapter mAdapter;
@@ -76,22 +70,16 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < mValues.size(); i++) {
             ExamDataBaseInfo.examData mData = mValues.get(i);
 
-            SimpleDateFormat mFormat = new SimpleDateFormat("yyyy.MM.dd E요일", Locale.KOREA);
-            Calendar mCalendar = Calendar.getInstance();
-            mCalendar.set(mData.year, mData.month, mData.day);
-
-            mAdapter.addItem(mData._id, mData.category, mData.color, mData.name, mFormat.format(mCalendar.getTime()), ExamDataBaseInfo.getCategoryNameById(mData.category));
+            mAdapter.addItem(mData._id, mData.category, mData.color, mData.name, mData.dateName);
         }
 
-
-        mAdapter.sort();
     }
 
     public class SimpleRecyclerViewAdapter
             extends RecyclerView.Adapter<SimpleRecyclerViewAdapter.ViewHolder> {
 
         private final int mBackground;
-        private ArrayList<ExamData> mValues = new ArrayList<>();
+        private ArrayList<ExamDataBaseInfo.examData> mValues = new ArrayList<>();
 
         public SimpleRecyclerViewAdapter(Context mContext) {
             TypedValue mTypedValue = new TypedValue();
@@ -102,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
             public final View mColor;
-            public final TextView mExamName, mExamDate, mExamCategory;
+            public final TextView mExamName, mExamDate;
 
             public ViewHolder(View view) {
                 super(view);
@@ -110,19 +98,17 @@ public class MainActivity extends AppCompatActivity {
                 mColor = view.findViewById(R.id.mColor);
                 mExamName = (TextView) view.findViewById(R.id.mExamName);
                 mExamDate = (TextView) view.findViewById(R.id.mExamDate);
-                mExamCategory = (TextView) view.findViewById(R.id.mExamCategory);
             }
         }
 
-        public void addItem(int _id, int category, int color, String name, String date, String categoryName) {
-            ExamData mData = new ExamData();
+        public void addItem(int _id, int category, int color, String name, String dateName) {
+            ExamDataBaseInfo.examData mData = new ExamDataBaseInfo.examData();
 
             mData._id = _id;
             mData.category = category;
             mData.color = color;
             mData.name = name;
-            mData.date = date;
-            mData.categoryName = categoryName;
+            mData.dateName = dateName;
 
             mValues.add(mData);
         }
@@ -135,10 +121,6 @@ public class MainActivity extends AppCompatActivity {
 //        public ExamData getItemData(int position) {
 //            return mValues.get(position);
 //        }
-
-        public void sort() {
-            Collections.sort(mValues, ALPHA_COMPARATOR);
-        }
 
         public void clear() {
             mValues.clear();
@@ -153,51 +135,30 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            ExamData mData = mValues.get(position);
+            ExamDataBaseInfo.examData mData = mValues.get(position);
 
             GradientDrawable bgShape = (GradientDrawable) holder.mColor.getBackground();
             bgShape.setColor(mData.color);
 
             holder.mExamName.setText(mData.name);
-            holder.mExamDate.setText(mData.date);
-            holder.mExamCategory.setText(mData.categoryName);
+            holder.mExamDate.setText(mData.dateName);
 
             holder.mView.setTag(mData);
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ExamData mTag = (ExamData) v.getTag();
+                    ExamDataBaseInfo.examData mTag = (ExamDataBaseInfo.examData) v.getTag();
 
                     Intent mIntent = new Intent(v.getContext(), ShowExamDetailActivity.class);
                     mIntent.putExtra("_id", mTag._id);
                     mIntent.putExtra("name", mTag.name);
-//                    mIntent.putExtra("category", mTag.category);
-//                    mIntent.putExtra("color", mTag.color);
 
                     startActivity(mIntent);
                 }
             });
         }
     }
-
-    public class ExamData {
-        public int _id;
-        public int color, category;
-        public String name, categoryName, date;
-    }
-
-    /**
-     * 알파벳순으로 정렬
-     */
-    public final Comparator<ExamData> ALPHA_COMPARATOR = new Comparator<ExamData>() {
-        private final Collator sCollator = Collator.getInstance();
-
-        @Override
-        public int compare(ExamData arg1, ExamData arg2) {
-            return sCollator.compare(arg1.date, arg2.date);
-        }
-    };
 
     @Override
     public void onResume() {
