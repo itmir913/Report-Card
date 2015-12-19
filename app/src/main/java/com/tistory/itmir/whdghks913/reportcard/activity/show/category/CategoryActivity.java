@@ -1,10 +1,10 @@
-package com.tistory.itmir.whdghks913.reportcard.activity.show.subject;
+package com.tistory.itmir.whdghks913.reportcard.activity.show.category;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,12 +19,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.tistory.itmir.whdghks913.reportcard.R;
-import com.tistory.itmir.whdghks913.reportcard.activity.modify.SubjectActivity;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 
 import java.util.ArrayList;
 
-public class ShowSubjectActivity extends AppCompatActivity {
+public class CategoryActivity extends AppCompatActivity {
     SimpleRecyclerViewAdapter mAdapter;
 
     @Override
@@ -38,7 +37,8 @@ public class ShowSubjectActivity extends AppCompatActivity {
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), SubjectActivity.class));
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
         });
 
@@ -61,20 +61,21 @@ public class ShowSubjectActivity extends AppCompatActivity {
         mAdapter = new SimpleRecyclerViewAdapter(this);
         recyclerView.setAdapter(mAdapter);
 
-        getSubjectList();
+        getCategoryList();
     }
 
-    private void getSubjectList() {
+
+    private void getCategoryList() {
         mAdapter.clear();
         mAdapter.notifyDataSetChanged();
 
-        ArrayList<ExamDataBaseInfo.subjectData> mValues = ExamDataBaseInfo.getSubjectList();
+        ArrayList<ExamDataBaseInfo.categoryData> mValues = ExamDataBaseInfo.getCategoryList();
         if (mValues == null)
             return;
 
         for (int i = 0; i < mValues.size(); i++) {
-            ExamDataBaseInfo.subjectData mData = mValues.get(i);
-            mAdapter.addItem(mData._subjectId, mData.name, mData.color);
+            ExamDataBaseInfo.categoryData mData = mValues.get(i);
+            mAdapter.addItem(mData._categoryId, mData.name, mData.color);
         }
     }
 
@@ -82,7 +83,7 @@ public class ShowSubjectActivity extends AppCompatActivity {
             extends RecyclerView.Adapter<SimpleRecyclerViewAdapter.ViewHolder> {
 
         private final int mBackground;
-        private ArrayList<ExamDataBaseInfo.subjectData> mValues = new ArrayList<>();
+        private ArrayList<ExamDataBaseInfo.categoryData> mValues = new ArrayList<>();
 
         public SimpleRecyclerViewAdapter(Context mContext) {
             TypedValue mTypedValue = new TypedValue();
@@ -93,20 +94,20 @@ public class ShowSubjectActivity extends AppCompatActivity {
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
             public final View mColor;
-            public final TextView mSubjectName;
+            public final TextView mCategoryName;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
                 mColor = view.findViewById(R.id.mColor);
-                mSubjectName = (TextView) view.findViewById(R.id.mName);
+                mCategoryName = (TextView) view.findViewById(R.id.mName);
             }
         }
 
-        public void addItem(int _subjectId, String name, int color) {
-            ExamDataBaseInfo.subjectData mData = new ExamDataBaseInfo.subjectData();
+        public void addItem(int _categoryId, String name, int color) {
+            ExamDataBaseInfo.categoryData mData = new ExamDataBaseInfo.categoryData();
 
-            mData._subjectId = _subjectId;
+            mData._categoryId = _categoryId;
             mData.color = color;
             mData.name = name;
 
@@ -135,29 +136,29 @@ public class ShowSubjectActivity extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
-            ExamDataBaseInfo.subjectData mData = mValues.get(position);
+            ExamDataBaseInfo.categoryData mData = mValues.get(position);
 
             GradientDrawable bgShape = (GradientDrawable) holder.mColor.getBackground();
             bgShape.setColor(mData.color);
 
-            holder.mSubjectName.setText(mData.name);
+            holder.mCategoryName.setText(mData.name);
             holder.mView.setTag(mData);
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ExamDataBaseInfo.subjectData mData = (ExamDataBaseInfo.subjectData) v.getTag();
-                    int _subjectId = mData._subjectId;
-                    int color = mData.color;
-                    String name = mData.name;
-
-                    Intent mIntent = new Intent(v.getContext(), SubjectActivity.class);
-                    mIntent.putExtra("type", 1);
-                    mIntent.putExtra("_id", _subjectId);
-                    mIntent.putExtra("color", color);
-                    mIntent.putExtra("name", name);
-
-                    v.getContext().startActivity(mIntent);
+//                    ExamDataBaseInfo.subjectData mData = (ExamDataBaseInfo.subjectData) v.getTag();
+//                    int _subjectId = mData._subjectId;
+//                    int color = mData.color;
+//                    String name = mData.name;
+//
+//                    Intent mIntent = new Intent(v.getContext(), SubjectActivity.class);
+//                    mIntent.putExtra("type", 1);
+//                    mIntent.putExtra("_id", _subjectId);
+//                    mIntent.putExtra("color", color);
+//                    mIntent.putExtra("name", name);
+//
+//                    v.getContext().startActivity(mIntent);
                 }
             });
         }
@@ -167,7 +168,7 @@ public class ShowSubjectActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        getSubjectList();
+        getCategoryList();
     }
 
     @Override
@@ -188,13 +189,14 @@ public class ShowSubjectActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         } else if (id == R.id.action_add) {
-            Intent mIntent = new Intent(getApplicationContext(), SubjectActivity.class);
-            mIntent.putExtra("type", 0);
-            startActivity(mIntent);
+//            Intent mIntent = new Intent(getApplicationContext(), SubjectActivity.class);
+//            mIntent.putExtra("type", 0);
+//            startActivity(mIntent);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
 
 }

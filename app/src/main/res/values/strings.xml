@@ -10,31 +10,32 @@
     <string name="action_settings">설정</string>
     <string name="action_add">추가</string>
     <string name="action_edit">편집</string>
-    <!-- Fragment -->
-    <string name="subject">과목</string>
-    <string name="graph">통계</string>
-    <!-- Create Exam -->
-    <string name="title_activity_create_exam">시험 추가</string>
-    <string name="edit_exam_color">시험 색상 변경</string>
-    <string name="edit_category">시험 카테고리 변경</string>
-    <!-- Create Subject -->
-    <string name="title_activity_create_subject">과목 추가</string>
-    <!-- Detail Exam Activity -->
-    <string name="title_activity_show_exam_detail">시험 상세 정보</string>
-    <string name="rank_format">%1$d / %2$d</string>
-    <string name="score_format">%1$.2f점</string><!-- http://ellieya.tistory.com/160, http://stackoverflow.com/questions/1915074/understanding-the-in-javas-format-strings -->
-    <string name="class_format">%1$d등급</string>
-    <!-- Subject List -->
+    <!-- List Activity -->
+    <string name="title_activity_category">카테고리 목록</string>
     <string name="title_activity_show_subject">과목 목록</string>
-    <string name="not_delete_subject_title">과목 삭제 불가능</string>
-    <string name="not_delete_subject_message">이미 과목이 사용되어 삭제가 불가능 합니다.</string>
-    <!-- Add Score Activity -->
-    <string name="not_exists_subject_title">과목 없음</string>
-    <string name="not_exists_subject_message">추가된 과목이 없거나 모든 과목이 추가되었습니다.\n확인을 눌러 먼저 과목을 추가하세요.</string>
+    <!-- Add Activity -->
+    <string name="title_activity_create_exam">시험 추가</string>
+    <string name="title_activity_create_subject">과목 추가</string>
     <string name="title_activity_add_exam_data">시험 성적 추가</string>
     <!-- Edit Activity-->
     <string name="title_activity_edit_exam">시험 수정</string>
     <string name="title_activity_edit_subject">과목 수정</string>
     <string name="title_activity_edit_subject_data">시험 성적 수정</string>
+    <!-- Create Exam -->
+    <string name="edit_exam_color">시험 색상 변경</string>
+    <string name="edit_category">시험 카테고리 변경</string>
+    <!-- Detail Exam Activity -->
+    <string name="title_activity_show_exam_detail">시험 상세 정보</string>
+    <string name="subject">과목</string>
+    <string name="graph">통계</string>
+    <string name="rank_format">%1$d / %2$d</string>
+    <string name="score_format">%1$.2f점</string><!-- http://ellieya.tistory.com/160, http://stackoverflow.com/questions/1915074/understanding-the-in-javas-format-strings -->
+    <string name="class_format">%1$d등급</string>
+    <!-- Subject List -->
+    <string name="not_delete_subject_title">과목 삭제 불가능</string>
+    <string name="not_delete_subject_message">이미 과목이 사용되어 삭제가 불가능 합니다.</string>
+    <!-- ExamActivity -->
+    <string name="not_exists_subject_title">과목 없음</string>
+    <string name="not_exists_subject_message">추가된 과목이 없거나 모든 과목이 추가되었습니다.\n확인을 눌러 먼저 과목을 추가하세요.</string>
 
 </resources>

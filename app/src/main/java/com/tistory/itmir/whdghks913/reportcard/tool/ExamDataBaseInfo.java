@@ -206,6 +206,8 @@ public class ExamDataBaseInfo {
             mValues.add(mData);
         }
 
+        Collections.sort(mValues, SUBJECT_DATA);
+
         return mValues;
     }
 
@@ -213,6 +215,15 @@ public class ExamDataBaseInfo {
         public int _subjectId, color;
         public String name;
     }
+
+    public static final Comparator<subjectData> SUBJECT_DATA = new Comparator<subjectData>() {
+        private final Collator sCollator = Collator.getInstance();
+
+        @Override
+        public int compare(subjectData arg1, subjectData arg2) {
+            return sCollator.compare(arg1.name, arg2.name);
+        }
+    };
 
     /**
      * 시험 고유 _id를 이용하여 저장된 과목의 데이터를 가져오는 메소드

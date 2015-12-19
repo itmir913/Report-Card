@@ -38,6 +38,10 @@
             android:name=".activity.modify.ExamScoreActivity"
             android:label="@string/title_activity_add_exam_data"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.show.category.CategoryActivity"
+            android:label="@string/title_activity_category"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>
