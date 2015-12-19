@@ -1,6 +1,7 @@
 package com.tistory.itmir.whdghks913.reportcard.tool;
 
 import android.database.Cursor;
+import android.util.Log;
 
 import java.io.File;
 import java.text.Collator;
@@ -115,13 +116,10 @@ public class ExamDataBaseInfo {
     /**
      * 시험 리스트를 가져오는 메소드
      */
-    public static ArrayList<examData> getExamList() {
+    public static ArrayList<examData> getExamList(boolean isReverse) {
         initDatabase();
 
         Cursor mExamListCursor = mDatabase.getData(ExamDataBaseInfo.examListTableName);
-
-        if (mExamListCursor == null)
-            return null;
 
         ArrayList<examData> mValues = new ArrayList<>();
 
@@ -155,7 +153,10 @@ public class ExamDataBaseInfo {
             mValues.add(mData);
         }
 
-        Collections.sort(mValues, EXAM_LIST);
+        if (isReverse)
+            Collections.sort(mValues, EXAM_REVERSE_LIST);
+        else
+            Collections.sort(mValues, EXAM_LIST);
 
         return mValues;
     }
@@ -178,6 +179,36 @@ public class ExamDataBaseInfo {
         }
     };
 
+    public static final Comparator<examData> EXAM_REVERSE_LIST = new Comparator<examData>() {
+        private final Collator sCollator = Collator.getInstance();
+
+        @Override
+        public int compare(examData arg1, examData arg2) {
+            if (arg1.dateName.equals(arg2.dateName))
+                return sCollator.compare(arg2.name, arg1.name);
+            else
+                return sCollator.compare(arg2.dateName, arg1.dateName);
+        }
+    };
+
+    /**
+     * 최근 n개 시험을 불러오는 메소드
+     */
+    public static ArrayList<examData> getNewExamList(int number) {
+        ArrayList<examData> mExamList = getExamList(true);
+
+        Log.d("mExamList", mExamList.size() + "");
+
+        ArrayList<examData> mValues = new ArrayList<>();
+
+        int min = (mExamList.size() > number) ? number : mExamList.size();
+        for (int i = 0; i < min; i++) {
+            mValues.add(mExamList.get(i));
+        }
+
+        return mValues;
+    }
+
     /**
      * 과목 리스트를 가져오는 메소드
      */
@@ -185,9 +216,6 @@ public class ExamDataBaseInfo {
         initDatabase();
 
         Cursor mSubjectListCursor = mDatabase.getData(ExamDataBaseInfo.subjectTableName);
-
-        if (mSubjectListCursor == null)
-            return null;
 
         ArrayList<subjectData> mValues = new ArrayList<>();
 
@@ -233,9 +261,6 @@ public class ExamDataBaseInfo {
 
         Cursor mCursor = mDatabase.getFirstData(ExamDataBaseInfo.getExamTable(_id));
 
-        if (mCursor == null)
-            return null;
-
         ArrayList<subjectInExamData> mValues = new ArrayList<>();
 
         for (int i = 0; i < mCursor.getCount(); i++) {
@@ -270,6 +295,36 @@ public class ExamDataBaseInfo {
         return mValues;
     }
 
+    /**
+     *
+     */
+    public static subjectInExamData getSubjectDataByExamId(int _id, int _subjectId) {
+        initDatabase();
+
+        Cursor mCursor = mDatabase.getData(ExamDataBaseInfo.getExamTable(_id), "*", "name", _subjectId);
+        if (mCursor.getCount() == 0) {
+            return null;
+        }
+        mCursor.moveToNext();
+
+        float score = mCursor.getFloat(2);
+        int rank = mCursor.getInt(3);
+        int applicants = mCursor.getInt(4);
+        int mClass = mCursor.getInt(5);
+        float average = mCursor.getFloat(6);
+        float standardDeviation = mCursor.getFloat(7);
+
+        subjectInExamData mData = new subjectInExamData();
+        mData.score = score;
+        mData.rank = rank;
+        mData.applicants = applicants;
+        mData.mClass = mClass;
+        mData.average = average;
+        mData.standardDeviation = standardDeviation;
+
+        return mData;
+    }
+
     public static class subjectInExamData {
         public int _id, _subjectId, rank, applicants, mClass;
         public float score, average, standardDeviation;
@@ -283,9 +338,6 @@ public class ExamDataBaseInfo {
         initDatabase();
 
         Cursor mSubjectListCursor = mDatabase.getData(ExamDataBaseInfo.subjectTableName);
-
-        if (mSubjectListCursor == null)
-            return null;
 
         ArrayList<Integer> mValues = new ArrayList<>();
 
@@ -307,9 +359,6 @@ public class ExamDataBaseInfo {
         initDatabase();
 
         Cursor mSubjectListCursor = mDatabase.getData(ExamDataBaseInfo.subjectTableName);
-
-        if (mSubjectListCursor == null)
-            return null;
 
         ArrayList<Integer> mValues = new ArrayList<>();
 

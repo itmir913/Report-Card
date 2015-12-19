@@ -15,6 +15,7 @@
     <string name="title_activity_category">카테고리 목록</string>
     <string name="title_activity_show_subject">과목 목록</string>
     <string name="title_activity_analytics_subject">과목 통계</string>
+    <string name="title_activity_analytics_subject_format">%1$s 통계</string>
     <!-- Add Activity -->
     <string name="title_activity_create_exam">시험 추가</string>
     <string name="title_activity_create_subject">과목 추가</string>

@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -116,6 +115,8 @@ public class FragmentGraph extends Fragment {
 
         LineSet listSet = new LineSet();
 
+        int count = 0;
+
         int size = mChartData.size();
         for (int i = size - 1; i >= 0; i--) {
             chartData mData = mChartData.get(i);
@@ -123,11 +124,11 @@ public class FragmentGraph extends Fragment {
             int rank = mData.rank;
             int applicants = mData.applicants;
 
-            Log.d("rank", "" + rank);
-            Log.d("applicants", "" + applicants);
-
             boolean isZero = ((rank == 0) || (applicants == 0));
-            float percentage = isZero ? 0 : 100 - (new BigDecimal(rank))
+            if (isZero)
+                continue;
+
+            float percentage = 100 - (new BigDecimal(rank))
                     .divide(new BigDecimal(applicants), 2, BigDecimal.ROUND_UP)
                     .multiply(new BigDecimal("100"))
                     .floatValue();
@@ -138,7 +139,11 @@ public class FragmentGraph extends Fragment {
             point.setStrokeThickness(Tools.fromDpToPx(4));
 
             listSet.addPoint(point);
+            count++;
         }
+
+        if (count == 0)
+            return;
 
         Tooltip mTooltip = new Tooltip(getActivity(), R.layout.tooltip_linechart, R.id.value);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
@@ -162,10 +167,7 @@ public class FragmentGraph extends Fragment {
                 .setAxisColor(Color.parseColor("#FF8E8A84"));
 
         // Animation customization
-        Animation anim = new Animation(3000);
-        anim.setEasing(new CubicEase());
-        anim.setAlpha(2);
-        mLineChartView.show(anim);
+        mLineChartView.show(new Animation(1500).setEasing(new CubicEase()).setAlpha(2));
     }
 
     /**

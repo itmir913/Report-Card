@@ -51,7 +51,7 @@ public class ExamListFragment extends Fragment {
         mAdapter.clear();
         mAdapter.notifyDataSetChanged();
 
-        ArrayList<ExamDataBaseInfo.examData> mExamValues = ExamDataBaseInfo.getExamList();
+        ArrayList<ExamDataBaseInfo.examData> mExamValues = ExamDataBaseInfo.getExamList(false);
         ArrayList<ExamDataBaseInfo.categoryData> mCategoryValues = ExamDataBaseInfo.getCategoryList();
         if (mExamValues == null)
             return;
