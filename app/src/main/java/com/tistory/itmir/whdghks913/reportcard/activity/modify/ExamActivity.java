@@ -100,7 +100,7 @@ public class ExamActivity extends AppCompatActivity implements ColorChooserDialo
         for (int i = 0; i < mCategoryList.size(); i++) {
             ExamDataBaseInfo.categoryData mData = mCategoryList.get(i);
 
-            categoryId.add(mData._id);
+            categoryId.add(mData._categoryId);
             categoryName.add(mData.name);
             categoryColor.add(mData.color);
         }

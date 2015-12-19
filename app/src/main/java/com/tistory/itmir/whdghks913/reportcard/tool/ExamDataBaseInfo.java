@@ -84,7 +84,7 @@ public class ExamDataBaseInfo {
         for (int i = 0; i < mCategoryCursor.getCount(); i++) {
             categoryData mData = new categoryData();
 
-            mData._id = mCategoryCursor.getInt(0);
+            mData._categoryId = mCategoryCursor.getInt(0);
             mData.name = mCategoryCursor.getString(1);
             mData.color = mCategoryCursor.getInt(2);
 
@@ -100,7 +100,7 @@ public class ExamDataBaseInfo {
 
     public static class categoryData {
         public String name;
-        public int _id, color;
+        public int _categoryId, color;
     }
 
     public static final Comparator<categoryData> CATEGORY_LIST = new Comparator<categoryData>() {
