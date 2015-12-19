@@ -74,6 +74,13 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(getApplicationContext(), SubjectActivity.class).putExtra("type", 0));
                 } else {
                     menuItem.setChecked(true);
+
+                    switch (id) {
+                        case R.id.action_exam_list:
+                            break;
+                        case R.id.action_statistics:
+                            break;
+                    }
                 }
 
                 mDrawerLayout.closeDrawers();
