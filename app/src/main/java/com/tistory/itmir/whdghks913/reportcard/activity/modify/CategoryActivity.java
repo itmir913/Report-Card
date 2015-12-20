@@ -26,8 +26,8 @@ public class CategoryActivity extends AppCompatActivity implements ColorChooserD
     /**
      * type
      */
-    private int type;
-    private boolean isExam;
+    private int type; // 0 : 생성, 1 : 편집
+    private boolean isExam; // true : 시험, false : 과목
 
     /**
      * Create type

@@ -38,10 +38,6 @@ public class ExamListFragment extends Fragment {
         mAdapter = new SimpleRecyclerViewAdapter(getActivity());
         recyclerView.setAdapter(mAdapter);
 
-        if (!ExamDataBaseInfo.isDatabaseExists()) {
-            (new initDatabase()).init();
-        }
-
         getExamList();
 
         return mView;
@@ -257,7 +253,6 @@ public class ExamListFragment extends Fragment {
         public boolean isHeader() {
             return true;
         }
-
     }
 
     public class examData implements listData {
@@ -296,6 +291,5 @@ public class ExamListFragment extends Fragment {
         public boolean isHeader() {
             return false;
         }
-
     }
 }

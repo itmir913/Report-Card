@@ -22,6 +22,8 @@ import com.tistory.itmir.whdghks913.reportcard.activity.modify.SubjectActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.settings.SettingsActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.show.category.ShowCategoryActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.show.subject.ShowSubjectActivity;
+import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
+import com.tistory.itmir.whdghks913.reportcard.tool.initDatabase;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
@@ -49,6 +51,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        if (!ExamDataBaseInfo.isDatabaseExists()) {
+            (new initDatabase()).init();
+        }
 
         mFragmentManager = getSupportFragmentManager();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.mDrawerLayout);

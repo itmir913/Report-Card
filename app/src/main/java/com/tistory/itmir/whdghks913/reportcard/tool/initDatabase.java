@@ -23,7 +23,7 @@ public class initDatabase {
         mData.commit(ExamDataBaseInfo.categoryExamTableName);
 
         mData.addData("name", "기본 과목");
-        mData.addData("color", -5317);
+        mData.addData("color", -16738680);
         mData.commit(ExamDataBaseInfo.categorySubjectTableName);
         mData.addData("name", "내신 과목");
         mData.addData("color", -9920712);
