@@ -40,7 +40,7 @@
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:orientation="vertical">
 
                     <TextView
@@ -48,6 +48,37 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="16dp"
+                        android:gravity="center"
+                        android:text="카테고리 설정"
+                        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                    <FrameLayout
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="16dp">
+
+                        <View
+                            android:id="@+id/mCategoryColorCircleView"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/circle_view"
+                            android:onClick="categoryColorView" />
+
+                        <TextView
+                            android:id="@+id/mCategoryName"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:maxEms="1"
+                            android:textColor="@android:color/white" />
+
+                    </FrameLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:gravity="center"
                         android:text="과목 색 설정"
                         android:textAppearance="?android:attr/textAppearanceSmall" />

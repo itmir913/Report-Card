@@ -74,7 +74,7 @@ public class ShowSubjectActivity extends AppCompatActivity {
 
         for (int i = 0; i < mValues.size(); i++) {
             ExamDataBaseInfo.subjectData mData = mValues.get(i);
-            mAdapter.addItem(mData._subjectId, mData.name, mData.color);
+            mAdapter.addItem(mData._subjectId, mData.name, mData.color, mData.category);
         }
     }
 
@@ -103,12 +103,13 @@ public class ShowSubjectActivity extends AppCompatActivity {
             }
         }
 
-        public void addItem(int _subjectId, String name, int color) {
+        public void addItem(int _subjectId, String name, int color, int category) {
             ExamDataBaseInfo.subjectData mData = new ExamDataBaseInfo.subjectData();
 
             mData._subjectId = _subjectId;
             mData.color = color;
             mData.name = name;
+            mData.category = category;
 
             mValues.add(mData);
         }
@@ -146,12 +147,14 @@ public class ShowSubjectActivity extends AppCompatActivity {
                     int _subjectId = mData._subjectId;
                     int color = mData.color;
                     String name = mData.name;
+                    int category = mData.category;
 
                     Intent mIntent = new Intent(v.getContext(), SubjectActivity.class);
                     mIntent.putExtra("type", 1);
                     mIntent.putExtra("_id", _subjectId);
                     mIntent.putExtra("color", color);
                     mIntent.putExtra("name", name);
+                    mIntent.putExtra("category", category);
 
                     v.getContext().startActivity(mIntent);
                 }

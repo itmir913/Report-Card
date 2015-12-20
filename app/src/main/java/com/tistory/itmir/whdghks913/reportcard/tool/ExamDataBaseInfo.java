@@ -47,12 +47,18 @@ public class ExamDataBaseInfo {
     public static final String examListTableColumn = "name text, category integer, year integer, month integer, day integer, color integer";
 
     /**
+     * 과목 카테고리 (내신, 모의고사, etc..)
+     */
+    public static final String categorySubjectTableName = "categorySubject";
+    public static final String categorySubjectTableColumn = "name text, color integer";
+
+    /**
      * 과목을 저장하는 세부 테이블
      * name 과목 이름
      * color 과목 색상
      */
     public static final String subjectTableName = "subjectList";
-    public static final String subjectColumn = "name text, color integer";
+    public static final String subjectColumn = "name text, color integer, category integer";
 
     /**
      * 시험 정보를 저장하는 세부 테이블
@@ -75,6 +81,9 @@ public class ExamDataBaseInfo {
         return new File(dataBasePath + dataBaseName).exists();
     }
 
+    /**
+     * 시험 카테고리 정보를 가져오는 메소드
+     */
     public static ArrayList<categoryData> getCategoryList() {
         initDatabase();
 
@@ -210,6 +219,33 @@ public class ExamDataBaseInfo {
     }
 
     /**
+     * 시험 카테고리 정보를 가져오는 메소드
+     */
+    public static ArrayList<categoryData> getSubjectCategoryList() {
+        initDatabase();
+
+        Cursor mSubjectCategoryCursor = mDatabase.getFirstData(ExamDataBaseInfo.categorySubjectTableName);
+
+        ArrayList<categoryData> mValues = new ArrayList<>();
+
+        for (int i = 0; i < mSubjectCategoryCursor.getCount(); i++) {
+            categoryData mData = new categoryData();
+
+            mData._categoryId = mSubjectCategoryCursor.getInt(0);
+            mData.name = mSubjectCategoryCursor.getString(1);
+            mData.color = mSubjectCategoryCursor.getInt(2);
+
+            mValues.add(mData);
+
+            mSubjectCategoryCursor.moveToNext();
+        }
+
+        Collections.sort(mValues, CATEGORY_LIST);
+
+        return mValues;
+    }
+
+    /**
      * 과목 리스트를 가져오는 메소드
      */
     public static ArrayList<subjectData> getSubjectList() {
@@ -225,11 +261,13 @@ public class ExamDataBaseInfo {
             int _subjectId = mSubjectListCursor.getInt(0);
             String name = mSubjectListCursor.getString(1);
             int color = mSubjectListCursor.getInt(2);
+            int category = mSubjectListCursor.getInt(3);
 
             subjectData mData = new subjectData();
             mData._subjectId = _subjectId;
             mData.name = name;
             mData.color = color;
+            mData.category = category;
 
             mValues.add(mData);
         }
@@ -240,7 +278,7 @@ public class ExamDataBaseInfo {
     }
 
     public static class subjectData {
-        public int _subjectId, color;
+        public int _subjectId, color, category;
         public String name;
     }
 

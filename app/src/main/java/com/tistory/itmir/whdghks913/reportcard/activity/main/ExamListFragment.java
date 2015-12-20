@@ -157,7 +157,7 @@ public class ExamListFragment extends Fragment {
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             if (viewType == TYPE_HEADER) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_exam_list_header, parent, false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_list_header, parent, false);
                 view.setBackgroundResource(mBackground);
                 return new HeaderViewHolder(view);
             } else if (viewType == TYPE_ITEM) {
