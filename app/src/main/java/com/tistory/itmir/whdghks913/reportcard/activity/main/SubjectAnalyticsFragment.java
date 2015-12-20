@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.tistory.itmir.whdghks913.reportcard.R;
 import com.tistory.itmir.whdghks913.reportcard.activity.analytics.AnalyticsSubjectActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.modify.CategoryActivity;
+import com.tistory.itmir.whdghks913.reportcard.activity.modify.SubjectActivity;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 
 import java.util.ArrayList;
@@ -168,7 +169,7 @@ public class SubjectAnalyticsFragment extends Fragment {
                 HeaderViewHolder mHolder = (HeaderViewHolder) holder;
                 subjectData mCategoryData = (subjectData) mData;
 
-                mHolder.mHeader.setText(mCategoryData.getName());
+                mHolder.mHeader.setText(mCategoryData.name);
                 mHolder.headerDivider.setBackgroundColor(mCategoryData.color);
                 mHolder.mView.setTag(mCategoryData);
                 mHolder.mView.setOnClickListener(new View.OnClickListener() {
@@ -199,15 +200,14 @@ public class SubjectAnalyticsFragment extends Fragment {
                 subjectData mItemData = (subjectData) mData;
 
                 GradientDrawable bgShape = (GradientDrawable) mHolder.mColor.getBackground();
-                bgShape.setColor(mItemData.getColor());
+                bgShape.setColor(mItemData.color);
 
-                mHolder.mName.setText(mItemData.getName());
+                mHolder.mName.setText(mItemData.name);
                 mHolder.mView.setTag(mItemData);
 
                 mHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         subjectData mData = (subjectData) v.getTag();
 
                         Intent mIntent = new Intent(v.getContext(), AnalyticsSubjectActivity.class);
@@ -215,6 +215,23 @@ public class SubjectAnalyticsFragment extends Fragment {
                         mIntent.putExtra("name", mData.name);
 
                         startActivity(mIntent);
+                    }
+                });
+                mHolder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        subjectData mData = (subjectData) v.getTag();
+
+                        Intent mIntent = new Intent(v.getContext(), SubjectActivity.class);
+                        mIntent.putExtra("type", 1);
+                        mIntent.putExtra("_id", mData._subjectId);
+                        mIntent.putExtra("color", mData.color);
+                        mIntent.putExtra("name", mData.name);
+                        mIntent.putExtra("category", mData._categoryId);
+
+                        startActivity(mIntent);
+
+                        return true;
                     }
                 });
             }
@@ -237,18 +254,6 @@ public class SubjectAnalyticsFragment extends Fragment {
             this._categoryId = _categoryId;
             this.color = color;
             this.isHeader = isHeader;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public int getCategoryId() {
-            return _categoryId;
-        }
-
-        public int getColor() {
-            return color;
         }
 
         @Override

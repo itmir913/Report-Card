@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.tistory.itmir.whdghks913.reportcard.R;
 import com.tistory.itmir.whdghks913.reportcard.activity.modify.CategoryActivity;
+import com.tistory.itmir.whdghks913.reportcard.activity.modify.ExamActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.show.exam.ShowExamDetailActivity;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 
@@ -177,7 +178,7 @@ public class ExamListFragment extends Fragment {
                 HeaderViewHolder mHolder = (HeaderViewHolder) holder;
                 categoryData mCategoryData = (categoryData) mData;
 
-                mHolder.mHeader.setText(mCategoryData.getName());
+                mHolder.mHeader.setText(mCategoryData.name);
                 mHolder.headerDivider.setBackgroundColor(mCategoryData.color);
                 mHolder.mView.setTag(mCategoryData);
                 mHolder.mView.setOnClickListener(new View.OnClickListener() {
@@ -205,10 +206,10 @@ public class ExamListFragment extends Fragment {
                 examData mItemData = (examData) mData;
 
                 GradientDrawable bgShape = (GradientDrawable) mHolder.mColor.getBackground();
-                bgShape.setColor(mItemData.getColor());
+                bgShape.setColor(mItemData.color);
 
-                mHolder.mExamName.setText(mItemData.getName());
-                mHolder.mExamDate.setText(mItemData.getDateName());
+                mHolder.mExamName.setText(mItemData.name);
+                mHolder.mExamDate.setText(mItemData.dateName);
 
                 mHolder.mView.setTag(mItemData);
 
@@ -222,6 +223,21 @@ public class ExamListFragment extends Fragment {
                         mIntent.putExtra("name", mTag.name);
 
                         startActivity(mIntent);
+                    }
+                });
+                mHolder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        examData mTag = (examData) v.getTag();
+
+                        Intent mIntent = new Intent(v.getContext(), ExamActivity.class);
+                        mIntent.putExtra("type", 1);
+                        mIntent.putExtra("_id", mTag._id);
+                        mIntent.putExtra("name", mTag.name);
+
+                        startActivity(mIntent);
+
+                        return true;
                     }
                 });
             }
@@ -242,18 +258,6 @@ public class ExamListFragment extends Fragment {
             this.color = color;
         }
 
-        public String getName() {
-            return name;
-        }
-
-        public int getCategoryId() {
-            return _categoryId;
-        }
-
-        public int getColor() {
-            return color;
-        }
-
         @Override
         public boolean isHeader() {
             return true;
@@ -270,26 +274,6 @@ public class ExamListFragment extends Fragment {
             this.color = color;
             this.name = name;
             this.dateName = dateName;
-        }
-
-        public int getId() {
-            return _id;
-        }
-
-        public int getCategoryId() {
-            return category;
-        }
-
-        public int getColor() {
-            return color;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getDateName() {
-            return dateName;
         }
 
         @Override

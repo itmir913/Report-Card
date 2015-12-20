@@ -14,4 +14,11 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@android:color/white" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="whdghks913@naver.com"
+        android:textColor="@android:color/white" />
+
+
 </LinearLayout>
