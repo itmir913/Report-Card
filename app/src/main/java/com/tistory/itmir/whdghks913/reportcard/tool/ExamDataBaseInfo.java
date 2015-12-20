@@ -111,6 +111,7 @@ public class ExamDataBaseInfo {
     public static class categoryData {
         public String name;
         public int _categoryId, color;
+        public int type;
     }
 
     public static final Comparator<categoryData> CATEGORY_LIST = new Comparator<categoryData>() {

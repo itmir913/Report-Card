@@ -40,11 +40,11 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.show.category.ShowCategoryActivity"
-            android:label="@string/title_activity_category"
+            android:label="@string/title_activity_exam_category"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.modify.CategoryActivity"
-            android:label="@string/title_activity_create_category"
+            android:label="@string/title_activity_create_exam_category"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".activity.settings.SettingsActivity"
@@ -52,7 +52,7 @@
         <activity
             android:name=".activity.analytics.AnalyticsSubjectActivity"
             android:label="@string/title_activity_analytics_subject"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

@@ -27,6 +27,7 @@ public class CategoryActivity extends AppCompatActivity implements ColorChooserD
      * type
      */
     private int type;
+    private boolean isExam;
 
     /**
      * Create type
@@ -52,9 +53,15 @@ public class CategoryActivity extends AppCompatActivity implements ColorChooserD
 
         Intent mIntent = getIntent();
         type = mIntent.getIntExtra("type", 0);
+        isExam = mIntent.getBooleanExtra("isExam", true);
 
         Toolbar mToolbar = (Toolbar) findViewById(R.id.mToolbar);
-        if (type == 1) mToolbar.setTitle(getString(R.string.title_activity_edit_category));
+        if (type == 0 && !isExam)
+            mToolbar.setTitle(getString(R.string.title_activity_create_subject_category));
+        if (type == 1 && isExam)
+            mToolbar.setTitle(getString(R.string.title_activity_edit_exam_category));
+        else if (type == 1)
+            mToolbar.setTitle(getString(R.string.title_activity_edit_subject_category));
         setSupportActionBar(mToolbar);
 
         ActionBar mActionBar = getSupportActionBar();
@@ -118,15 +125,20 @@ public class CategoryActivity extends AppCompatActivity implements ColorChooserD
     }
 
     private void canDeleteCategory() {
-        Cursor mExamDetailList = mDatabase.getFirstData(ExamDataBaseInfo.examListTableName, "category");
+        Cursor mDetailList;
+        if (isExam) {
+            mDetailList = mDatabase.getFirstData(ExamDataBaseInfo.examListTableName, "category");
+        } else {
+            mDetailList = mDatabase.getFirstData(ExamDataBaseInfo.subjectTableName, "category");
+        }
 
-        for (int i = 0; i < mExamDetailList.getCount(); i++) {
-            if (_id == mExamDetailList.getInt(0)) {
+        for (int i = 0; i < mDetailList.getCount(); i++) {
+            if (_id == mDetailList.getInt(0)) {
                 isDelete = false;
                 break;
             }
 
-            mExamDetailList.moveToNext();
+            mDetailList.moveToNext();
         }
     }
 
@@ -139,9 +151,16 @@ public class CategoryActivity extends AppCompatActivity implements ColorChooserD
                 builder.setPositiveButton(android.R.string.ok, null);
                 builder.setCancelable(false);
                 builder.show();
-            } else if (isDelete) {
-                mDatabase.remove(ExamDataBaseInfo.categoryExamTableName, "_id", _id);
+
+                return;
+            }
+
+            if (isDelete) {
+                if (isExam) mDatabase.remove(ExamDataBaseInfo.categoryExamTableName, "_id", _id);
+                else mDatabase.remove(ExamDataBaseInfo.categorySubjectTableName, "_id", _id);
+
                 finish();
+
             } else {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppCompatErrorAlertDialogStyle);
                 builder.setTitle(R.string.not_delete_category_title);
@@ -150,6 +169,7 @@ public class CategoryActivity extends AppCompatActivity implements ColorChooserD
                 builder.setCancelable(false);
                 builder.show();
             }
+
         }
     }
 
@@ -181,26 +201,49 @@ public class CategoryActivity extends AppCompatActivity implements ColorChooserD
             }
             mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
 
-            if (type == 0 || ((type == 1) && (!name.equals(categoryName)))) {
-                Cursor mCursor = mDatabase.getData(ExamDataBaseInfo.categoryExamTableName, "name");
-                for (int i = 0; i < mCursor.getCount(); i++) {
-                    mCursor.moveToNext();
+            if (isExam) {
+                if (type == 0 || ((type == 1) && (!name.equals(categoryName)))) {
+                    Cursor mCursor = mDatabase.getData(ExamDataBaseInfo.categoryExamTableName, "name");
+                    for (int i = 0; i < mCursor.getCount(); i++) {
+                        mCursor.moveToNext();
 
-                    if (categoryName.equals(mCursor.getString(0))) {
-                        mTextInputLayout.setError("이미 존재하는 카테고리 이름입니다.");
-                        return true;
+                        if (categoryName.equals(mCursor.getString(0))) {
+                            mTextInputLayout.setError("이미 존재하는 카테고리 이름입니다.");
+                            return true;
+                        }
                     }
                 }
-            }
 
-            // TODO
-            if (type == 0) {
-                mDatabase.addData("name", categoryName);
-                mDatabase.addData("color", color);
-                mDatabase.commit(ExamDataBaseInfo.categoryExamTableName);
-            } else if (type == 1) {
-                mDatabase.update(ExamDataBaseInfo.categoryExamTableName, "name", categoryName, "_id", _id);
-                mDatabase.update(ExamDataBaseInfo.categoryExamTableName, "color", color, "_id", _id);
+                if (type == 0) {
+                    mDatabase.addData("name", categoryName);
+                    mDatabase.addData("color", color);
+                    mDatabase.commit(ExamDataBaseInfo.categoryExamTableName);
+                } else if (type == 1) {
+                    mDatabase.update(ExamDataBaseInfo.categoryExamTableName, "name", categoryName, "_id", _id);
+                    mDatabase.update(ExamDataBaseInfo.categoryExamTableName, "color", color, "_id", _id);
+                }
+
+            } else {
+                if (type == 0 || ((type == 1) && (!name.equals(categoryName)))) {
+                    Cursor mCursor = mDatabase.getData(ExamDataBaseInfo.categorySubjectTableName, "name");
+                    for (int i = 0; i < mCursor.getCount(); i++) {
+                        mCursor.moveToNext();
+
+                        if (categoryName.equals(mCursor.getString(0))) {
+                            mTextInputLayout.setError("이미 존재하는 카테고리 이름입니다.");
+                            return true;
+                        }
+                    }
+                }
+
+                if (type == 0) {
+                    mDatabase.addData("name", categoryName);
+                    mDatabase.addData("color", color);
+                    mDatabase.commit(ExamDataBaseInfo.categorySubjectTableName);
+                } else if (type == 1) {
+                    mDatabase.update(ExamDataBaseInfo.categorySubjectTableName, "name", categoryName, "_id", _id);
+                    mDatabase.update(ExamDataBaseInfo.categorySubjectTableName, "color", color, "_id", _id);
+                }
             }
 
             mDatabase.release();

@@ -12,8 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -25,13 +23,23 @@ import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 import java.util.ArrayList;
 
 public class ShowCategoryActivity extends AppCompatActivity {
-    SimpleRecyclerViewAdapter mAdapter;
+    /**
+     * type
+     */
+    private int type;
+
+    private SimpleRecyclerViewAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_simple_list);
+
+        Intent mIntent = getIntent();
+        type = mIntent.getIntExtra("type", 0);
+
         Toolbar mToolbar = (Toolbar) findViewById(R.id.mToolbar);
+        if (type == 1) mToolbar.setTitle(getString(R.string.title_activity_subject_category));
         setSupportActionBar(mToolbar);
 
         FloatingActionButton mFab = (FloatingActionButton) findViewById(R.id.mFab);
@@ -40,6 +48,7 @@ public class ShowCategoryActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent mIntent = new Intent(getApplicationContext(), CategoryActivity.class);
                 mIntent.putExtra("type", 0);
+                mIntent.putExtra("isExam", (type == 0));
                 startActivity(mIntent);
             }
         });
@@ -63,11 +72,13 @@ public class ShowCategoryActivity extends AppCompatActivity {
         mAdapter = new SimpleRecyclerViewAdapter(this);
         recyclerView.setAdapter(mAdapter);
 
-        getCategoryList();
+        if (type == 0)
+            getExamCategoryList();
+        else
+            getSubjectCategoryList();
     }
 
-
-    private void getCategoryList() {
+    private void getExamCategoryList() {
         mAdapter.clear();
         mAdapter.notifyDataSetChanged();
 
@@ -77,7 +88,21 @@ public class ShowCategoryActivity extends AppCompatActivity {
 
         for (int i = 0; i < mValues.size(); i++) {
             ExamDataBaseInfo.categoryData mData = mValues.get(i);
-            mAdapter.addItem(mData._categoryId, mData.name, mData.color);
+            mAdapter.addItem(mData._categoryId, mData.name, mData.color, 0);
+        }
+    }
+
+    private void getSubjectCategoryList() {
+        mAdapter.clear();
+        mAdapter.notifyDataSetChanged();
+
+        ArrayList<ExamDataBaseInfo.categoryData> mValues = ExamDataBaseInfo.getSubjectCategoryList();
+        if (mValues == null)
+            return;
+
+        for (int i = 0; i < mValues.size(); i++) {
+            ExamDataBaseInfo.categoryData mData = mValues.get(i);
+            mAdapter.addItem(mData._categoryId, mData.name, mData.color, 1);
         }
     }
 
@@ -106,12 +131,13 @@ public class ShowCategoryActivity extends AppCompatActivity {
             }
         }
 
-        public void addItem(int _categoryId, String name, int color) {
+        public void addItem(int _categoryId, String name, int color, int type) {
             ExamDataBaseInfo.categoryData mData = new ExamDataBaseInfo.categoryData();
 
             mData._categoryId = _categoryId;
             mData.color = color;
             mData.name = name;
+            mData.type = type;
 
             mValues.add(mData);
         }
@@ -153,12 +179,16 @@ public class ShowCategoryActivity extends AppCompatActivity {
                     int _categoryId = mData._categoryId;
                     int color = mData.color;
                     String name = mData.name;
+                    int type = mData.type;
 
                     Intent mIntent = new Intent(v.getContext(), CategoryActivity.class);
                     mIntent.putExtra("type", 1);
+
                     mIntent.putExtra("_id", _categoryId);
                     mIntent.putExtra("color", color);
                     mIntent.putExtra("name", name);
+
+                    mIntent.putExtra("isExam", (type == 0));
 
                     v.getContext().startActivity(mIntent);
                 }
@@ -170,34 +200,10 @@ public class ShowCategoryActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        getCategoryList();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_add_icon, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        } else if (id == R.id.action_add) {
-            Intent mIntent = new Intent(getApplicationContext(), CategoryActivity.class);
-            mIntent.putExtra("type", 0);
-            startActivity(mIntent);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        if (type == 0)
+            getExamCategoryList();
+        else
+            getSubjectCategoryList();
     }
 
 

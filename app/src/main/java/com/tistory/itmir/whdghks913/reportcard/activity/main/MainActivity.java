@@ -2,7 +2,6 @@ package com.tistory.itmir.whdghks913.reportcard.activity.main;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -12,7 +11,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -60,24 +58,36 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(MenuItem menuItem) {
                 int id = menuItem.getItemId();
 
-                if (id == R.id.action_view_category) {
-                    startActivity(new Intent(getApplicationContext(), ShowCategoryActivity.class));
-                } else if (id == R.id.action_view_subject) {
-                    startActivity(new Intent(getApplicationContext(), ShowSubjectActivity.class));
-                } else if (id == R.id.action_add_category) {
-                    startActivity(new Intent(getApplicationContext(), CategoryActivity.class).putExtra("type", 0));
-                } else if (id == R.id.action_add_subject) {
-                    startActivity(new Intent(getApplicationContext(), SubjectActivity.class).putExtra("type", 0));
-                } else {
-                    menuItem.setChecked(true);
-                    switch (id) {
-                        case R.id.action_exam_list:
-                            mFragmentManager.beginTransaction().replace(R.id.mContainer, ExamListFragment.newInstance()).commit();
-                            break;
-                        case R.id.action_statistics:
-                            mFragmentManager.beginTransaction().replace(R.id.mContainer, SubjectAnalyticsFragment.newInstance()).commit();
-                            break;
-                    }
+                switch (id) {
+                    case R.id.action_view_subject:
+                        startActivity(new Intent(getApplicationContext(), ShowSubjectActivity.class));
+                        break;
+                    case R.id.action_view_exam_category:
+                        startActivity(new Intent(getApplicationContext(), ShowCategoryActivity.class).putExtra("type", 0));
+                        break;
+                    case R.id.action_view_subject_category:
+                        startActivity(new Intent(getApplicationContext(), ShowCategoryActivity.class).putExtra("type", 1));
+                        break;
+                    case R.id.action_add_exam:
+                        startActivity(new Intent(getApplicationContext(), ExamActivity.class).putExtra("type", 0));
+                        break;
+                    case R.id.action_add_subject:
+                        startActivity(new Intent(getApplicationContext(), SubjectActivity.class).putExtra("type", 0));
+                        break;
+                    case R.id.action_add_exam_category:
+                        startActivity(new Intent(getApplicationContext(), CategoryActivity.class).putExtra("type", 0).putExtra("isExam", true));
+                        break;
+                    case R.id.action_add_subject_category:
+                        startActivity(new Intent(getApplicationContext(), CategoryActivity.class).putExtra("type", 0).putExtra("isExam", false));
+                        break;
+                    case R.id.action_exam_list:
+                        menuItem.setChecked(true);
+                        mFragmentManager.beginTransaction().replace(R.id.mContainer, ExamListFragment.newInstance()).commit();
+                        break;
+                    case R.id.action_statistics:
+                        menuItem.setChecked(true);
+                        mFragmentManager.beginTransaction().replace(R.id.mContainer, SubjectAnalyticsFragment.newInstance()).commit();
+                        break;
                 }
 
                 mDrawerLayout.closeDrawers();
@@ -87,17 +97,6 @@ public class MainActivity extends AppCompatActivity {
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.app_name, R.string.app_name);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        Menu mMenu = navigationView.getMenu();
-        if (mMenu.getItem(0).isChecked())
-            mFragmentManager.beginTransaction().replace(R.id.mContainer, ExamListFragment.newInstance()).commit();
-        else
-            mFragmentManager.beginTransaction().replace(R.id.mContainer, SubjectAnalyticsFragment.newInstance()).commit();
     }
 
     @Override
@@ -112,6 +111,16 @@ public class MainActivity extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    public void onResume() {
+        super.onResume();
+
+        Menu mMenu = navigationView.getMenu();
+        if (mMenu.getItem(0).isChecked())
+            mFragmentManager.beginTransaction().replace(R.id.mContainer, ExamListFragment.newInstance()).commit();
+        else
+            mFragmentManager.beginTransaction().replace(R.id.mContainer, SubjectAnalyticsFragment.newInstance()).commit();
     }
 
     @Override
@@ -134,12 +143,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         } else if (id == R.id.action_settings) {
             startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-            return true;
-        } else if (id == R.id.action_subject) {
-            startActivity(new Intent(getApplicationContext(), ShowSubjectActivity.class));
-            return true;
-        } else if (id == R.id.action_category) {
-            startActivity(new Intent(getApplicationContext(), ShowCategoryActivity.class));
             return true;
         }
 
