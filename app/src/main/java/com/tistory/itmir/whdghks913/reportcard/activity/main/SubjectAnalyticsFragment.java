@@ -37,19 +37,21 @@ public class SubjectAnalyticsFragment extends Fragment {
         mAdapter = new SimpleRecyclerViewAdapter(getActivity());
         recyclerView.setAdapter(mAdapter);
 
-        getSubjectList();
+        getSubjectList(mView);
 
         return mView;
     }
 
-    private void getSubjectList() {
+    private void getSubjectList(View mView) {
         mAdapter.clear();
         mAdapter.notifyDataSetChanged();
 
         ArrayList<ExamDataBaseInfo.subjectData> mValues = ExamDataBaseInfo.getSubjectList();
         ArrayList<ExamDataBaseInfo.categoryData> mCategoryValues = ExamDataBaseInfo.getSubjectCategoryList();
-        if (mValues == null)
+        if (mValues == null || mValues.size() == 0) {
+            mView.findViewById(R.id.mEmpty).setVisibility(View.VISIBLE);
             return;
+        }
 
         ArrayList<Integer> mCategoryIdInExam = new ArrayList<>();
         for (int i = 0; i < mValues.size(); i++) {
@@ -73,6 +75,10 @@ public class SubjectAnalyticsFragment extends Fragment {
 
             }
 
+        }
+
+        if (mAdapter.getItemCount() == 0) {
+            mView.findViewById(R.id.mEmpty).setVisibility(View.VISIBLE);
         }
 
     }

@@ -6,6 +6,7 @@
     <string name="back">뒤로가기</string>
     <string name="basic">일반설정</string>
     <string name="custom">고급설정</string>
+    <string name="title_data_empty">표시할 데이터가 없습니다.\n데이터를 추가하세요</string>
     <!-- Menu -->
     <string name="action_settings">설정</string>
     <string name="action_add">추가</string>
@@ -14,7 +15,7 @@
     <!-- List Activity -->
     <string name="title_activity_exam_category">시험 카테고리 목록</string>
     <string name="title_activity_subject_category">과목 카테고리 목록</string>
-    <string name="title_activity_show_subject">과목 목록 보기</string>
+    <string name="title_activity_show_subject">과목 목록</string>
     <string name="title_activity_analytics_subject">과목 통계</string>
     <string name="title_activity_analytics_subject_format">%1$s 통계</string>
     <!-- Add Activity -->

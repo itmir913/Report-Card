@@ -17,7 +17,6 @@ import com.tistory.itmir.whdghks913.reportcard.R;
 import com.tistory.itmir.whdghks913.reportcard.activity.modify.CategoryActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.show.exam.ShowExamDetailActivity;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
-import com.tistory.itmir.whdghks913.reportcard.tool.initDatabase;
 
 import java.util.ArrayList;
 
@@ -38,19 +37,21 @@ public class ExamListFragment extends Fragment {
         mAdapter = new SimpleRecyclerViewAdapter(getActivity());
         recyclerView.setAdapter(mAdapter);
 
-        getExamList();
+        getExamList(mView);
 
         return mView;
     }
 
-    private void getExamList() {
+    private void getExamList(View mView) {
         mAdapter.clear();
         mAdapter.notifyDataSetChanged();
 
         ArrayList<ExamDataBaseInfo.examData> mExamValues = ExamDataBaseInfo.getExamList(false);
         ArrayList<ExamDataBaseInfo.categoryData> mCategoryValues = ExamDataBaseInfo.getCategoryList();
-        if (mExamValues == null)
+        if (mExamValues == null || mExamValues.size() == 0) {
+            mView.findViewById(R.id.mEmpty).setVisibility(View.VISIBLE);
             return;
+        }
 
         ArrayList<Integer> mCategoryIdInExam = new ArrayList<>();
         for (int i = 0; i < mExamValues.size(); i++) {
@@ -74,6 +75,10 @@ public class ExamListFragment extends Fragment {
 
             }
 
+        }
+
+        if (mAdapter.getItemCount() == 0) {
+            mView.findViewById(R.id.mEmpty).setVisibility(View.VISIBLE);
         }
 
     }

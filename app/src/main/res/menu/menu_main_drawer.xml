@@ -33,14 +33,6 @@
     <item android:title="카테고리">
         <menu>
             <item
-                android:id="@+id/action_view_exam_category"
-                android:icon="@drawable/ic_view_list"
-                android:title="@string/title_activity_exam_category" />
-            <item
-                android:id="@+id/action_view_subject_category"
-                android:icon="@drawable/ic_view_list"
-                android:title="@string/title_activity_subject_category" />
-            <item
                 android:id="@+id/action_add_exam_category"
                 android:icon="@drawable/ic_add"
                 android:title="@string/title_activity_create_exam_category" />
@@ -48,6 +40,14 @@
                 android:id="@+id/action_add_subject_category"
                 android:icon="@drawable/ic_add"
                 android:title="@string/title_activity_create_subject_category" />
+            <item
+                android:id="@+id/action_view_exam_category"
+                android:icon="@drawable/ic_view_list"
+                android:title="@string/title_activity_exam_category" />
+            <item
+                android:id="@+id/action_view_subject_category"
+                android:icon="@drawable/ic_view_list"
+                android:title="@string/title_activity_subject_category" />
         </menu>
     </item>
 
