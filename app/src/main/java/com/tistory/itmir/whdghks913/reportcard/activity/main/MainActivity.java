@@ -122,11 +122,13 @@ public class MainActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        Menu mMenu = navigationView.getMenu();
-        if (mMenu.getItem(0).isChecked())
-            mFragmentManager.beginTransaction().replace(R.id.mContainer, ExamListFragment.newInstance()).commit();
-        else
-            mFragmentManager.beginTransaction().replace(R.id.mContainer, SubjectAnalyticsFragment.newInstance()).commit();
+        if (mFragmentManager != null) {
+            Menu mMenu = navigationView.getMenu();
+            if (mMenu.getItem(0).isChecked())
+                mFragmentManager.beginTransaction().replace(R.id.mContainer, ExamListFragment.newInstance()).commitAllowingStateLoss();
+            else
+                mFragmentManager.beginTransaction().replace(R.id.mContainer, SubjectAnalyticsFragment.newInstance()).commitAllowingStateLoss();
+        }
     }
 
     @Override
