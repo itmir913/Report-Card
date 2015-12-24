@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -25,12 +26,14 @@ import com.tistory.itmir.whdghks913.reportcard.activity.show.subject.ShowSubject
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 import com.tistory.itmir.whdghks913.reportcard.tool.initDatabase;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
 
     private FragmentManager mFragmentManager;
     private NavigationView navigationView;
+
+    private Fragment examListFragment, subjectAnalyticsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,53 +59,18 @@ public class MainActivity extends AppCompatActivity {
             (new initDatabase()).init();
         }
 
+        examListFragment = ExamListFragment.newInstance();
+        subjectAnalyticsFragment = SubjectAnalyticsFragment.newInstance();
+
         mFragmentManager = getSupportFragmentManager();
         mDrawerLayout = (DrawerLayout) findViewById(R.id.mDrawerLayout);
         navigationView = (NavigationView) findViewById(R.id.mNavigationView);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
-                int id = menuItem.getItemId();
-
-                switch (id) {
-                    case R.id.action_view_subject:
-                        startActivity(new Intent(getApplicationContext(), ShowSubjectActivity.class));
-                        break;
-                    case R.id.action_view_exam_category:
-                        startActivity(new Intent(getApplicationContext(), ShowCategoryActivity.class).putExtra("type", 0));
-                        break;
-                    case R.id.action_view_subject_category:
-                        startActivity(new Intent(getApplicationContext(), ShowCategoryActivity.class).putExtra("type", 1));
-                        break;
-                    case R.id.action_add_exam:
-                        startActivity(new Intent(getApplicationContext(), ExamActivity.class).putExtra("type", 0));
-                        break;
-                    case R.id.action_add_subject:
-                        startActivity(new Intent(getApplicationContext(), SubjectActivity.class).putExtra("type", 0));
-                        break;
-                    case R.id.action_add_exam_category:
-                        startActivity(new Intent(getApplicationContext(), CategoryActivity.class).putExtra("type", 0).putExtra("isExam", true));
-                        break;
-                    case R.id.action_add_subject_category:
-                        startActivity(new Intent(getApplicationContext(), CategoryActivity.class).putExtra("type", 0).putExtra("isExam", false));
-                        break;
-                    case R.id.action_exam_list:
-                        menuItem.setChecked(true);
-                        mFragmentManager.beginTransaction().replace(R.id.mContainer, ExamListFragment.newInstance()).commit();
-                        break;
-                    case R.id.action_statistics:
-                        menuItem.setChecked(true);
-                        mFragmentManager.beginTransaction().replace(R.id.mContainer, SubjectAnalyticsFragment.newInstance()).commit();
-                        break;
-                }
-
-                mDrawerLayout.closeDrawers();
-                return true;
-            }
-        });
+        navigationView.setNavigationItemSelectedListener(this);
 
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.app_name, R.string.app_name);
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        mFragmentManager.beginTransaction().replace(R.id.mContainer, examListFragment).commit();
     }
 
     @Override
@@ -119,17 +87,18 @@ public class MainActivity extends AppCompatActivity {
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
-    public void onResume() {
-        super.onResume();
-
-        if (mFragmentManager != null) {
-            Menu mMenu = navigationView.getMenu();
-            if (mMenu.getItem(0).isChecked())
-                mFragmentManager.beginTransaction().replace(R.id.mContainer, ExamListFragment.newInstance()).commitAllowingStateLoss();
-            else
-                mFragmentManager.beginTransaction().replace(R.id.mContainer, SubjectAnalyticsFragment.newInstance()).commitAllowingStateLoss();
-        }
-    }
+//    public void onResume() {
+//        super.onResume();
+//
+//        if (mFragmentManager != null) {
+//            Menu mMenu = navigationView.getMenu();
+//            if (mMenu.getItem(0).isChecked())
+//                if (examListFragment.isResumed())
+//                    mFragmentManager.beginTransaction().replace(R.id.mContainer, ((ExamListFragment) examListFragment).getResumeFragment()).commitAllowingStateLoss();
+//                else if (subjectAnalyticsFragment.isResumed())
+//                    mFragmentManager.beginTransaction().replace(R.id.mContainer, ((ExamListFragment) examListFragment).getResumeFragment()).commitAllowingStateLoss();
+//        }
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -165,5 +134,45 @@ public class MainActivity extends AppCompatActivity {
             super.onBackPressed();
             finish();
         }
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(MenuItem menuItem) {
+        int id = menuItem.getItemId();
+
+        switch (id) {
+            case R.id.action_view_subject:
+                startActivity(new Intent(getApplicationContext(), ShowSubjectActivity.class));
+                break;
+            case R.id.action_view_exam_category:
+                startActivity(new Intent(getApplicationContext(), ShowCategoryActivity.class).putExtra("type", 0));
+                break;
+            case R.id.action_view_subject_category:
+                startActivity(new Intent(getApplicationContext(), ShowCategoryActivity.class).putExtra("type", 1));
+                break;
+            case R.id.action_add_exam:
+                startActivity(new Intent(getApplicationContext(), ExamActivity.class).putExtra("type", 0));
+                break;
+            case R.id.action_add_subject:
+                startActivity(new Intent(getApplicationContext(), SubjectActivity.class).putExtra("type", 0));
+                break;
+            case R.id.action_add_exam_category:
+                startActivity(new Intent(getApplicationContext(), CategoryActivity.class).putExtra("type", 0).putExtra("isExam", true));
+                break;
+            case R.id.action_add_subject_category:
+                startActivity(new Intent(getApplicationContext(), CategoryActivity.class).putExtra("type", 0).putExtra("isExam", false));
+                break;
+            case R.id.action_exam_list:
+                menuItem.setChecked(true);
+                mFragmentManager.beginTransaction().replace(R.id.mContainer, examListFragment).commit();
+                break;
+            case R.id.action_statistics:
+                menuItem.setChecked(true);
+                mFragmentManager.beginTransaction().replace(R.id.mContainer, subjectAnalyticsFragment).commit();
+                break;
+        }
+
+        mDrawerLayout.closeDrawers();
+        return true;
     }
 }

@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 public class ExamListFragment extends Fragment {
     private SimpleRecyclerViewAdapter mAdapter;
+    private TextView mEmpty;
 
     public static ExamListFragment newInstance() {
         return new ExamListFragment();
@@ -38,20 +39,25 @@ public class ExamListFragment extends Fragment {
         mAdapter = new SimpleRecyclerViewAdapter(getActivity());
         recyclerView.setAdapter(mAdapter);
 
-        getExamList(mView);
+        mEmpty = (TextView) mView.findViewById(R.id.mEmpty);
+
+        getExamList();
 
         return mView;
     }
 
-    private void getExamList(View mView) {
+    private void getExamList() {
         mAdapter.clear();
         mAdapter.notifyDataSetChanged();
 
         ArrayList<ExamDataBaseInfo.examData> mExamValues = ExamDataBaseInfo.getExamList(false);
         ArrayList<ExamDataBaseInfo.categoryData> mCategoryValues = ExamDataBaseInfo.getCategoryList();
         if (mExamValues == null || mExamValues.size() == 0) {
-            mView.findViewById(R.id.mEmpty).setVisibility(View.VISIBLE);
+            mEmpty.setVisibility(View.VISIBLE);
             return;
+        } else {
+            if (mEmpty.getVisibility() == View.VISIBLE)
+                mEmpty.setVisibility(View.GONE);
         }
 
         ArrayList<Integer> mCategoryIdInExam = new ArrayList<>();
@@ -79,7 +85,7 @@ public class ExamListFragment extends Fragment {
         }
 
         if (mAdapter.getItemCount() == 0) {
-            mView.findViewById(R.id.mEmpty).setVisibility(View.VISIBLE);
+            mEmpty.setVisibility(View.VISIBLE);
         }
 
     }
@@ -280,5 +286,12 @@ public class ExamListFragment extends Fragment {
         public boolean isHeader() {
             return false;
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        getExamList();
     }
 }

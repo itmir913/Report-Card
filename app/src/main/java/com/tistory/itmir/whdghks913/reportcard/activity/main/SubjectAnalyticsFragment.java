@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 public class SubjectAnalyticsFragment extends Fragment {
     private SimpleRecyclerViewAdapter mAdapter;
+    private TextView mEmpty;
 
     public static SubjectAnalyticsFragment newInstance() {
         return new SubjectAnalyticsFragment();
@@ -38,20 +39,25 @@ public class SubjectAnalyticsFragment extends Fragment {
         mAdapter = new SimpleRecyclerViewAdapter(getActivity());
         recyclerView.setAdapter(mAdapter);
 
-        getSubjectList(mView);
+        mEmpty = (TextView) mView.findViewById(R.id.mEmpty);
+
+        getSubjectList();
 
         return mView;
     }
 
-    private void getSubjectList(View mView) {
+    private void getSubjectList() {
         mAdapter.clear();
         mAdapter.notifyDataSetChanged();
 
         ArrayList<ExamDataBaseInfo.subjectData> mValues = ExamDataBaseInfo.getSubjectList();
         ArrayList<ExamDataBaseInfo.categoryData> mCategoryValues = ExamDataBaseInfo.getSubjectCategoryList();
         if (mValues == null || mValues.size() == 0) {
-            mView.findViewById(R.id.mEmpty).setVisibility(View.VISIBLE);
+            mEmpty.setVisibility(View.VISIBLE);
             return;
+        } else {
+            if (mEmpty.getVisibility() == View.VISIBLE)
+                mEmpty.setVisibility(View.GONE);
         }
 
         ArrayList<Integer> mCategoryIdInExam = new ArrayList<>();
@@ -79,7 +85,7 @@ public class SubjectAnalyticsFragment extends Fragment {
         }
 
         if (mAdapter.getItemCount() == 0) {
-            mView.findViewById(R.id.mEmpty).setVisibility(View.VISIBLE);
+            mEmpty.setVisibility(View.VISIBLE);
         }
 
     }
@@ -262,4 +268,10 @@ public class SubjectAnalyticsFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        getSubjectList();
+    }
 }
