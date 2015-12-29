@@ -58,6 +58,8 @@ public class FragmentGraph extends Fragment {
         if (mValues == null || subjectList == null || mValues.size() == 0 || subjectList.size() == 0 || mSubjectId == null || mSubjectColor == null)
             return mView;
 
+        float maxScore = 0;
+
         ArrayList<chartData> mChartData = new ArrayList<>();
         for (int i = 0; i < mValues.size(); i++) {
             ExamDataBaseInfo.subjectInExamData mData = mValues.get(i);
@@ -68,18 +70,27 @@ public class FragmentGraph extends Fragment {
             mBarData.score = mData.score;
             mBarData.applicants = mData.applicants;
             mBarData.rank = mData.rank;
+            mBarData.percentage = mData.percentage;
             mChartData.add(mBarData);
+
+            if (maxScore < mData.score)
+                maxScore = mData.score;
         }
+
+        int score = (maxScore == 0) ? 0 : (new BigDecimal(maxScore))
+                .divide(new BigDecimal(10), 0, BigDecimal.ROUND_UP)
+                .multiply(new BigDecimal(10))
+                .intValue();
 
         Collections.sort(mChartData, ALPHA_COMPARATOR);
 
-        showScoreGraph(mView, mChartData);
+        showScoreGraph(mView, mChartData, score);
         showPercentageGraph(mView, mChartData);
 
         return mView;
     }
 
-    private void showScoreGraph(View mView, ArrayList<chartData> mChartData) {
+    private void showScoreGraph(View mView, ArrayList<chartData> mChartData, int maxScore) {
         HorizontalBarChartView mBarChartView = (HorizontalBarChartView) mView.findViewById(R.id.mBarChartView);
 
         BarSet barSet = new BarSet();
@@ -95,7 +106,7 @@ public class FragmentGraph extends Fragment {
         mBarChartView.addData(barSet);
 
         mBarChartView.setBorderSpacing(Tools.fromDpToPx(5))
-                .setAxisBorderValues(0, 100, 20)
+                .setAxisBorderValues(0, maxScore, (maxScore / 5))
                 .setXAxis(false)
                 .setYAxis(false)
                 .setLabelsColor(Color.parseColor("#FF8E8A84"))
@@ -121,17 +132,14 @@ public class FragmentGraph extends Fragment {
         for (int i = size - 1; i >= 0; i--) {
             chartData mData = mChartData.get(i);
 
-            int rank = mData.rank;
-            int applicants = mData.applicants;
-
-            boolean isZero = ((rank == 0) || (applicants == 0));
-            if (isZero)
-                continue;
-
-            float percentage = 100 - (new BigDecimal(rank))
-                    .divide(new BigDecimal(applicants), 2, BigDecimal.ROUND_UP)
-                    .multiply(new BigDecimal("100"))
-                    .floatValue();
+            boolean isZero = ((mData.rank == 0) || (mData.applicants == 0));
+            float percentage = mData.percentage;
+            if (percentage == 0.0f) {
+                percentage = isZero ? 0.0f : 100 - (new BigDecimal(mData.rank))
+                        .divide(new BigDecimal(mData.applicants), 2, BigDecimal.ROUND_UP)
+                        .multiply(new BigDecimal("100"))
+                        .floatValue();
+            }
 
             Point point = new Point(mData.name, percentage);
             point.setColor(Color.parseColor("#eef1f6"));
@@ -185,7 +193,7 @@ public class FragmentGraph extends Fragment {
     class chartData {
         public String name;
         public int color;
-        public float score;
+        public float score, percentage;
         public int rank, applicants;
     }
 

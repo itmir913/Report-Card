@@ -72,8 +72,9 @@ public class ExamDataBaseInfo {
      * class : 등급
      * average : 과목 평군
      * standardDeviation : 과목 표준 편차
+     * percentage : 백분위
      */
-    public static final String examDetailedColumn = "name integer, score integer, rank integer, applicants integer, class integer, average integer, standardDeviation integer";
+    public static final String examDetailedColumn = "name integer, score integer, rank integer, applicants integer, class integer, average integer, standardDeviation integer, percentage integer";
 
     public static String getExamTable(int _id) {
         return "exam_" + _id;
@@ -316,6 +317,7 @@ public class ExamDataBaseInfo {
             int mClass = mCursor.getInt(5);
             float average = mCursor.getFloat(6);
             float standardDeviation = mCursor.getFloat(7);
+            float percentage = mCursor.getFloat(8);
 
             subjectInExamData mData = new subjectInExamData();
             mData._id = _id;
@@ -326,6 +328,7 @@ public class ExamDataBaseInfo {
             mData.mClass = mClass;
             mData.average = average;
             mData.standardDeviation = standardDeviation;
+            mData.percentage = percentage;
             mData.name = name;
 
             mValues.add(mData);
@@ -354,6 +357,7 @@ public class ExamDataBaseInfo {
         int mClass = mCursor.getInt(5);
         float average = mCursor.getFloat(6);
         float standardDeviation = mCursor.getFloat(7);
+        float percentage = mCursor.getFloat(8);
 
         subjectInExamData mData = new subjectInExamData();
         mData.score = score;
@@ -362,13 +366,14 @@ public class ExamDataBaseInfo {
         mData.mClass = mClass;
         mData.average = average;
         mData.standardDeviation = standardDeviation;
+        mData.percentage = percentage;
 
         return mData;
     }
 
     public static class subjectInExamData {
         public int _id, _subjectId, rank, applicants, mClass;
-        public float score, average, standardDeviation;
+        public float score, average, standardDeviation, percentage;
         public String name;
     }
 

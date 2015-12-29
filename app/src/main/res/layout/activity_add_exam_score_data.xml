@@ -185,7 +185,24 @@
                             android:layout_height="wrap_content"
                             android:hint="표준 편차"
                             android:inputType="numberDecimal"
+                            android:nextFocusDown="@+id/mPercentage"
                             android:nextFocusUp="@id/mAverage"
+                            android:singleLine="true" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <EditText
+                            android:id="@+id/mPercentage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="백분위"
+                            android:inputType="numberDecimal"
+                            android:nextFocusUp="@id/mStandardDeviation"
                             android:singleLine="true" />
 
                     </android.support.design.widget.TextInputLayout>
@@ -201,7 +218,6 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="16dp"
                 android:background="@color/colorAccent"
-                android:nextFocusUp="@id/mApplicants"
                 android:onClick="remove"
                 android:text="삭제"
                 android:textAppearance="?android:attr/textAppearanceMedium"

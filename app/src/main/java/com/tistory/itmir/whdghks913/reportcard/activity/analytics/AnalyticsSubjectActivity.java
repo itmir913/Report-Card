@@ -98,10 +98,13 @@ public class AnalyticsSubjectActivity extends AppCompatActivity {
                 rankListSet.addPoint(rankPoint);
 
                 boolean isZero = ((mSubjectData.rank == 0) || (mSubjectData.applicants == 0));
-                float percentage = isZero ? 0 : 100 - (new BigDecimal(mSubjectData.rank))
-                        .divide(new BigDecimal(mSubjectData.applicants), 2, BigDecimal.ROUND_UP)
-                        .multiply(new BigDecimal("100"))
-                        .floatValue();
+                float percentage = mSubjectData.percentage;
+                if (percentage == 0.0f) {
+                    percentage = isZero ? 0 : 100 - (new BigDecimal(mSubjectData.rank))
+                            .divide(new BigDecimal(mSubjectData.applicants), 2, BigDecimal.ROUND_UP)
+                            .multiply(new BigDecimal("100"))
+                            .floatValue();
+                }
 
                 Point percentagePoint = new Point(mExamData.name, percentage);
                 percentagePoint.setColor(Color.parseColor("#eef1f6"));
@@ -136,19 +139,22 @@ public class AnalyticsSubjectActivity extends AppCompatActivity {
                 .multiply(new BigDecimal(10))
                 .intValue();
 
-        Tooltip mTooltip = new Tooltip(this, R.layout.tooltip_linechart, R.id.value);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
-            mTooltip.setEnterAnimation(PropertyValuesHolder.ofFloat(View.ALPHA, 1),
-                    PropertyValuesHolder.ofFloat(View.SCALE_X, 1f),
-                    PropertyValuesHolder.ofFloat(View.SCALE_Y, 1f));
+        Tooltip[] mTooltipList = new Tooltip[3];
+        for (int i = 0; i < 3; i++) {
+            mTooltipList[i] = new Tooltip(this, R.layout.tooltip_linechart, R.id.value);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+                mTooltipList[i].setEnterAnimation(PropertyValuesHolder.ofFloat(View.ALPHA, 1),
+                        PropertyValuesHolder.ofFloat(View.SCALE_X, 1f),
+                        PropertyValuesHolder.ofFloat(View.SCALE_Y, 1f));
 
-            mTooltip.setExitAnimation(PropertyValuesHolder.ofFloat(View.ALPHA, 0),
-                    PropertyValuesHolder.ofFloat(View.SCALE_X, 0f),
-                    PropertyValuesHolder.ofFloat(View.SCALE_Y, 0f));
+                mTooltipList[i].setExitAnimation(PropertyValuesHolder.ofFloat(View.ALPHA, 0),
+                        PropertyValuesHolder.ofFloat(View.SCALE_X, 0f),
+                        PropertyValuesHolder.ofFloat(View.SCALE_Y, 0f));
+            }
         }
-        mScoreChart.setTooltips(mTooltip);
-        mRankChart.setTooltips(mTooltip);
-        mPercentageChart.setTooltips(mTooltip);
+        mScoreChart.setTooltips(mTooltipList[0]);
+        mRankChart.setTooltips(mTooltipList[1]);
+        mPercentageChart.setTooltips(mTooltipList[2]);
 
         scoreListSet.setColor(Color.parseColor("#FF8E8A84")).setThickness(Tools.fromDpToPx(2));
         classListSet.setColor(Color.parseColor("#FF8E8A84")).setThickness(Tools.fromDpToPx(2));
@@ -160,7 +166,7 @@ public class AnalyticsSubjectActivity extends AppCompatActivity {
         mRankChart.addData(rankListSet);
         mPercentageChart.addData(percentageListSet);
 
-        mScoreChart.setAxisBorderValues(0, score, 10)
+        mScoreChart.setAxisBorderValues(0, score, (score / 5))
                 .setLabelsColor(Color.parseColor("#FF8E8A84"))
                 .setAxisColor(Color.parseColor("#FF8E8A84"))
                 .setLabelsFormat(new DecimalFormat("#점"));

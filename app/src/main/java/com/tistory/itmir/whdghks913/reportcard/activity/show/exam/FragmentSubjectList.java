@@ -56,7 +56,7 @@ public class FragmentSubjectList extends Fragment {
         for (int i = 0; i < mValues.size(); i++) {
             ExamDataBaseInfo.subjectInExamData mData = mValues.get(i);
 
-            mAdapter.addItem(_id, mData._subjectId, mData.name, mData.score, mData.rank, mData.applicants, mData.mClass, mData.average, mData.standardDeviation);
+            mAdapter.addItem(_id, mData._subjectId, mData.name, mData.score, mData.rank, mData.applicants, mData.mClass, mData.average, mData.standardDeviation, mData.percentage);
         }
 
         mAdapter.sort();
@@ -89,7 +89,7 @@ class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.SubjectViewHold
         }
     }
 
-    public void addItem(int _id, int subjectId, String name, float score, int rank, int applicants, int mClass, float average, float standardDeviation) {
+    public void addItem(int _id, int subjectId, String name, float score, int rank, int applicants, int mClass, float average, float standardDeviation, float percentage) {
         SubjectListInfo addInfo = new SubjectListInfo();
 
         addInfo._id = _id;
@@ -101,6 +101,7 @@ class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.SubjectViewHold
         addInfo.mClass = mClass;
         addInfo.average = average;
         addInfo.standardDeviation = standardDeviation;
+        addInfo.percentage = percentage;
 
         mValues.add(addInfo);
     }
@@ -140,6 +141,7 @@ class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.SubjectViewHold
                 mIntent.putExtra("mClass", mInfo.mClass);
                 mIntent.putExtra("average", mInfo.average);
                 mIntent.putExtra("standardDeviation", mInfo.standardDeviation);
+                mIntent.putExtra("percentage", mInfo.percentage);
 
                 view.getContext().startActivity(mIntent);
             }
@@ -162,7 +164,7 @@ class AdapterSubject extends RecyclerView.Adapter<AdapterSubject.SubjectViewHold
     public class SubjectListInfo {
         public int _id;
         public int subjectId;
-        public float score, average, standardDeviation;
+        public float score, average, standardDeviation, percentage;
         public int rank, applicants, mClass;
         public String name;
     }

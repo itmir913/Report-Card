@@ -14,10 +14,10 @@ public class initDatabase {
         mData.createTable(ExamDataBaseInfo.examListTableName, ExamDataBaseInfo.examListTableColumn);
         mData.createTable(ExamDataBaseInfo.subjectTableName, ExamDataBaseInfo.subjectColumn);
 
-        mData.addData("name", "기본");
+        mData.addData("name", "기본 시험");
         mData.addData("color", -16738680);
         mData.commit(ExamDataBaseInfo.categoryExamTableName);
-        mData.addData("name", "내신");
+        mData.addData("name", "내신 시험");
         mData.addData("color", -16537100);
         mData.commit(ExamDataBaseInfo.categoryExamTableName);
         mData.addData("name", "모의고사");

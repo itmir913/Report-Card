@@ -10,13 +10,16 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.tistory.itmir.whdghks913.reportcard.R;
 import com.tistory.itmir.whdghks913.reportcard.tool.Database;
@@ -42,7 +45,7 @@ public class ExamScoreActivity extends AppCompatActivity {
     private GradientDrawable subjectColorGradient;
 
     private Spinner mSubjectSpinner;
-    private EditText mScore, mClass, mRank, mApplicants, mAverage, mStandardDeviation;
+    private EditText mScore, mClass, mRank, mApplicants, mAverage, mStandardDeviation, mPercentage;
     private TextInputLayout mScoreTextInputLayout, mApplicantsTextInputLayout;
 
     /**
@@ -95,7 +98,19 @@ public class ExamScoreActivity extends AppCompatActivity {
         mApplicants = (EditText) findViewById(R.id.mApplicants);
         mAverage = (EditText) findViewById(R.id.mAverage);
         mStandardDeviation = (EditText) findViewById(R.id.mStandardDeviation);
+        mPercentage = (EditText) findViewById(R.id.mPercentage);
         mSubjectSpinner = (Spinner) findViewById(R.id.mSubjectSpinner);
+
+        mPercentage.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_DONE) {
+                    addData();
+                    return true;
+                }
+                return false;
+            }
+        });
 
         mScoreTextInputLayout = (TextInputLayout) findViewById(R.id.mScoreTextInputLayout);
         mApplicantsTextInputLayout = (TextInputLayout) findViewById(R.id.mApplicantsTextInputLayout);
@@ -174,6 +189,7 @@ public class ExamScoreActivity extends AppCompatActivity {
             mApplicants.setText(String.valueOf(mIntent.getIntExtra("applicants", 0)));
             mAverage.setText(String.valueOf(mIntent.getFloatExtra("average", 0)));
             mStandardDeviation.setText(String.valueOf(mIntent.getFloatExtra("standardDeviation", 0)));
+            mPercentage.setText(String.valueOf(mIntent.getFloatExtra("percentage", 0)));
         }
     }
 
@@ -251,65 +267,73 @@ public class ExamScoreActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_add) {
-            String scoreText = mScore.getText().toString();
-            String classText = mClass.getText().toString();
-            String rankText = mRank.getText().toString();
-            String applicantsText = mApplicants.getText().toString();
-            String averageText = mAverage.getText().toString();
-            String standardDeviationText = mStandardDeviation.getText().toString();
-
-            /**
-             * private EditText mScore, mClass, mRank, mApplicants;
-             * private TextInputLayout mScoreTextInputLayout, mClassTextInputLayout, mRankTextInputLayout, mApplicantsTextInputLayout;
-             */
-            if (scoreText.isEmpty() || scoreText.length() == 0) {
-                mScoreTextInputLayout.setError("받은 점수는 필수로 입력해야 합니다.");
-                return true;
-            }
-
-            float score = Float.parseFloat(scoreText);
-            float average = (averageText.isEmpty() || averageText.length() == 0) ? 0 : Float.parseFloat(averageText);
-            float standardDeviation = (standardDeviationText.isEmpty() || standardDeviationText.length() == 0) ? 0 : Float.parseFloat(standardDeviationText);
-            int mClass = (classText.isEmpty() || classText.length() == 0) ? 0 : Integer.parseInt(classText);
-            int rank = (rankText.isEmpty() || rankText.length() == 0) ? 0 : Integer.parseInt(rankText);
-            int applicants = (applicantsText.isEmpty() || applicantsText.length() == 0) ? 0 : Integer.parseInt(applicantsText);
-
-            if (rank > applicants) {
-                mApplicantsTextInputLayout.setError("전체 응시자 수는 과목 석차수보다 커야 합니다.");
-                return true;
-            }
-
-            if (mDatabase == null) {
-                mDatabase = new Database();
-            }
-            mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
-
-            if (type == 0) {
-                mDatabase.addData("name", subjectExamData.get(mSubjectSpinner.getSelectedItemPosition())._subjectId);
-                mDatabase.addData("score", score);
-                mDatabase.addData("rank", rank);
-                mDatabase.addData("applicants", applicants);
-                mDatabase.addData("class", mClass);
-                mDatabase.addData("average", average);
-                mDatabase.addData("standardDeviation", standardDeviation);
-                mDatabase.commit(ExamDataBaseInfo.getExamTable(_id));
-
-            } else if (type == 1) {
-                mDatabase.update(ExamDataBaseInfo.getExamTable(_id), "score", score, "name", subjectId);
-                mDatabase.update(ExamDataBaseInfo.getExamTable(_id), "rank", rank, "name", subjectId);
-                mDatabase.update(ExamDataBaseInfo.getExamTable(_id), "applicants", applicants, "name", subjectId);
-                mDatabase.update(ExamDataBaseInfo.getExamTable(_id), "class", mClass, "name", subjectId);
-                mDatabase.update(ExamDataBaseInfo.getExamTable(_id), "average", average, "name", subjectId);
-                mDatabase.update(ExamDataBaseInfo.getExamTable(_id), "standardDeviation", standardDeviation, "name", subjectId);
-            }
-
-            mDatabase.release();
-            finish();
+            addData();
 
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void addData() {
+        String scoreText = mScore.getText().toString();
+        String classText = mClass.getText().toString();
+        String rankText = mRank.getText().toString();
+        String applicantsText = mApplicants.getText().toString();
+        String averageText = mAverage.getText().toString();
+        String standardDeviationText = mStandardDeviation.getText().toString();
+        String percentageText = mPercentage.getText().toString();
+
+        /**
+         * private EditText mScore, mClass, mRank, mApplicants;
+         * private TextInputLayout mScoreTextInputLayout, mClassTextInputLayout, mRankTextInputLayout, mApplicantsTextInputLayout;
+         */
+        if (scoreText.isEmpty() || scoreText.length() == 0) {
+            mScoreTextInputLayout.setError("받은 점수는 필수로 입력해야 합니다.");
+            return;
+        }
+
+        float score = Float.parseFloat(scoreText);
+        float average = (averageText.isEmpty() || averageText.length() == 0) ? 0 : Float.parseFloat(averageText);
+        float standardDeviation = (standardDeviationText.isEmpty() || standardDeviationText.length() == 0) ? 0 : Float.parseFloat(standardDeviationText);
+        int mClass = (classText.isEmpty() || classText.length() == 0) ? 0 : Integer.parseInt(classText);
+        int rank = (rankText.isEmpty() || rankText.length() == 0) ? 0 : Integer.parseInt(rankText);
+        int applicants = (applicantsText.isEmpty() || applicantsText.length() == 0) ? 0 : Integer.parseInt(applicantsText);
+        float percentage = (percentageText.isEmpty() || percentageText.length() == 0) ? 0 : Float.parseFloat(percentageText);
+
+        if (rank > applicants) {
+            mApplicantsTextInputLayout.setError("전체 응시자 수는 과목 석차수보다 커야 합니다.");
+            return;
+        }
+
+        if (mDatabase == null) {
+            mDatabase = new Database();
+        }
+        mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
+
+        if (type == 0) {
+            mDatabase.addData("name", subjectExamData.get(mSubjectSpinner.getSelectedItemPosition())._subjectId);
+            mDatabase.addData("score", score);
+            mDatabase.addData("rank", rank);
+            mDatabase.addData("applicants", applicants);
+            mDatabase.addData("class", mClass);
+            mDatabase.addData("average", average);
+            mDatabase.addData("standardDeviation", standardDeviation);
+            mDatabase.addData("percentage", percentage);
+            mDatabase.commit(ExamDataBaseInfo.getExamTable(_id));
+
+        } else if (type == 1) {
+            mDatabase.update(ExamDataBaseInfo.getExamTable(_id), "score", score, "name", subjectId);
+            mDatabase.update(ExamDataBaseInfo.getExamTable(_id), "rank", rank, "name", subjectId);
+            mDatabase.update(ExamDataBaseInfo.getExamTable(_id), "applicants", applicants, "name", subjectId);
+            mDatabase.update(ExamDataBaseInfo.getExamTable(_id), "class", mClass, "name", subjectId);
+            mDatabase.update(ExamDataBaseInfo.getExamTable(_id), "average", average, "name", subjectId);
+            mDatabase.update(ExamDataBaseInfo.getExamTable(_id), "standardDeviation", standardDeviation, "name", subjectId);
+            mDatabase.update(ExamDataBaseInfo.getExamTable(_id), "percentage", percentage, "name", subjectId);
+        }
+
+        mDatabase.release();
+        finish();
     }
 
 }
