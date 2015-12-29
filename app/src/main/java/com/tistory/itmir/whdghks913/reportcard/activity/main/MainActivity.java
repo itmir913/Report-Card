@@ -2,6 +2,7 @@ package com.tistory.itmir.whdghks913.reportcard.activity.main;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -184,6 +185,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.action_statistics:
                 menuItem.setChecked(true);
                 mFragmentManager.beginTransaction().replace(R.id.mContainer, subjectAnalyticsFragment).commit();
+                break;
+            case R.id.action_bug_report:
+                // ACTION_SENDTO filters for email apps (discard bluetooth and others)
+                Intent sendIntent = new Intent(Intent.ACTION_SENDTO);
+                sendIntent.setData(Uri.parse("mailto:whdghks913@naver.com"));
+                sendIntent.putExtra(Intent.EXTRA_SUBJECT, "성적표 어플에 대해 문의드립니다.");
+                startActivity(Intent.createChooser(sendIntent, "이메일 보내기"));
+                break;
+            case R.id.action_other_apps:
+                /**
+                 * http://stackoverflow.com/questions/11753000/how-to-open-the-google-play-store-directly-from-my-android-application
+                 * We use a try/catch block here because an Exception will be thrown if the Play Store is not installed on the target device.
+                 */
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://search?q=pub:%EC%9D%B4%EC%A2%85%ED%99%98(whdghks913)")));
+                } catch (android.content.ActivityNotFoundException ex) {
+                    ex.printStackTrace();
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/search?q=pub:%EC%9D%B4%EC%A2%85%ED%99%98(whdghks913)")));
+                }
                 break;
         }
 

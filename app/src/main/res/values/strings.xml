@@ -14,6 +14,8 @@
     <string name="action_add">추가</string>
     <string name="action_edit">편집</string>
     <string name="title_activity_settings">설정</string>
+    <string name="title_bug_report">개발자에게 메일보내기</string>
+    <string name="title_other_apps">개발자의 다른앱</string>
     <!-- List Activity -->
     <string name="title_activity_exam_category">시험 카테고리 목록</string>
     <string name="title_activity_subject_category">과목 카테고리 목록</string>

@@ -19,6 +19,7 @@
 \n-com.wdullaer:materialdatetimepicker:2.1.0
 \n-com.diogobernardino:williamchart:2.1
 \n-com.github.afollestad.material-dialogs:commons:0.8.5.2@aar</string>
+    <string name="copyright">Copyright <![CDATA[ⓒ]]> 2015 whdghks913</string>
 
     <!-- Change Log -->
     <string name="change_log_title">수정내역 정보</string>

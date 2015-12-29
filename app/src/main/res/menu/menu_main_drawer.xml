@@ -51,4 +51,15 @@
         </menu>
     </item>
 
+    <item android:title="개발자 정보">
+        <menu>
+            <item
+                android:id="@+id/action_bug_report"
+                android:title="@string/title_bug_report" />
+            <item
+                android:id="@+id/action_other_apps"
+                android:title="@string/title_other_apps" />
+        </menu>
+    </item>
+
 </menu>

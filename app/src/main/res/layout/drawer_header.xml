@@ -10,14 +10,15 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="성적표"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:text="@string/app_name"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@android:color/white" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="whdghks913@naver.com"
+        android:text="@string/copyright"
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@android:color/white" />
 
 
