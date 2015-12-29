@@ -11,9 +11,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -91,6 +93,17 @@ public class ExamActivity extends AppCompatActivity implements ColorChooserDialo
         View mCategoryColorCircleView = findViewById(R.id.mCategoryColorCircleView);
         examColorGradient = (GradientDrawable) mExamColorCircleView.getBackground();
         examCategoryGradient = (GradientDrawable) mCategoryColorCircleView.getBackground();
+
+        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_DONE) {
+                    addData();
+                    return true;
+                }
+                return false;
+            }
+        });
 
         mDatabase = new Database();
         mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
@@ -233,63 +246,67 @@ public class ExamActivity extends AppCompatActivity implements ColorChooserDialo
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_add) {
-            String examName = mEditText.getText().toString();
-
-            if (examName.isEmpty() || examName.length() == 0 || (examName.replaceAll("\\s", "")).length() == 0) {
-                mTextInputLayout.setError("시험 이름은 필수로 입력해야 합니다.");
-                return true;
-            }
-
-            if (mDatabase == null) {
-                mDatabase = new Database();
-            }
-            mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
-
-            Cursor mCursor = mDatabase.getData(ExamDataBaseInfo.examListTableName, "name");
-
-            if (type == 0 || ((type == 1) && (!title.equals(examName)))) {
-                for (int i = 0; i < mCursor.getCount(); i++) {
-                    mCursor.moveToNext();
-
-                    if (examName.equals(mCursor.getString(0))) {
-                        mTextInputLayout.setError("이미 존재하는 시험 이름입니다.");
-                        return true;
-                    }
-                }
-            }
-
-            if (type == 0) {
-                mDatabase.addData("name", examName);
-                mDatabase.addData("category", categoryId.get(categoryIndex));
-                mDatabase.addData("year", mCalendar.get(Calendar.YEAR));
-                mDatabase.addData("month", mCalendar.get(Calendar.MONTH));
-                mDatabase.addData("day", mCalendar.get(Calendar.DAY_OF_MONTH));
-                mDatabase.addData("color", color);
-
-                mDatabase.commit(ExamDataBaseInfo.examListTableName);
-
-                mCursor = mDatabase.getLastData(ExamDataBaseInfo.examListTableName, "_id");
-
-                mDatabase.createTable(ExamDataBaseInfo.getExamTable(mCursor.getInt(0)), ExamDataBaseInfo.examDetailedColumn);
-
-                finish();
-
-            } else if (type == 1) {
-                mDatabase.update(ExamDataBaseInfo.examListTableName, "name", examName, "_id", _id);
-                mDatabase.update(ExamDataBaseInfo.examListTableName, "category", categoryId.get(categoryIndex), "_id", _id);
-                mDatabase.update(ExamDataBaseInfo.examListTableName, "year", mCalendar.get(Calendar.YEAR), "_id", _id);
-                mDatabase.update(ExamDataBaseInfo.examListTableName, "month", mCalendar.get(Calendar.MONTH), "_id", _id);
-                mDatabase.update(ExamDataBaseInfo.examListTableName, "day", mCalendar.get(Calendar.DAY_OF_MONTH), "_id", _id);
-                mDatabase.update(ExamDataBaseInfo.examListTableName, "color", color, "_id", _id);
-
-                setResult(1234);
-                finish();
-            }
+            addData();
 
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void addData() {
+        String examName = mEditText.getText().toString();
+
+        if (examName.isEmpty() || examName.length() == 0 || (examName.replaceAll("\\s", "")).length() == 0) {
+            mTextInputLayout.setError("시험 이름은 필수로 입력해야 합니다.");
+            return;
+        }
+
+        if (mDatabase == null) {
+            mDatabase = new Database();
+        }
+        mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
+
+        Cursor mCursor = mDatabase.getData(ExamDataBaseInfo.examListTableName, "name");
+
+        if (type == 0 || ((type == 1) && (!title.equals(examName)))) {
+            for (int i = 0; i < mCursor.getCount(); i++) {
+                mCursor.moveToNext();
+
+                if (examName.equals(mCursor.getString(0))) {
+                    mTextInputLayout.setError("이미 존재하는 시험 이름입니다.");
+                    return;
+                }
+            }
+        }
+
+        if (type == 0) {
+            mDatabase.addData("name", examName);
+            mDatabase.addData("category", categoryId.get(categoryIndex));
+            mDatabase.addData("year", mCalendar.get(Calendar.YEAR));
+            mDatabase.addData("month", mCalendar.get(Calendar.MONTH));
+            mDatabase.addData("day", mCalendar.get(Calendar.DAY_OF_MONTH));
+            mDatabase.addData("color", color);
+
+            mDatabase.commit(ExamDataBaseInfo.examListTableName);
+
+            mCursor = mDatabase.getLastData(ExamDataBaseInfo.examListTableName, "_id");
+
+            mDatabase.createTable(ExamDataBaseInfo.getExamTable(mCursor.getInt(0)), ExamDataBaseInfo.examDetailedColumn);
+
+            finish();
+
+        } else if (type == 1) {
+            mDatabase.update(ExamDataBaseInfo.examListTableName, "name", examName, "_id", _id);
+            mDatabase.update(ExamDataBaseInfo.examListTableName, "category", categoryId.get(categoryIndex), "_id", _id);
+            mDatabase.update(ExamDataBaseInfo.examListTableName, "year", mCalendar.get(Calendar.YEAR), "_id", _id);
+            mDatabase.update(ExamDataBaseInfo.examListTableName, "month", mCalendar.get(Calendar.MONTH), "_id", _id);
+            mDatabase.update(ExamDataBaseInfo.examListTableName, "day", mCalendar.get(Calendar.DAY_OF_MONTH), "_id", _id);
+            mDatabase.update(ExamDataBaseInfo.examListTableName, "color", color, "_id", _id);
+
+            setResult(1234);
+            finish();
+        }
     }
 
 }

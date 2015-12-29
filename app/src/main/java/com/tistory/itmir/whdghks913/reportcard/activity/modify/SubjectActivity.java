@@ -11,9 +11,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -85,6 +87,17 @@ public class SubjectActivity extends AppCompatActivity implements ColorChooserDi
         mEditText = (EditText) findViewById(R.id.mEditText);
         subjectColorGradient = (GradientDrawable) mSubjectCircleView.getBackground();
         examCategoryGradient = (GradientDrawable) mCategoryColorCircleView.getBackground();
+
+        mEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+                if (i == EditorInfo.IME_ACTION_DONE) {
+                    addData();
+                    return true;
+                }
+                return false;
+            }
+        });
 
         mDatabase = new Database();
         mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
@@ -213,48 +226,53 @@ public class SubjectActivity extends AppCompatActivity implements ColorChooserDi
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_add) {
-            String subjectName = mEditText.getText().toString();
-
-            if (subjectName.isEmpty() || subjectName.length() == 0 || (subjectName.replaceAll("\\s", "")).length() == 0) {
-                mTextInputLayout.setError("과목 이름은 필수로 입력해야 합니다.");
-                return true;
-            }
-
-            if (mDatabase == null) {
-                mDatabase = new Database();
-            }
-            mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
-
-            if (type == 0 || ((type == 1) && (!name.equals(subjectName)))) {
-                Cursor mCursor = mDatabase.getData(ExamDataBaseInfo.subjectTableName, "name");
-                for (int i = 0; i < mCursor.getCount(); i++) {
-                    mCursor.moveToNext();
-
-                    if (subjectName.equals(mCursor.getString(0))) {
-                        mTextInputLayout.setError("이미 존재하는 과목 이름입니다.");
-                        return true;
-                    }
-                }
-            }
-
-            if (type == 0) {
-                mDatabase.addData("name", subjectName);
-                mDatabase.addData("color", color);
-                mDatabase.addData("category", categoryId.get(categoryIndex));
-                mDatabase.commit(ExamDataBaseInfo.subjectTableName);
-            } else if (type == 1) {
-                mDatabase.update(ExamDataBaseInfo.subjectTableName, "name", subjectName, "_id", _id);
-                mDatabase.update(ExamDataBaseInfo.subjectTableName, "color", color, "_id", _id);
-                mDatabase.update(ExamDataBaseInfo.subjectTableName, "category", categoryId.get(categoryIndex), "_id", _id);
-            }
-
-            mDatabase.release();
-            finish();
+            addData();
 
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void addData() {
+
+        String subjectName = mEditText.getText().toString();
+
+        if (subjectName.isEmpty() || subjectName.length() == 0 || (subjectName.replaceAll("\\s", "")).length() == 0) {
+            mTextInputLayout.setError("과목 이름은 필수로 입력해야 합니다.");
+            return;
+        }
+
+        if (mDatabase == null) {
+            mDatabase = new Database();
+        }
+        mDatabase.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
+
+        if (type == 0 || ((type == 1) && (!name.equals(subjectName)))) {
+            Cursor mCursor = mDatabase.getData(ExamDataBaseInfo.subjectTableName, "name");
+            for (int i = 0; i < mCursor.getCount(); i++) {
+                mCursor.moveToNext();
+
+                if (subjectName.equals(mCursor.getString(0))) {
+                    mTextInputLayout.setError("이미 존재하는 과목 이름입니다.");
+                    return;
+                }
+            }
+        }
+
+        if (type == 0) {
+            mDatabase.addData("name", subjectName);
+            mDatabase.addData("color", color);
+            mDatabase.addData("category", categoryId.get(categoryIndex));
+            mDatabase.commit(ExamDataBaseInfo.subjectTableName);
+        } else if (type == 1) {
+            mDatabase.update(ExamDataBaseInfo.subjectTableName, "name", subjectName, "_id", _id);
+            mDatabase.update(ExamDataBaseInfo.subjectTableName, "color", color, "_id", _id);
+            mDatabase.update(ExamDataBaseInfo.subjectTableName, "category", categoryId.get(categoryIndex), "_id", _id);
+        }
+
+        mDatabase.release();
+        finish();
     }
 
 }
