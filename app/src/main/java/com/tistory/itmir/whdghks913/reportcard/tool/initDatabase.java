@@ -1,10 +1,12 @@
 package com.tistory.itmir.whdghks913.reportcard.tool;
 
+import android.content.Context;
+
 /**
  * Created by whdghks913 on 2015-12-13.
  */
 public class initDatabase {
-    public void init() {
+    public void init(Context mContext) {
         Database mData = new Database();
         mData.openDatabase(ExamDataBaseInfo.dataBasePath, ExamDataBaseInfo.dataBaseName);
         mData.createTable(ExamDataBaseInfo.categoryExamTableName, ExamDataBaseInfo.categoryExamTableColumn);
@@ -33,5 +35,7 @@ public class initDatabase {
         mData.commit(ExamDataBaseInfo.categorySubjectTableName);
 
         mData.release();
+
+        (new Preference(mContext)).putInt(ExamDataBaseInfo.PreferenceVersionName, ExamDataBaseInfo.DatabaseVersion);
     }
 }

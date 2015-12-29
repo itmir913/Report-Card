@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.tistory.itmir.whdghks913.reportcard.R;
 import com.tistory.itmir.whdghks913.reportcard.activity.modify.CategoryActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.modify.ExamActivity;
@@ -24,6 +25,7 @@ import com.tistory.itmir.whdghks913.reportcard.activity.settings.SettingsActivit
 import com.tistory.itmir.whdghks913.reportcard.activity.show.category.ShowCategoryActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.show.subject.ShowSubjectActivity;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
+import com.tistory.itmir.whdghks913.reportcard.tool.Preference;
 import com.tistory.itmir.whdghks913.reportcard.tool.initDatabase;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -56,21 +58,34 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
 
         if (!ExamDataBaseInfo.isDatabaseExists()) {
-            (new initDatabase()).init();
+            (new initDatabase()).init(getApplicationContext());
         }
 
-        examListFragment = ExamListFragment.newInstance();
-        subjectAnalyticsFragment = SubjectAnalyticsFragment.newInstance();
+        int mDatabaseVersion = (new Preference(getApplicationContext())).getInt(ExamDataBaseInfo.PreferenceVersionName, ExamDataBaseInfo.DatabaseVersion);
+        if (mDatabaseVersion == ExamDataBaseInfo.DatabaseVersion) {
+            examListFragment = ExamListFragment.newInstance();
+            subjectAnalyticsFragment = SubjectAnalyticsFragment.newInstance();
 
-        mFragmentManager = getSupportFragmentManager();
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.mDrawerLayout);
-        navigationView = (NavigationView) findViewById(R.id.mNavigationView);
-        navigationView.setNavigationItemSelectedListener(this);
+            mFragmentManager = getSupportFragmentManager();
+            mDrawerLayout = (DrawerLayout) findViewById(R.id.mDrawerLayout);
+            navigationView = (NavigationView) findViewById(R.id.mNavigationView);
+            navigationView.setNavigationItemSelectedListener(this);
 
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.app_name, R.string.app_name);
-        mDrawerLayout.setDrawerListener(mDrawerToggle);
+            mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, mToolbar, R.string.app_name, R.string.app_name);
+            mDrawerLayout.setDrawerListener(mDrawerToggle);
 
-        mFragmentManager.beginTransaction().replace(R.id.mContainer, examListFragment).commit();
+            mFragmentManager.beginTransaction().replace(R.id.mContainer, examListFragment).commit();
+        } else {
+            /**
+             * 데이터 베이스 업데이트가 필요함
+             */
+            MaterialDialog.Builder mBuilder = new MaterialDialog.Builder(getApplicationContext());
+            mBuilder.title(R.string.database_update_title);
+            mBuilder.content(R.string.database_update_message);
+            mBuilder.progress(true, 0);
+            mBuilder.show();
+        }
+
     }
 
     @Override

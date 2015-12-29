@@ -20,6 +20,8 @@ public class ExamDataBaseInfo {
      * Database
      */
     public static Database mDatabase;
+    public static final int DatabaseVersion = 1;
+    public static final String PreferenceVersionName = "DatabaseVersion";
 
     public static void initDatabase() {
         if (mDatabase == null) {

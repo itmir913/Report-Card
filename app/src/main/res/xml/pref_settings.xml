@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="어플 정보">
+    <PreferenceCategory android:title="@string/app_info">
+
         <Preference
             android:key="appVersion"
             android:summary="v0.0"
-            android:title="어플 버전" />
+            android:title="@string/app_version" />
+
+        <Preference
+            android:key="license"
+            android:title="@string/license_title" />
+
+        <Preference
+            android:key="change_log"
+            android:title="@string/change_log_title" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>
