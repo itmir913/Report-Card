@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -30,7 +29,6 @@ import com.tistory.itmir.whdghks913.reportcard.activity.show.category.ShowCatego
 import com.tistory.itmir.whdghks913.reportcard.activity.show.subject.ShowSubjectActivity;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 import com.tistory.itmir.whdghks913.reportcard.tool.Preference;
-import com.tistory.itmir.whdghks913.reportcard.tool.AdMobTools;
 import com.tistory.itmir.whdghks913.reportcard.tool.initDatabase;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -68,12 +66,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             (new initDatabase()).init(getApplicationContext());
         }
 
-        String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        String deviceId = AdMobTools.MD5(android_id).toUpperCase();
+//        String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+//        String deviceId = AdMobTools.MD5(android_id).toUpperCase();
 
         mAdView = (AdView) findViewById(R.id.adView);
         mAdView.loadAd(new AdRequest.Builder()
-                .addTestDevice(deviceId)
+//                .addTestDevice(deviceId)
                 .build());
 
         int mDatabaseVersion = (new Preference(getApplicationContext())).getInt(ExamDataBaseInfo.PreferenceVersionName, ExamDataBaseInfo.DatabaseVersion);

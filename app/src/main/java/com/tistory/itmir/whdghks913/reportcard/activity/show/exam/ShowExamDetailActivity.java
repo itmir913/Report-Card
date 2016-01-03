@@ -3,7 +3,6 @@ package com.tistory.itmir.whdghks913.reportcard.activity.show.exam;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -22,7 +21,6 @@ import com.google.android.gms.ads.AdView;
 import com.tistory.itmir.whdghks913.reportcard.R;
 import com.tistory.itmir.whdghks913.reportcard.activity.modify.ExamActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.modify.ExamScoreActivity;
-import com.tistory.itmir.whdghks913.reportcard.tool.AdMobTools;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,12 +103,12 @@ public class ShowExamDetailActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setSelectedTabIndicatorColor(Color.WHITE);
 
-        String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        String deviceId = AdMobTools.MD5(android_id).toUpperCase();
+//        String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+//        String deviceId = AdMobTools.MD5(android_id).toUpperCase();
 
         mAdView = (AdView) findViewById(R.id.adView);
         mAdView.loadAd(new AdRequest.Builder()
-                .addTestDevice(deviceId)
+//                .addTestDevice(deviceId)
                 .build());
     }
 

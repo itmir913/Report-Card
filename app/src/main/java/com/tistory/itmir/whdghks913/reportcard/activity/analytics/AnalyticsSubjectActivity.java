@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,7 +20,6 @@ import com.db.chart.view.animation.easing.BounceEase;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.tistory.itmir.whdghks913.reportcard.R;
-import com.tistory.itmir.whdghks913.reportcard.tool.AdMobTools;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 
 import java.math.BigDecimal;
@@ -58,12 +56,12 @@ public class AnalyticsSubjectActivity extends AppCompatActivity {
             });
         }
 
-        String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        String deviceId = AdMobTools.MD5(android_id).toUpperCase();
+//        String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+//        String deviceId = AdMobTools.MD5(android_id).toUpperCase();
 
         mAdView = (AdView) findViewById(R.id.adView);
         mAdView.loadAd(new AdRequest.Builder()
-                .addTestDevice(deviceId)
+//                .addTestDevice(deviceId)
                 .build());
 
         showChart();

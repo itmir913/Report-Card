@@ -23,6 +23,7 @@
 
     <!-- Change Log -->
     <string name="change_log_title">수정내역 정보</string>
-    <string name="change_log_message">v1.0 : 성적표 어플 출시</string>
+    <string name="change_log_message">v1.1 : 일부 버그 수정
+\nv1.0 : 성적표 어플 출시</string>
 
 </resources>
