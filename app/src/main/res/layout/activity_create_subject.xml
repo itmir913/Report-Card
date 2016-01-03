@@ -131,7 +131,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="16dp"
-                android:background="@color/colorAccent"
+                android:background="@drawable/button"
                 android:onClick="remove"
                 android:text="삭제"
                 android:textAppearance="?android:attr/textAppearanceMedium"
