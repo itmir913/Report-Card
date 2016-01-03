@@ -1,148 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.analytics.AnalyticsSubjectActivity">
+    android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/mToolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    </android.support.design.widget.AppBarLayout>
-
-    <ScrollView
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="16dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context=".activity.analytics.AnalyticsSubjectActivity"
-        tools:showIn="@layout/activity_analytics_subject">
+        android:layout_weight="1"
+        tools:context=".activity.analytics.AnalyticsSubjectActivity">
 
-        <LinearLayout
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:theme="@style/AppTheme.AppBarOverlay">
 
-            <android.support.v7.widget.CardView
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/mToolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        </android.support.design.widget.AppBarLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:context=".activity.analytics.AnalyticsSubjectActivity"
+            tools:showIn="@layout/activity_analytics_subject">
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp">
+                android:orientation="vertical">
 
-                <LinearLayout
-                    style="@style/Widget.CardContent"
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:padding="5dp"
-                        android:text="원 점수 변화"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                    <com.db.chart.view.LineChartView
-                        android:id="@+id/mScoreChart"
+                    <LinearLayout
+                        style="@style/Widget.CardContent"
                         android:layout_width="match_parent"
-                        android:layout_height="200sp" />
+                        android:layout_height="match_parent">
 
-                </LinearLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:padding="5dp"
+                            android:text="원 점수 변화"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            </android.support.v7.widget.CardView>
+                        <com.db.chart.view.LineChartView
+                            android:id="@+id/mScoreChart"
+                            android:layout_width="match_parent"
+                            android:layout_height="200sp" />
 
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp">
+                    </LinearLayout>
 
-                <LinearLayout
-                    style="@style/Widget.CardContent"
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:padding="5dp"
-                        android:text="등급 변화"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                    <com.db.chart.view.LineChartView
-                        android:id="@+id/mClassChart"
+                    <LinearLayout
+                        style="@style/Widget.CardContent"
                         android:layout_width="match_parent"
-                        android:layout_height="200sp" />
+                        android:layout_height="match_parent">
 
-                </LinearLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:padding="5dp"
+                            android:text="등급 변화"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            </android.support.v7.widget.CardView>
+                        <com.db.chart.view.LineChartView
+                            android:id="@+id/mClassChart"
+                            android:layout_width="match_parent"
+                            android:layout_height="200sp" />
 
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp">
+                    </LinearLayout>
 
-                <LinearLayout
-                    style="@style/Widget.CardContent"
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:padding="5dp"
-                        android:text="석차 변화"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                    <com.db.chart.view.LineChartView
-                        android:id="@+id/mRankChart"
+                    <LinearLayout
+                        style="@style/Widget.CardContent"
                         android:layout_width="match_parent"
-                        android:layout_height="300sp" />
+                        android:layout_height="match_parent">
 
-                </LinearLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:padding="5dp"
+                            android:text="석차 변화"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            </android.support.v7.widget.CardView>
+                        <com.db.chart.view.LineChartView
+                            android:id="@+id/mRankChart"
+                            android:layout_width="match_parent"
+                            android:layout_height="300sp" />
 
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp">
+                    </LinearLayout>
 
-                <LinearLayout
-                    style="@style/Widget.CardContent"
+                </android.support.v7.widget.CardView>
+
+                <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:padding="5dp"
-                        android:text="백분위 변화"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-                    <com.db.chart.view.LineChartView
-                        android:id="@+id/mPercentageChart"
+                    <LinearLayout
+                        style="@style/Widget.CardContent"
                         android:layout_width="match_parent"
-                        android:layout_height="200sp" />
+                        android:layout_height="match_parent">
 
-                </LinearLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:padding="5dp"
+                            android:text="백분위 변화"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
 
-            </android.support.v7.widget.CardView>
+                        <com.db.chart.view.LineChartView
+                            android:id="@+id/mPercentageChart"
+                            android:layout_width="match_parent"
+                            android:layout_height="200sp" />
 
-        </LinearLayout>
+                    </LinearLayout>
 
-    </ScrollView>
+                </android.support.v7.widget.CardView>
 
-</android.support.design.widget.CoordinatorLayout>
+            </LinearLayout>
+
+        </ScrollView>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:layout_weight="0"
+        ads:adUnitId="ca-app-pub-7836950522051045/8923298412"
+        app:adSize="SMART_BANNER" />
+
+</LinearLayout>

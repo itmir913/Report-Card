@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,6 +18,8 @@ import com.db.chart.view.LineChartView;
 import com.db.chart.view.Tooltip;
 import com.db.chart.view.animation.Animation;
 import com.db.chart.view.animation.easing.BounceEase;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.tistory.itmir.whdghks913.reportcard.R;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 
@@ -26,6 +29,8 @@ import java.util.ArrayList;
 
 public class AnalyticsSubjectActivity extends AppCompatActivity {
     private int _subjectId;
+
+    private AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +56,14 @@ public class AnalyticsSubjectActivity extends AppCompatActivity {
                 }
             });
         }
+
+        String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        String deviceId = com.tistory.itmir.whdghks913.reportcard.tool.Tools.MD5(android_id).toUpperCase();
+
+        mAdView = (AdView) findViewById(R.id.adView);
+        mAdView.loadAd(new AdRequest.Builder()
+                .addTestDevice(deviceId)
+                .build());
 
         showChart();
     }
@@ -188,6 +201,30 @@ public class AnalyticsSubjectActivity extends AppCompatActivity {
         mClassChart.show(new Animation(1500).setEasing(new BounceEase()).setAlpha(2));
         mRankChart.show(new Animation(1500).setEasing(new BounceEase()).setAlpha(2));
         mPercentageChart.show(new Animation(1500).setEasing(new BounceEase()).setAlpha(2));
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (mAdView != null)
+            mAdView.resume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if (mAdView != null)
+            mAdView.pause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (mAdView != null)
+            mAdView.destroy();
     }
 
 }

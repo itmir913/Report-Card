@@ -3,6 +3,7 @@ package com.tistory.itmir.whdghks913.reportcard.activity.show.exam;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -16,9 +17,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.tistory.itmir.whdghks913.reportcard.R;
 import com.tistory.itmir.whdghks913.reportcard.activity.modify.ExamActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.modify.ExamScoreActivity;
+import com.tistory.itmir.whdghks913.reportcard.tool.Tools;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +33,8 @@ public class ShowExamDetailActivity extends AppCompatActivity {
     private Adapter mAdapter;
 
     private FloatingActionButton mFab;
+
+    private AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,6 +104,14 @@ public class ShowExamDetailActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.mTabLayout);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setSelectedTabIndicatorColor(Color.WHITE);
+
+        String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        String deviceId = Tools.MD5(android_id).toUpperCase();
+
+        mAdView = (AdView) findViewById(R.id.adView);
+        mAdView.loadAd(new AdRequest.Builder()
+                .addTestDevice(deviceId)
+                .build());
     }
 
     class Adapter extends FragmentStatePagerAdapter {
@@ -138,6 +152,9 @@ public class ShowExamDetailActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         mAdapter.notifyDataSetChanged();
+
+        if (mAdView != null)
+            mAdView.resume();
     }
 
     @Override
@@ -175,6 +192,22 @@ public class ShowExamDetailActivity extends AppCompatActivity {
         if ((resultCode == 1234) || (resultCode == 999)) {
             finish();
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if (mAdView != null)
+            mAdView.pause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (mAdView != null)
+            mAdView.destroy();
     }
 
 }

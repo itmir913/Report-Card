@@ -32,6 +32,7 @@ import com.tistory.itmir.whdghks913.reportcard.activity.show.category.ShowCatego
 import com.tistory.itmir.whdghks913.reportcard.activity.show.subject.ShowSubjectActivity;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 import com.tistory.itmir.whdghks913.reportcard.tool.Preference;
+import com.tistory.itmir.whdghks913.reportcard.tool.Tools;
 import com.tistory.itmir.whdghks913.reportcard.tool.initDatabase;
 
 import java.security.MessageDigest;
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        String deviceId = MD5(android_id).toUpperCase();
+        String deviceId = Tools.MD5(android_id).toUpperCase();
 
         mAdView = (AdView) findViewById(R.id.adView);
         mAdView.loadAd(new AdRequest.Builder()
@@ -104,24 +105,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mBuilder.progress(true, 0);
             mBuilder.show();
         }
-    }
-
-    public String MD5(String s) {
-        try {
-            // Create MD5 Hash
-            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
-            digest.update(s.getBytes());
-            byte messageDigest[] = digest.digest();
-
-            // Create Hex String
-            StringBuilder hexString = new StringBuilder();
-            for (int i = 0; i < messageDigest.length; i++)
-                hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
-            return hexString.toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return "";
     }
 
     @Override
