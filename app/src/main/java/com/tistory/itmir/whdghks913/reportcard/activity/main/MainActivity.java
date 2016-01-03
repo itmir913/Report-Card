@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -13,11 +14,15 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
 import com.tistory.itmir.whdghks913.reportcard.R;
 import com.tistory.itmir.whdghks913.reportcard.activity.modify.CategoryActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.modify.ExamActivity;
@@ -29,6 +34,9 @@ import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 import com.tistory.itmir.whdghks913.reportcard.tool.Preference;
 import com.tistory.itmir.whdghks913.reportcard.tool.initDatabase;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -37,6 +45,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView navigationView;
 
     private Fragment examListFragment, subjectAnalyticsFragment;
+
+    private AdView mAdView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +72,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             (new initDatabase()).init(getApplicationContext());
         }
 
+        String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        String deviceId = MD5(android_id).toUpperCase();
+
+        mAdView = (AdView) findViewById(R.id.adView);
+        mAdView.loadAd(new AdRequest.Builder()
+                .addTestDevice(deviceId)
+                .build());
+
         int mDatabaseVersion = (new Preference(getApplicationContext())).getInt(ExamDataBaseInfo.PreferenceVersionName, ExamDataBaseInfo.DatabaseVersion);
         if (mDatabaseVersion == ExamDataBaseInfo.DatabaseVersion) {
             examListFragment = ExamListFragment.newInstance();
@@ -86,7 +104,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mBuilder.progress(true, 0);
             mBuilder.show();
         }
+    }
 
+    public String MD5(String s) {
+        try {
+            // Create MD5 Hash
+            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
+            digest.update(s.getBytes());
+            byte messageDigest[] = digest.digest();
+
+            // Create Hex String
+            StringBuilder hexString = new StringBuilder();
+            for (int i = 0; i < messageDigest.length; i++)
+                hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     @Override
@@ -209,5 +244,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         mDrawerLayout.closeDrawers();
         return true;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (mAdView != null)
+            mAdView.resume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        if (mAdView != null)
+            mAdView.pause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (mAdView != null)
+            mAdView.destroy();
     }
 }
