@@ -22,7 +22,7 @@ import com.google.android.gms.ads.AdView;
 import com.tistory.itmir.whdghks913.reportcard.R;
 import com.tistory.itmir.whdghks913.reportcard.activity.modify.ExamActivity;
 import com.tistory.itmir.whdghks913.reportcard.activity.modify.ExamScoreActivity;
-import com.tistory.itmir.whdghks913.reportcard.tool.Tools;
+import com.tistory.itmir.whdghks913.reportcard.tool.AdMobTools;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,7 +106,7 @@ public class ShowExamDetailActivity extends AppCompatActivity {
         tabLayout.setSelectedTabIndicatorColor(Color.WHITE);
 
         String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        String deviceId = Tools.MD5(android_id).toUpperCase();
+        String deviceId = AdMobTools.MD5(android_id).toUpperCase();
 
         mAdView = (AdView) findViewById(R.id.adView);
         mAdView.loadAd(new AdRequest.Builder()

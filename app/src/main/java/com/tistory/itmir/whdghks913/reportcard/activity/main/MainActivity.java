@@ -14,14 +14,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.tistory.itmir.whdghks913.reportcard.R;
 import com.tistory.itmir.whdghks913.reportcard.activity.modify.CategoryActivity;
@@ -32,11 +30,8 @@ import com.tistory.itmir.whdghks913.reportcard.activity.show.category.ShowCatego
 import com.tistory.itmir.whdghks913.reportcard.activity.show.subject.ShowSubjectActivity;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 import com.tistory.itmir.whdghks913.reportcard.tool.Preference;
-import com.tistory.itmir.whdghks913.reportcard.tool.Tools;
+import com.tistory.itmir.whdghks913.reportcard.tool.AdMobTools;
 import com.tistory.itmir.whdghks913.reportcard.tool.initDatabase;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout mDrawerLayout;
@@ -74,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        String deviceId = Tools.MD5(android_id).toUpperCase();
+        String deviceId = AdMobTools.MD5(android_id).toUpperCase();
 
         mAdView = (AdView) findViewById(R.id.adView);
         mAdView.loadAd(new AdRequest.Builder()

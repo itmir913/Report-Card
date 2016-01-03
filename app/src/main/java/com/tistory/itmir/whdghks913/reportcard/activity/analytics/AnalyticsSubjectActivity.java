@@ -21,6 +21,7 @@ import com.db.chart.view.animation.easing.BounceEase;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.tistory.itmir.whdghks913.reportcard.R;
+import com.tistory.itmir.whdghks913.reportcard.tool.AdMobTools;
 import com.tistory.itmir.whdghks913.reportcard.tool.ExamDataBaseInfo;
 
 import java.math.BigDecimal;
@@ -58,7 +59,7 @@ public class AnalyticsSubjectActivity extends AppCompatActivity {
         }
 
         String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        String deviceId = com.tistory.itmir.whdghks913.reportcard.tool.Tools.MD5(android_id).toUpperCase();
+        String deviceId = AdMobTools.MD5(android_id).toUpperCase();
 
         mAdView = (AdView) findViewById(R.id.adView);
         mAdView.loadAd(new AdRequest.Builder()

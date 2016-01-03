@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException;
 /**
  * Created by whdghks913 on 2016-01-03.
  */
-public class Tools {
+public class AdMobTools {
     public static String MD5(String s) {
         try {
             // Create MD5 Hash
